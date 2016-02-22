@@ -34,6 +34,7 @@
             android:background="#ff971e"
             android:gravity="center"
             android:minWidth="100dp"
+            android:id="@+id/login"
             android:text="登录"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/white" />
@@ -51,8 +52,8 @@
         android:textColor="#ff971e" />
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="84dp"
+        android:layout_height="84dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_margin="20dp"

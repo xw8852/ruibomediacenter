@@ -1,6 +1,7 @@
 package android.com.msx7.josn.ruibo_mediacenter.activity;
 
 import android.app.Activity;
+import android.com.msx7.josn.ruibo_mediacenter.R;
 import android.os.Bundle;
 
 /**
@@ -13,5 +14,6 @@ public class LoginManager extends Activity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_manager_main);
     }
 }
