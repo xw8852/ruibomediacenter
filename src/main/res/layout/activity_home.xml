@@ -18,22 +18,23 @@
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:layout_weight="1"
+            android:background="@drawable/bg_left_top"
             android:orientation="horizontal"
             >
-            <!--android:background="@drawable/bg_left_top"-->
 
             <ImageView
-                android:id="@+id/bg"
+                android:id="@+id/loginbg"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:src="@drawable/btn_login"
+                android:visibility="gone"
                 />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:visibility="gone"
+                android:id="@+id/loginRoot"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -81,6 +82,7 @@
                             android:background="@drawable/bg_left_btn"
                             android:gravity="center"
                             android:text="重设密码"
+                            android:id="@+id/resetPasswd"
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:textColor="@color/white" />
 
@@ -91,6 +93,7 @@
                             android:background="@drawable/bg_left_btn"
                             android:gravity="center"
                             android:text="交易记录"
+                            android:id="@+id/record"
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:textColor="@color/white" />
                     </LinearLayout>
@@ -103,6 +106,7 @@
                         android:background="@drawable/bg_left_btn"
                         android:gravity="center"
                         android:text="安全退出"
+                        android:id="@+id/loginOut"
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:textColor="@color/white" />
                 </LinearLayout>

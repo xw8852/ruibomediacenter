@@ -18,15 +18,17 @@ import com.msx7.lib.annotations.InjectView;
  */
 @InjectActivity(R.layout.activity_home)
 public class HomeActivity extends Activity {
+    /**
+     * 跳转至管理中心
+     */
     @InjectView(R.id.toAdmin)
     View toAdmin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        Inject.inject(this);
-        setContentView(R.layout.activity_home);
-        toAdmin = findViewById(R.id.toAdmin);
+        Inject.inject(this);
+
         toAdmin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -35,4 +37,33 @@ public class HomeActivity extends Activity {
             }
         });
     }
+
+    /**
+     * 未登录默认显示
+     */
+    @InjectView(R.id.loginbg)
+    View mLoginView;
+
+    /**
+     * 用户信息根节点
+     */
+    @InjectView(R.id.loginRoot)
+    View mLoginRootView;
+    /**
+     * 登出
+     */
+    @InjectView(R.id.loginOut)
+    View mLoginOutBtn;
+
+    /**
+     * 重设密码
+     */
+    @InjectView(R.id.resetPasswd)
+    View mResetPasswdBtn;
+
+    /**
+     * 交易记录
+     */
+    @InjectView(R.id.record)
+    View mRecordBtn;
 }

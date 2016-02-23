@@ -5,4 +5,12 @@
     <color name="colorAccent">#FF4081</color>
     <color name="white">#FFFFFFFF</color>
     <color name="tranparent">#00FFFFFF</color>
+    <color name="dialog_title_bg">#0f52b3</color>
+    <color name="dialog_content_bg">#f4f4f4</color>
+    <color name="font_red_0">#e11313</color>
+    <color name="font_color_1">#1bb947</color>
+    <color name="font_color_2">#ff971e</color>
+    <color name="font_color_6">#666666</color>
+    <color name="font_color_9">#999999</color>
+    <color name="font_color_3">#333333</color>
 </resources>
