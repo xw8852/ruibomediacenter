@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">博睿影音</string>
+    <string name="net_error">当前网络连接不可用,请开启网络后重新尝试!</string>
+    <string name="error">网络异常,请稍后重新尝试!</string>
+    <string name="user_login">用户登录</string>
+    <string name="reset_password">重设密码</string>
+    <string name="reset_admin_password">设置登录密码</string>
 </resources>

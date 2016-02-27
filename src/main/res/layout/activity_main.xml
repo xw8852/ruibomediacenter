@@ -22,10 +22,12 @@
         android:layout_centerInParent="true"
         android:orientation="horizontal">
 
-        <TextView
+        <EditText
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:background="@color/white"
+            android:id="@+id/passwd"
+            android:singleLine="true"
             android:minWidth="200dp" />
 
         <TextView
@@ -47,6 +49,7 @@
         android:layout_alignLeft="@+id/content"
         android:layout_below="@+id/content"
         android:layout_marginTop="10dp"
+        android:id="@+id/tip"
         android:text="您输入的密码有误，请重新输入!"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="#ff971e" />
@@ -57,5 +60,6 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_margin="20dp"
+        android:id="@+id/backpress"
         android:src="@drawable/ic_return_home" />
 </RelativeLayout>

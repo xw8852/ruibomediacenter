@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minWidth="350dp"
+        android:id="@+id/loginRoot"
+        android:orientation="vertical"
+        android:padding="20dp"
+        >
+
+        <TextView
+            android:id="@+id/tip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text=""
+            android:textColor="@color/font_red_0"
+            android:visibility="visible" />
+
+
+        <com.msx7.lib.widget.shape.ShapeEditText
+            android:id="@+id/loginName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:gravity="center"
+            android:hint="请输入会员卡号或手机号码"
+            android:maxLines="1"
+            android:padding="10dp"
+            android:singleLine="true"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/font_color_3"
+            app:radius="10dp"
+            app:solide="@color/white"
+            app:strokeColor="#a6a6a6"
+            app:strokeWidth="1dp" />
+
+
+        <com.msx7.lib.widget.shape.ShapeTextView
+            android:id="@+id/login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="登录"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/white"
+            app:radius="10dp"
+            app:solide="#ff791e" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:padding="20dp"
+        android:id="@+id/UserRoot"
+        android:visibility="gone"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="350dp"
+            android:orientation="horizontal"
+            >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+
+                <com.msx7.lib.widget.shape.ShapeTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:gravity="center"
+                    android:text="会员卡号:123456"
+                    android:maxLines="1"
+                    android:padding="10dp"
+                    android:singleLine="true"
+                    android:id="@+id/et1"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/font_color_3"
+                    app:radius="10dp"
+                    app:solide="@color/white"
+                    app:strokeColor="#a6a6a6"
+                    app:strokeWidth="1dp" />
+
+                <com.msx7.lib.widget.shape.ShapeTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:gravity="center"
+                    android:hint="请输入充值金额"
+                    android:maxLines="1"
+                    android:padding="10dp"
+                    android:text="账户余额:¥100.0"
+                    android:singleLine="true"
+                    android:id="@+id/et2"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/font_color_3"
+                    app:radius="10dp"
+                    app:solide="@color/white"
+                    app:strokeColor="#a6a6a6"
+                    app:strokeWidth="1dp" />
+
+                <com.msx7.lib.widget.shape.ShapeTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:gravity="center"
+                    android:hint="手机号码:18684835943"
+                    android:maxLines="1"
+                    android:padding="10dp"
+                    android:singleLine="true"
+                    android:id="@+id/et3"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/font_color_3"
+                    app:radius="10dp"
+                    app:solide="@color/white"
+                    app:strokeColor="#a6a6a6"
+                    app:strokeWidth="1dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="160dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <com.msx7.lib.widget.shape.ShapeTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:id="@+id/btn1"
+                    android:text="销户"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/white"
+                    app:radius="10dp"
+                    app:solide="#e9213d" />
+
+                <com.msx7.lib.widget.shape.ShapeTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:text="充值"
+                    android:id="@+id/btn2"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/white"
+                    app:radius="10dp"
+                    app:solide="#42ab1d" />
+
+                <com.msx7.lib.widget.shape.ShapeTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:id="@+id/btn3"
+                    android:text="重设初始密码"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/white"
+                    app:radius="10dp"
+                    app:solide="#ff791e" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:gravity="right"
+            android:text="开卡初始密码:111111" />
+    </LinearLayout>
+
+</FrameLayout>

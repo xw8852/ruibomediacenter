@@ -40,14 +40,30 @@
                 android:id="@+id/bg"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bg_search" />
+                android:scaleType="fitXY"
+                android:src="@drawable/bg_search" />
+
+            <EditText
+                android:id="@+id/search_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_toLeftOf="@+id/search_btn"
+                android:background="@drawable/bg_search_white"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <ImageView
+                android:id="@+id/search_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/bg"
                 android:layout_alignParentRight="true"
                 android:layout_alignTop="@+id/bg"
+                android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:src="@drawable/btn_search" />
 

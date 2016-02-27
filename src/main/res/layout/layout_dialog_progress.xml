@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.msx7.lib.widget.shape.ShapeLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="120dp"
+    android:layout_height="90dp"
+    android:orientation="vertical"
+    app:strokeColor="@color/white"
+    android:gravity="center"
+    app:strokeWidth="1dp"
+    app:radius="10dp"
+    app:solide="#A0000000">
+
+    <com.pnikosis.materialishprogress.ProgressWheel
+        android:id="@+id/progress_wheel"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        app:matProg_barColor="#5588FF"
+        app:matProg_progressIndeterminate="true" />
+</com.msx7.lib.widget.shape.ShapeLinearLayout>

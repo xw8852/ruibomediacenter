@@ -5,7 +5,7 @@ android {
     buildToolsVersion "23.0.2"
 
     defaultConfig {
-    applicationId "android.com.msx7.josn.ruibo_mediacenter"
+    applicationId "com.msx7.josn.ruibo_mediacenter"
         minSdkVersion 10
         targetSdkVersion 23
         versionCode 1
@@ -21,7 +21,11 @@ android {
 
 dependencies {
     compile 'com.android.support:appcompat-v7:23.+'
-    compile 'msx-android-lib:Msx_Android_Lib:0.1.0'
+    compile 'msx-android-lib:Msx_Android_Lib:1.0.2'
+//    compile 'com.squareup.okhttp3:okhttp:3.2.0'
+    compile 'com.pnikosis:materialish-progress:1.7'
+//    compile 'com.facebook.stetho:stetho-okhttp3:1.3.1'
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
+    compile 'com.google.code.gson:gson:2.2.4'
 }

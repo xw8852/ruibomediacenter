@@ -12,9 +12,26 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:padding="10dp"
+        android:visibility="visible"
         android:text="您输入的账号或密码有误，请重新输入!"
         android:textColor="@color/font_red_0" />
+    <com.msx7.lib.widget.shape.ShapeEditText
+        android:id="@+id/oldPassWd"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:gravity="center"
+        android:hint="请输入会员卡号"
+        android:maxLines="1"
+        android:padding="10dp"
+        android:textColor="@color/font_color_3"
+        android:singleLine="true"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        app:radius="10dp"
+        app:solide="@color/white"
+        app:strokeColor="#a6a6a6"
+        app:strokeWidth="1dp" />
 
     <com.msx7.lib.widget.shape.ShapeEditText
         android:id="@+id/loginName"
