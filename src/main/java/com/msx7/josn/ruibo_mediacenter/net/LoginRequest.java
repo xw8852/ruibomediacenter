@@ -14,7 +14,7 @@ public class LoginRequest extends BaseJsonRequest {
     String password;
     String name;
 
-    public LoginRequest(String password, String name, Response.Listener<String> listener, Response.ErrorListener errorListener) {
+    public LoginRequest( String name,String password, Response.Listener<String> listener, Response.ErrorListener errorListener) {
         super(Method.POST, UrlStatic.URL_LOGIN, listener, errorListener);
         this.password = password;
         this.name = name;

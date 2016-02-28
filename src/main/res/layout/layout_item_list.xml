@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_list_item"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="歌曲编码:23122"
+        android:singleLine="true"
+        android:maxLines="1"
+        android:id="@+id/num"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:textColor="#91a6c8" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:singleLine="true"
+            android:maxLines="1"
+            android:id="@+id/name"
+            android:text="我心中只有你"
+            android:textAppearance="?android:textAppearanceMedium"
+            android:textColor="@color/white" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0.2元"
+            android:id="@+id/money"
+            android:singleLine="true"
+            android:maxLines="1"
+            android:textAppearance="?android:textAppearanceMedium"
+            android:textColor="#ff971e" />
+    </LinearLayout>
+</LinearLayout>

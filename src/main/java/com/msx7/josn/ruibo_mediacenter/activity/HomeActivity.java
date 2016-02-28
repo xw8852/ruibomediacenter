@@ -1,30 +1,56 @@
 package com.msx7.josn.ruibo_mediacenter.activity;
 
+import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.msx7.josn.ruibo_mediacenter.RuiBoApplication;
+import com.msx7.josn.ruibo_mediacenter.activity.ui.CollectionView;
+import com.msx7.josn.ruibo_mediacenter.activity.ui.SearchView;
 import com.msx7.josn.ruibo_mediacenter.bean.BaseBean;
+import com.msx7.josn.ruibo_mediacenter.bean.BeanMusic;
 import com.msx7.josn.ruibo_mediacenter.bean.BeanUserInfo;
+import com.msx7.josn.ruibo_mediacenter.common.UrlStatic;
 import com.msx7.josn.ruibo_mediacenter.dialog.LoginDialog;
 import com.msx7.josn.ruibo_mediacenter.dialog.ResetPasswdDialog;
+import com.msx7.josn.ruibo_mediacenter.net.BaseJsonRequest;
 import com.msx7.josn.ruibo_mediacenter.net.LoginRequest;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Rect;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.msx7.josn.ruibo_mediacenter.util.L;
 import com.msx7.josn.ruibo_mediacenter.util.SharedPreferencesUtil;
+import com.msx7.josn.ruibo_mediacenter.util.ToastUtil;
 import com.msx7.josn.ruibo_mediacenter.util.VolleyErrorUtils;
 import com.msx7.lib.annotations.Inject;
 import com.msx7.lib.annotations.InjectActivity;
 import com.msx7.lib.annotations.InjectView;
 
 import com.msx7.josn.ruibo_mediacenter.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 文件名: HomeActivity
@@ -39,8 +65,18 @@ public class HomeActivity extends BaseActivity {
      */
     @InjectView(R.id.toAdmin)
     View toAdmin;
+    @InjectView(R.id.root)
+    View root;
+    @InjectView(R.id.group)
+    RadioGroup group;
 
     LoginDialog mLoginDialog;
+
+    @InjectView(R.id.SearchView)
+    SearchView mSearchView;
+
+    @InjectView(R.id.CollectionView)
+    CollectionView mCollectionView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +93,27 @@ public class HomeActivity extends BaseActivity {
             showUserInfo();
         } else
             unlogin();
+        DisplayMetrics dm = getResources().getDisplayMetrics();
+        int height = Math.min(dm.widthPixels, dm.heightPixels);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(height / 2, height);
+        root.setLayoutParams(params);
+//        L.d("way", dm.widthPixels + "," + dm.heightPixels);
+//        L.d("density = " + dm.density + ",densityDpi = " + dm.densityDpi);
+//        L.d("xDPi = " + dm.xdpi + ",yDpi = " + dm.ydpi);
+//        L.d("scaledDensity = " + dm.scaledDensity);
+        group.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                if (checkedId == R.id.home) {
+                    mSearchView.setVisibility(View.VISIBLE);
+                    mCollectionView.setVisibility(View.GONE);
+                } else if (checkedId == R.id.collection) {
+                    mSearchView.setVisibility(View.GONE);
+                    mCollectionView.setVisibility(View.VISIBLE);
+
+                }
+            }
+        });
     }
 
     /**
@@ -84,6 +141,8 @@ public class HomeActivity extends BaseActivity {
         mLoginView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mLoginDialog.getLoginPassWdView().setText("");
+                mLoginDialog.getLoginNameView().setText("");
                 mLoginDialog.show();
             }
         });
@@ -185,8 +244,4 @@ public class HomeActivity extends BaseActivity {
     @InjectView(R.id.record)
     View mRecordBtn;
 
-
-    void login() {
-
-    }
 }

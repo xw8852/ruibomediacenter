@@ -6,38 +6,39 @@
     android:orientation="horizontal">
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:id="@+id/root"
+        android:layout_width="200dp"
         android:layout_height="match_parent"
-        android:layout_weight="3"
+        android:gravity="center"
+        android:paddingBottom="30dp"
         android:orientation="vertical">
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginBottom="20dp"
-            android:layout_marginTop="10dp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
+            android:layout_marginTop="10dp"
             android:layout_weight="1"
             android:background="@drawable/bg_left_top"
-            android:orientation="horizontal"
-            >
+            android:orientation="horizontal">
 
             <ImageView
                 android:id="@+id/loginbg"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/btn_login"
-
-                />
+                android:src="@drawable/btn_login" />
 
             <LinearLayout
+                android:id="@+id/loginRoot"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:id="@+id/loginRoot"
-                android:visibility="gone"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:visibility="gone">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -66,63 +67,55 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:gravity="center_horizontal"
-                    android:orientation="vertical">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:orientation="horizontal">
-
-                        <Button
-                            android:layout_width="wrap_content"
-                            android:layout_height="48dp"
-                            android:background="@drawable/bg_left_btn"
-                            android:gravity="center"
-                            android:text="重设密码"
-                            android:id="@+id/resetPasswd"
-                            android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:textColor="@color/white" />
-
-                        <Button
-                            android:layout_width="wrap_content"
-                            android:layout_height="48dp"
-                            android:layout_marginLeft="10dp"
-                            android:background="@drawable/bg_left_btn"
-                            android:gravity="center"
-                            android:text="交易记录"
-                            android:id="@+id/record"
-                            android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:textColor="@color/white" />
-                    </LinearLayout>
-
+                    android:gravity="center"
+                    android:orientation="horizontal">
 
                     <Button
+                        android:id="@+id/resetPasswd"
                         android:layout_width="wrap_content"
                         android:layout_height="48dp"
-                        android:layout_marginTop="10dp"
                         android:background="@drawable/bg_left_btn"
                         android:gravity="center"
-                        android:text="安全退出"
-                        android:id="@+id/loginOut"
+                        android:text="重设密码"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textColor="@color/white" />
+
+                    <Button
+                        android:id="@+id/record"
+                        android:layout_width="wrap_content"
+                        android:layout_height="48dp"
+                        android:layout_marginLeft="10dp"
+                        android:background="@drawable/bg_left_btn"
+                        android:gravity="center"
+                        android:text="交易记录"
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:textColor="@color/white" />
                 </LinearLayout>
+
+
+                <Button
+                    android:id="@+id/loginOut"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/bg_left_btn"
+                    android:gravity="center"
+                    android:text="安全退出"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/white" />
             </LinearLayout>
 
-        </RelativeLayout>
+        </LinearLayout>
 
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
             android:layout_marginLeft="5dp"
-            android:layout_marginBottom="10dp"
             android:layout_marginRight="5dp"
+            android:layout_weight="1"
             android:background="@drawable/bg_left_top"
             android:src="@drawable/bg_left_bottom" />
     </LinearLayout>
@@ -130,31 +123,41 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"
         android:orientation="vertical">
 
-        <RelativeLayout
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginTop="10dp">
 
-            <Button
-                android:id="@+id/home"
+            <RadioGroup
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/btn_home" />
+                android:id="@+id/group"
+                android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/collection"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/home"
-                android:layout_alignTop="@+id/home"
-                android:layout_marginLeft="10dp"
-                android:layout_toRightOf="@+id/home"
-                android:background="@drawable/btn_collection" />
+                <RadioButton
+                    android:id="@+id/home"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/btn_home"
+                    android:button="@null"
+                    android:checked="true" />
+
+                <RadioButton
+                    android:id="@+id/collection"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/home"
+                    android:layout_alignTop="@+id/home"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/home"
+                    android:background="@drawable/btn_collection"
+                    android:button="@null" />
+            </RadioGroup>
 
             <View
                 android:layout_width="match_parent"
@@ -165,6 +168,7 @@
                 android:layout_weight="1" />
 
             <Button
+                android:id="@+id/toAdmin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/home"
@@ -173,10 +177,9 @@
                 android:background="@drawable/btn_default"
                 android:gravity="center"
                 android:text="管理中心"
-                android:id="@+id/toAdmin"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@color/white" />
-        </RelativeLayout>
+        </LinearLayout>
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -184,9 +187,19 @@
             android:layout_marginRight="10dp"
             android:layout_weight="1">
 
-            <include layout="@layout/layout_search" />
+            <com.msx7.josn.ruibo_mediacenter.activity.ui.SearchView
+                android:id="@+id/SearchView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <com.msx7.josn.ruibo_mediacenter.activity.ui.CollectionView
+                android:id="@+id/CollectionView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone" />
 
         </FrameLayout>
 
     </LinearLayout>
+
 </LinearLayout>

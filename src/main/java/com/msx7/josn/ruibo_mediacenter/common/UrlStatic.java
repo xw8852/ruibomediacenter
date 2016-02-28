@@ -18,6 +18,7 @@ public class UrlStatic {
 
     public static final String URL_USERINMONEY = BASE_UR + "/adminapi/admin.userinmoney";
     public static final String URL_CLOSEUSER = BASE_UR + "/adminapi/admin.closeuser";
+    public static final String URL_GETMUSICLIST = BASE_UR + "/adminapi/admin.getmusiclist";
 
     /**
      * 导出会员列表
