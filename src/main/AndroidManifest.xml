@@ -35,6 +35,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!--<receiver android:name=".net.DownloadManager">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="com.msx7.josn.ruibo_mediacenter.net.DownloadManager" />-->
+            <!--</intent-filter>-->
+        <!--</receiver>-->
     </application>
+
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION" />
 </manifest>

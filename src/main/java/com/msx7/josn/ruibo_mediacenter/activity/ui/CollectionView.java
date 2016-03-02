@@ -8,11 +8,14 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -24,10 +27,13 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.msx7.josn.ruibo_mediacenter.R;
 import com.msx7.josn.ruibo_mediacenter.RuiBoApplication;
+import com.msx7.josn.ruibo_mediacenter.activity.BaseActivity;
 import com.msx7.josn.ruibo_mediacenter.bean.BaseBean;
 import com.msx7.josn.ruibo_mediacenter.bean.BeanMusic;
+import com.msx7.josn.ruibo_mediacenter.bean.BeanUserInfo;
 import com.msx7.josn.ruibo_mediacenter.common.UrlStatic;
 import com.msx7.josn.ruibo_mediacenter.net.BaseJsonRequest;
+import com.msx7.josn.ruibo_mediacenter.net.OkHttpManager;
 import com.msx7.josn.ruibo_mediacenter.util.L;
 import com.msx7.josn.ruibo_mediacenter.util.SharedPreferencesUtil;
 import com.msx7.josn.ruibo_mediacenter.util.ToastUtil;
@@ -35,6 +41,7 @@ import com.msx7.josn.ruibo_mediacenter.util.VolleyErrorUtils;
 import com.msx7.lib.annotations.Inject;
 import com.msx7.lib.annotations.InjectView;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,7 +51,7 @@ import java.util.List;
  * 作  者：Josn@憬承
  * 时  间：2016/2/28
  */
-public class CollectionView extends LinearLayout {
+public class CollectionView extends BeanView {
 
     public CollectionView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -73,7 +80,7 @@ public class CollectionView extends LinearLayout {
     View mclear;
 
     @InjectView(R.id.selectAll)
-    View mSelectAll;
+    CheckBox mSelectAll;
 
     @InjectView(R.id.tip)
     TextView mTip;
@@ -113,10 +120,14 @@ public class CollectionView extends LinearLayout {
                 doSearch();
             }
         });
-        mSelectAll.setOnClickListener(new OnClickListener() {
+        mSelectAll.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View v) {
-                mMusicAdapter.checkAll();
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    mMusicAdapter.clearCheck();
+                } else {
+                    mMusicAdapter.checkAll();
+                }
             }
         });
 //        new Handler().postDelayed(new Runnable() {
@@ -133,6 +144,33 @@ public class CollectionView extends LinearLayout {
                 mMusicAdapter.clear();
             }
         });
+        mDownBtn.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (SharedPreferencesUtil.getUserInfo() == null) {
+                    ToastUtil.show("请先登录");
+                    return;
+                }
+                download();
+            }
+        });
+    }
+
+    void download() {
+        double money = 0.0;
+        List<BeanMusic> urls = new ArrayList<BeanMusic>();
+        BeanUserInfo info = SharedPreferencesUtil.getUserInfo();
+        for (String str : mMusicAdapter.mChecked) {
+            BeanMusic beanMusic = mMusicAdapter.beanMusics.get(Integer.parseInt(str));
+            beanMusic.loginid = info.loginid;
+            urls.add(beanMusic);
+            money += mMusicAdapter.beanMusics.get(Integer.parseInt(str)).money;
+        }
+        if (money > SharedPreferencesUtil.getUserInfo().remainmoney) {
+            ToastUtil.show("余额不足,请充值");
+            return;
+        }
+        download(urls);
     }
 
     void doSearch() {
@@ -200,14 +238,20 @@ public class CollectionView extends LinearLayout {
             this.beanMusics = musics;
         }
 
+        public void clearCheck() {
+            if (mChecked.size() != beanMusics.size()) return;
+            mChecked= new ArrayList<String>();
+            onCheckedItem();
+            notifyDataSetChanged();
+        }
         public void clear() {
             beanMusics.clear();
             notifyDataSetChanged();
             mChecked.clear();
             onCheckedItem();
         }
-
         public void checkAll() {
+            if (mChecked.size() == beanMusics.size()) return;
             for (int i = 0; i < beanMusics.size(); i++) {
                 if (!mChecked.contains("" + i)) mChecked.add("" + i);
             }
@@ -249,9 +293,13 @@ public class CollectionView extends LinearLayout {
                 public void onClick(View v) {
                     if (mChecked.contains(position + "")) {
                         mChecked.remove(position + "");
+                        mSelectAll.setChecked(true);
                         holder.itemView.setSelected(false);
                     } else {
                         mChecked.add("" + position);
+                        if (mChecked.size() == beanMusics.size()) {
+                            mSelectAll.setChecked(false);
+                        }
                         holder.itemView.setSelected(true);
                     }
                     onCheckedItem();

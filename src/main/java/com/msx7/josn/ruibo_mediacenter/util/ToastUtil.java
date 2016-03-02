@@ -1,8 +1,10 @@
 package com.msx7.josn.ruibo_mediacenter.util;
 
 import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.text.TextUtils;
 import android.view.Gravity;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.msx7.josn.ruibo_mediacenter.RuiBoApplication;
@@ -30,6 +32,9 @@ public class ToastUtil {
         if (toast == null) {
             toast = Toast.makeText(RuiBoApplication.getApplication(), null, Toast.LENGTH_SHORT);
         }
+        TextView textView=(TextView)toast.getView().findViewById(android.R.id.message);
+        textView.setTextAppearance(RuiBoApplication.getApplication(),android.R.style.TextAppearance_Large);
+        textView.setTextColor(Color.WHITE);
     }
 
     private static void setToastDisplayTime(ToastDisplayTime time) {

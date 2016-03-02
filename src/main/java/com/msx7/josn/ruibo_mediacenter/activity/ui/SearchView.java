@@ -1,19 +1,25 @@
 package com.msx7.josn.ruibo_mediacenter.activity.ui;
 
+import android.app.DownloadManager;
 import android.content.Context;
 import android.graphics.Rect;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Handler;
+import android.os.storage.StorageManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -25,10 +31,13 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.msx7.josn.ruibo_mediacenter.R;
 import com.msx7.josn.ruibo_mediacenter.RuiBoApplication;
+import com.msx7.josn.ruibo_mediacenter.activity.BaseActivity;
 import com.msx7.josn.ruibo_mediacenter.bean.BaseBean;
 import com.msx7.josn.ruibo_mediacenter.bean.BeanMusic;
+import com.msx7.josn.ruibo_mediacenter.bean.BeanUserInfo;
 import com.msx7.josn.ruibo_mediacenter.common.UrlStatic;
 import com.msx7.josn.ruibo_mediacenter.net.BaseJsonRequest;
+import com.msx7.josn.ruibo_mediacenter.net.OkHttpManager;
 import com.msx7.josn.ruibo_mediacenter.util.L;
 import com.msx7.josn.ruibo_mediacenter.util.SharedPreferencesUtil;
 import com.msx7.josn.ruibo_mediacenter.util.ToastUtil;
@@ -36,7 +45,9 @@ import com.msx7.josn.ruibo_mediacenter.util.VolleyErrorUtils;
 import com.msx7.lib.annotations.Inject;
 import com.msx7.lib.annotations.InjectView;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -45,7 +56,7 @@ import java.util.List;
  * 作  者：Josn@憬承
  * 时  间：2016/2/28
  */
-public class SearchView extends LinearLayout {
+public class SearchView extends BeanView {
 
     public SearchView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -74,7 +85,7 @@ public class SearchView extends LinearLayout {
     View mCollection;
 
     @InjectView(R.id.selectAll)
-    View mSelectAll;
+    CheckBox mSelectAll;
 
     @InjectView(R.id.tip)
     TextView mTip;
@@ -105,19 +116,24 @@ public class SearchView extends LinearLayout {
         mRecyclerView.addItemDecoration(new MarginDecoration(getContext()));
         mMusicAdapter = new MusicAdapter(new ArrayList<BeanMusic>());
         mRecyclerView.setAdapter(mMusicAdapter);
-        mSwip.setColorSchemeColors(0xff971e);
+        mSwip.setColorSchemeColors(0xFFFF971E);
         mSwip.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 doSearch();
             }
         });
-        mSelectAll.setOnClickListener(new View.OnClickListener() {
+        mSelectAll.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View v) {
-                mMusicAdapter.checkAll();
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    mMusicAdapter.clearCheck();
+                } else {
+                    mMusicAdapter.checkAll();
+                }
             }
         });
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -135,8 +151,37 @@ public class SearchView extends LinearLayout {
                         SharedPreferencesUtil.addToCollection(mMusicAdapter.beanMusics.get(position));
                     }
                 }
+                ToastUtil.show("添加成功，请继续选歌!");
             }
         });
+        mDownBtn.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (SharedPreferencesUtil.getUserInfo() == null) {
+                    ToastUtil.show("请先登录");
+                    return;
+                }
+                download();
+            }
+        });
+    }
+
+    void download() {
+        double money = 0.0;
+        List<BeanMusic> urls = new ArrayList<BeanMusic>();
+        BeanUserInfo info = SharedPreferencesUtil.getUserInfo();
+        for (String str : mMusicAdapter.mChecked) {
+            BeanMusic beanMusic = mMusicAdapter.beanMusics.get(Integer.parseInt(str));
+            beanMusic.loginid = info.loginid;
+            urls.add(beanMusic);
+            money += mMusicAdapter.beanMusics.get(Integer.parseInt(str)).money;
+        }
+        if (money > SharedPreferencesUtil.getUserInfo().remainmoney) {
+            ToastUtil.show("余额不足,请充值");
+            return;
+        }
+        download(urls);
+
     }
 
     void doSearch() {
@@ -198,7 +243,15 @@ public class SearchView extends LinearLayout {
             onCheckedItem();
         }
 
+        public void clearCheck() {
+            if (mChecked.size() != beanMusics.size()) return;
+            mChecked = new ArrayList<String>();
+            onCheckedItem();
+            notifyDataSetChanged();
+        }
+
         public void checkAll() {
+            if (mChecked.size() == beanMusics.size()) return;
             for (int i = 0; i < beanMusics.size(); i++) {
                 if (!mChecked.contains("" + i)) mChecked.add("" + i);
             }
@@ -239,9 +292,13 @@ public class SearchView extends LinearLayout {
                 public void onClick(View v) {
                     if (mChecked.contains(position + "")) {
                         mChecked.remove(position + "");
+                        mSelectAll.setChecked(true);
                         holder.itemView.setSelected(false);
                     } else {
                         mChecked.add("" + position);
+                        if (mChecked.size() == beanMusics.size()) {
+                            mSelectAll.setChecked(false);
+                        }
                         holder.itemView.setSelected(true);
                     }
                     onCheckedItem();

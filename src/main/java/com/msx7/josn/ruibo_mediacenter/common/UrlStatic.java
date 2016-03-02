@@ -10,6 +10,11 @@ public class UrlStatic {
     private static final String BASE_UR = "http://xw8852.xicp.net";
 
     public static final String URL_LOGIN = BASE_UR + "/passportapi/passport.userlogin";
+    public static final String URL_USERREGISTER = BASE_UR + "/passportapi/passport.userregister";
+    public static final String URL_GETUSERINFO = BASE_UR + "/userapi/user.getuserinfo";
+
+    public static final String URL_DOWNLOADMUSIC = BASE_UR + "/userapi/user.downloadmusic";
+
     public static final String URL_CHANGEUSERPASSWORD = BASE_UR + "/passportapi/passport.changeuserpassword";
     public static final String URL_CHANGEADMINPASSWORD = BASE_UR + "/passportapi/passport.changeadminpassword";
     public static final String URL_ADMINLOGIN = BASE_UR + "/passportapi/passport.adminlogin";
@@ -19,6 +24,7 @@ public class UrlStatic {
     public static final String URL_USERINMONEY = BASE_UR + "/adminapi/admin.userinmoney";
     public static final String URL_CLOSEUSER = BASE_UR + "/adminapi/admin.closeuser";
     public static final String URL_GETMUSICLIST = BASE_UR + "/adminapi/admin.getmusiclist";
+    public static final String URL_GETUSERACCOUNTDETAIL = BASE_UR + "/userapi/admin.getuseraccountdetail";
 
     /**
      * 导出会员列表

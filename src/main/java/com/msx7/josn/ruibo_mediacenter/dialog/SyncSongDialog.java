@@ -57,9 +57,9 @@ public class SyncSongDialog extends BaseCustomDialog {
             BaseBean baseBean = new Gson().fromJson(response, BaseBean.class);
             if ("200".equals(baseBean.code)) {
                 dismiss();
-            } else {
-                ToastUtil.show(baseBean.msg);
             }
+            ToastUtil.show(baseBean.msg);
+
         }
     };
     Response.ErrorListener errorListener = new Response.ErrorListener() {

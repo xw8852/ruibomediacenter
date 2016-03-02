@@ -13,6 +13,7 @@ import com.msx7.josn.ruibo_mediacenter.bean.BeanMusic;
 import com.msx7.josn.ruibo_mediacenter.bean.BeanUserInfo;
 import com.msx7.josn.ruibo_mediacenter.common.UrlStatic;
 import com.msx7.josn.ruibo_mediacenter.dialog.LoginDialog;
+import com.msx7.josn.ruibo_mediacenter.dialog.RecordListDialog;
 import com.msx7.josn.ruibo_mediacenter.dialog.ResetPasswdDialog;
 import com.msx7.josn.ruibo_mediacenter.net.BaseJsonRequest;
 import com.msx7.josn.ruibo_mediacenter.net.LoginRequest;
@@ -21,13 +22,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Rect;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.storage.StorageManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +43,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.msx7.josn.ruibo_mediacenter.net.OkHttpManager;
 import com.msx7.josn.ruibo_mediacenter.util.L;
 import com.msx7.josn.ruibo_mediacenter.util.SharedPreferencesUtil;
 import com.msx7.josn.ruibo_mediacenter.util.ToastUtil;
@@ -49,6 +54,9 @@ import com.msx7.lib.annotations.InjectView;
 
 import com.msx7.josn.ruibo_mediacenter.R;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -114,6 +122,24 @@ public class HomeActivity extends BaseActivity {
                 }
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        BaseJsonRequest request = new BaseJsonRequest(Request.Method.POST, UrlStatic.URL_GETUSERINFO, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                BaseBean<BeanUserInfo> baseBean = new Gson().fromJson(response, new TypeToken<BaseBean<BeanUserInfo>>() {
+                }.getType());
+                if ("200".equals(baseBean.code)) {
+                    SharedPreferencesUtil.saveUserInfo(baseBean.data);
+                }
+            }
+        }, null);
+        RuiBoApplication.getApplication().runVolleyRequest(request);
+
+
     }
 
     /**
@@ -199,6 +225,12 @@ public class HomeActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 new ResetPasswdDialog(v.getContext()).show();
+            }
+        });
+        mRecordBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new RecordListDialog(v.getContext()).show();
             }
         });
     }
