@@ -16,7 +16,7 @@ public class CloseUserRequest extends BaseJsonRequest {
     BeanUserInfo info;
 
     public CloseUserRequest(BeanUserInfo info, Response.Listener<String> listener, Response.ErrorListener errorListener) {
-        super(Method.POST, UrlStatic.URL_CLOSEUSER, listener, errorListener);
+        super(Method.POST, UrlStatic.URL_CLOSEUSER(), listener, errorListener);
         this.info = info;
         addRequestJson(new Gson().toJson(info));
     }

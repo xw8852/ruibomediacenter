@@ -47,7 +47,7 @@ public class BeanView extends LinearLayout {
         try {
             new OkHttpClient().newCall(
                     new Request.Builder()
-                            .url(UrlStatic.URL_DOWNLOADMUSIC)
+                            .url(UrlStatic.URL_DOWNLOADMUSIC())
                             .post(RequestBody.create(JSON, new Gson().toJson(urls)))
                             .build())
                     .enqueue(new Callback() {

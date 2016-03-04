@@ -19,7 +19,7 @@ public class ResetAdminPasswdRequest extends BaseJsonRequest {
     String newpassword;
 
     public ResetAdminPasswdRequest(String password, String newpassword, Response.Listener<String> listener, Response.ErrorListener errorListener) {
-        super(Method.POST, UrlStatic.URL_CHANGEADMINPASSWORD, listener, errorListener);
+        super(Method.POST, UrlStatic.URL_CHANGEADMINPASSWORD(), listener, errorListener);
         this.password = password;
         this.newpassword = newpassword;
         ResetAdmin admin = new ResetAdmin();

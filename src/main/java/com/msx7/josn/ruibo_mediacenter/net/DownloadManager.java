@@ -5,6 +5,7 @@ import android.os.storage.StorageManager;
 import android.util.Log;
 
 import com.msx7.josn.ruibo_mediacenter.activity.BaseActivity;
+import com.msx7.josn.ruibo_mediacenter.util.SharedPreferencesUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,8 +17,7 @@ import java.util.List;
  * 作  者：Josn@憬承
  * 时  间：2016/3/1
  */
-public class DownloadManager  {
-
+public class DownloadManager {
 
 
     public static final void download(List<String> urls, BaseActivity activity, OkHttpManager.IDownFinish iDownFinish) {
@@ -41,7 +41,9 @@ public class DownloadManager  {
 
         for (String url : urls) {
             Log.d("MSG", url);
-            url = url.replaceFirst("json:88", "xw8852.xicp.net");
+            int index = url.indexOf(":88");
+            url = url.substring(index);
+            url = SharedPreferencesUtil.getServerIp() + url;
             Log.d("MSG", url);
             String pathName = url.substring(url.lastIndexOf("/") + 1);
             File file = new File(path + File.separator + pathName);
@@ -59,7 +61,6 @@ public class DownloadManager  {
             }
         }
     }
-
 
 
 }

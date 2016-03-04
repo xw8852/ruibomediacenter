@@ -13,7 +13,7 @@ public class SyncSongRequest extends BaseJsonRequest {
 
 
     public SyncSongRequest(int userId, Response.Listener<String> listener, Response.ErrorListener errorListener) {
-        super(Method.GET, UrlStatic.URL_UPLOADMUSIC+"/"+userId, listener, errorListener);
+        super(Method.GET, UrlStatic.URL_UPLOADMUSIC()+"/"+userId, listener, errorListener);
     }
 
 

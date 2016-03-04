@@ -187,7 +187,7 @@ public class SearchView extends BeanView {
     void doSearch() {
         mMusicAdapter.clear();
         onCheckedItem();
-        BaseJsonRequest request = new BaseJsonRequest(Request.Method.POST, UrlStatic.URL_GETMUSICLIST,
+        BaseJsonRequest request = new BaseJsonRequest(Request.Method.POST, UrlStatic.URL_GETMUSICLIST(),
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {

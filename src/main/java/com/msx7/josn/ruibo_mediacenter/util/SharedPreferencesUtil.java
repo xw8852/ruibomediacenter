@@ -2,6 +2,7 @@ package com.msx7.josn.ruibo_mediacenter.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -9,6 +10,7 @@ import com.msx7.josn.ruibo_mediacenter.RuiBoApplication;
 import com.msx7.josn.ruibo_mediacenter.bean.BeanAdminInfo;
 import com.msx7.josn.ruibo_mediacenter.bean.BeanMusic;
 import com.msx7.josn.ruibo_mediacenter.bean.BeanUserInfo;
+import com.msx7.josn.ruibo_mediacenter.common.UrlStatic;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -82,4 +84,14 @@ public class SharedPreferencesUtil {
         sharedPreferences.edit().putString("Collection", "").commit();
     }
 
+
+    public static final void saveServerIp(String saveServerIp) {
+        sharedPreferences.edit().putString("saveServerIp", saveServerIp).commit();
+    }
+
+    public static final String getServerIp() {
+        if(TextUtils.isEmpty(sharedPreferences.getString("saveServerIp", "")))
+            return UrlStatic.BASE_UR;
+        return sharedPreferences.getString("saveServerIp", "");
+    }
 }

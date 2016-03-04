@@ -80,7 +80,7 @@ public class OpenAccountDialog extends BaseCustomDialog {
         userInfo.password = "111111";
         userInfo.totalmoney = _money;
         userInfo.remainmoney = _money;
-        BaseJsonRequest request = new BaseJsonRequest(Request.Method.POST, UrlStatic.URL_USERREGISTER, new Response.Listener<String>() {
+        BaseJsonRequest request = new BaseJsonRequest(Request.Method.POST, UrlStatic.URL_USERREGISTER(), new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 BaseBean baseBean=new Gson().fromJson(response,BaseBean.class);

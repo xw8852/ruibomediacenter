@@ -15,7 +15,7 @@ public class ResetPasswdRequest extends BaseJsonRequest {
     String password;
 
     public ResetPasswdRequest(String password, Response.Listener<String> listener, Response.ErrorListener errorListener) {
-        super(Method.POST, UrlStatic.URL_CHANGEUSERPASSWORD, listener, errorListener);
+        super(Method.POST, UrlStatic.URL_CHANGEUSERPASSWORD(), listener, errorListener);
         this.password = password;
         addRequestJson(buildJson());
     }

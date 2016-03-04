@@ -14,7 +14,7 @@ public class getUserRequest extends BaseJsonRequest {
     String name;
 
     public getUserRequest(String name, Response.Listener<String> listener, Response.ErrorListener errorListener) {
-        super(Method.POST, UrlStatic.URL_GETUSERLIST, listener, errorListener);
+        super(Method.POST, UrlStatic.URL_GETUSERLIST(), listener, errorListener);
         this.name = name;
         addRequestJson(buildJson());
     }

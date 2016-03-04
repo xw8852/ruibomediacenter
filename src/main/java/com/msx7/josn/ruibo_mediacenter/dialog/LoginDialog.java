@@ -18,6 +18,8 @@ import com.msx7.lib.annotations.InjectView;
 public class LoginDialog extends BaseCustomDialog {
     @InjectView(R.id.tip)
     TextView mTips;
+    @InjectView(R.id.ip)
+    TextView ip;
     @InjectView(R.id.loginName)
     TextView mLoginName;
     @InjectView(R.id.loginPasswd)
@@ -25,12 +27,19 @@ public class LoginDialog extends BaseCustomDialog {
     @InjectView(R.id.login)
     TextView mLoginBtn;
 
-    public LoginDialog(Context context) {
+    public LoginDialog(final Context context) {
         super(context);
         getLayoutInflater().inflate(R.layout.layout_dialog_login, (ViewGroup) findViewById(R.id.content));
         Inject.inject(this, findViewById(R.id.content));
         mTips.setText("");
         setTitle(R.string.user_login);
+        ip.setVisibility(View.VISIBLE);
+        ip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new IpDialog(context).show();
+            }
+        });
     }
 
     public TextView getLoginBtn() {

@@ -66,7 +66,7 @@ public class MonthlyStatementDialog extends BaseCustomDialog {
 
     void showMoneyDetail() {
         activity.showProgess();
-        RuiBoApplication.getApplication().runVolleyRequest(new BaseJsonRequest(Request.Method.POST, UrlStatic.URL_GETMONEYDETAIL, new Response.Listener<String>() {
+        RuiBoApplication.getApplication().runVolleyRequest(new BaseJsonRequest(Request.Method.POST, UrlStatic.URL_GETMONEYDETAIL(), new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 BaseBean<List<BeanMoneyDetailInfo>> baseBean = new Gson().fromJson(response, new TypeToken<BaseBean<List<BeanMoneyDetailInfo>>>() {
@@ -129,7 +129,7 @@ public class MonthlyStatementDialog extends BaseCustomDialog {
      */
     void exportusertoexcel() {
         activity.showProgess();
-        RuiBoApplication.getApplication().runVolleyRequest(new BaseJsonRequest(Request.Method.POST, UrlStatic.URL_EXPORTUSERTOEXCEL,
+        RuiBoApplication.getApplication().runVolleyRequest(new BaseJsonRequest(Request.Method.POST, UrlStatic.URL_EXPORTUSERTOEXCEL(),
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -156,7 +156,7 @@ public class MonthlyStatementDialog extends BaseCustomDialog {
      */
     void exportuserinmoneytoexcel() {
         activity.showProgess();
-        RuiBoApplication.getApplication().runVolleyRequest(new BaseJsonRequest(Request.Method.POST, UrlStatic.URL_EXPORTUSERINMONEYTOEXCEL,
+        RuiBoApplication.getApplication().runVolleyRequest(new BaseJsonRequest(Request.Method.POST, UrlStatic.URL_EXPORTUSERINMONEYTOEXCEL(),
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -183,7 +183,7 @@ public class MonthlyStatementDialog extends BaseCustomDialog {
      */
     void exportmoneydetailtoexcel() {
         activity.showProgess();
-        RuiBoApplication.getApplication().runVolleyRequest(new BaseJsonRequest(Request.Method.POST, UrlStatic.URL_EXPORTMONEYDETAILTOEXCEL,
+        RuiBoApplication.getApplication().runVolleyRequest(new BaseJsonRequest(Request.Method.POST, UrlStatic.URL_EXPORTMONEYDETAILTOEXCEL(),
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {

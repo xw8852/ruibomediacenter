@@ -68,6 +68,19 @@
         app:strokeWidth="1dp" />
 
     <com.msx7.lib.widget.shape.ShapeTextView
+        android:id="@+id/ip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:gravity="center"
+        android:padding="10dp"
+        android:visibility="gone"
+        android:text="服务器地址"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#ff791e"
+       />
+
+    <com.msx7.lib.widget.shape.ShapeTextView
         android:id="@+id/login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

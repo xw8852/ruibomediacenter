@@ -14,7 +14,7 @@ public class AdminLoginRequest extends BaseJsonRequest {
     String password;
 
     public AdminLoginRequest(String password, Response.Listener<String> listener, Response.ErrorListener errorListener) {
-        super(Method.POST, UrlStatic.URL_ADMINLOGIN, listener, errorListener);
+        super(Method.POST, UrlStatic.URL_ADMINLOGIN(), listener, errorListener);
         this.password = password;
         addRequestJson(buildJson());
     }

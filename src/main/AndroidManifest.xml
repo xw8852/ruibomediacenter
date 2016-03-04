@@ -18,16 +18,19 @@
         <activity
             android:name="com.msx7.josn.ruibo_mediacenter.activity.MainActivity"
             android:screenOrientation="landscape"
+            android:windowSoftInputMode="stateHidden"
             android:theme="@android:style/Theme.NoTitleBar">
 
         </activity>
         <activity
             android:name=".activity.AdminActivity"
+            android:windowSoftInputMode="stateHidden"
             android:screenOrientation="landscape"
             android:theme="@android:style/Theme.NoTitleBar" />
         <activity
             android:name="com.msx7.josn.ruibo_mediacenter.activity.HomeActivity"
             android:screenOrientation="landscape"
+            android:windowSoftInputMode="stateHidden"
             android:theme="@android:style/Theme.NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

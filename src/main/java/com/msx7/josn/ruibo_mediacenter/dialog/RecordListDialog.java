@@ -52,7 +52,7 @@ public class RecordListDialog extends BaseCustomDialog {
 
     void showMoneyDetail() {
         activity.showProgess();
-        BaseJsonRequest request = new BaseJsonRequest(Request.Method.POST, UrlStatic.URL_GETUSERACCOUNTDETAIL, new Response.Listener<String>() {
+        BaseJsonRequest request = new BaseJsonRequest(Request.Method.POST, UrlStatic.URL_GETUSERACCOUNTDETAIL(), new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 BaseBean<List<BeanUserRecord>> baseBean = new Gson().fromJson(response, new TypeToken<BaseBean<List<BeanUserRecord>>>() {
