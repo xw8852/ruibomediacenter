@@ -1,6 +1,7 @@
 package com.msx7.josn.ruibo_mediacenter.net;
 
 import android.content.Context;
+import android.os.Environment;
 import android.os.storage.StorageManager;
 import android.util.Log;
 
@@ -38,6 +39,20 @@ public class DownloadManager {
         } finally {
 
         }
+        try {
+            File file = new File(path + "/11.txt");
+            if (!file.exists()) {
+                file.createNewFile();
+            } else {
+                file.deleteOnExit();
+                file.createNewFile();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            path = Environment.getExternalStorageDirectory().getAbsolutePath();
+            Log.i("dddd00", path);
+        } finally {
+        }
 
         for (String url : urls) {
             Log.d("MSG", url);
@@ -46,10 +61,11 @@ public class DownloadManager {
             url = SharedPreferencesUtil.getServerIp() + url;
             Log.d("MSG", url);
             String pathName = url.substring(url.lastIndexOf("/") + 1);
-            File file = new File(path + File.separator + pathName);
+            File file = new File(path + File.separator +"MUSIC" + File.separator+ pathName);
             if (file.exists()) {
-                file = new File(path + File.separator + System.currentTimeMillis() + pathName);
+                file = new File(path + File.separator  +"MUSIC" + File.separator+ System.currentTimeMillis() + pathName);
             }
+            Log.d("MSG", file.getPath());
             try {
                 OkHttpManager.asDown(url, file, iDownFinish);
             } catch (IOException e) {
