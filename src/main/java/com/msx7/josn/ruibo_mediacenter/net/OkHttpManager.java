@@ -27,7 +27,9 @@ public class OkHttpManager {
     static final OkHttpClient okHttpClient = new OkHttpClient();
 
     public static final void asDown(final String url, final File file, final IDownFinish finish) throws IOException {
+        System.setProperty("http.keepAlive", "false");
         okHttpClient.newCall(new Request.Builder()
+                .addHeader("http.keepAlive", "false")
                 .url(url)
                 .build()).
                 enqueue(new Callback() {
@@ -40,37 +42,47 @@ public class OkHttpManager {
                             }
 
                             @Override
-                            public void onResponse(Call call, Response response) throws IOException {
-                                if (!file.exists()) {
-                                    file.createNewFile();
+                            public void onResponse(Call call, Response response) {
+                                try {
+                                    if (!file.getParentFile().exists()) {
+                                        file.getParentFile().mkdirs();
+                                    }
+                                    if (!file.exists()) {
+                                        file.createNewFile();
+                                    }
+                                    InputStream is = response.body().byteStream();
+                                    FileOutputStream fos = new FileOutputStream(file);
+                                    byte[] bytes = new byte[102400];
+                                    int len = 0;
+                                    while ((len = is.read(bytes)) > 0) {
+                                        fos.write(bytes, 0, len);
+                                    }
+                                    fos.flush();
+                                    fos.close();
+                                    is.close();
+                                    if (finish != null) {
+                                        finish.finish(url, file);
+                                    }
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                    if (finish != null) {
+                                        finish.error(url, file);
+                                    }
+                                } finally {
                                 }
 
-                                InputStream is = response.body().byteStream();
-                                FileOutputStream fos = new FileOutputStream(file);
-//                                fos.write(response.body().bytes());
-                                byte[] bytes = new byte[102400];
-                                int len = 0;
-                                while ((len = is.read(bytes)) > 0) {
-                                    fos.write(bytes, 0, len);
-                                }
-                                fos.flush();
-                                fos.close();
-                                is.close();
-                                if (finish != null) {
-                                    finish.finish(url, file);
-                                }
-//                                RuiBoApplication.getApplication().sendBroadcast(new Intent("com.msx7.josn.ruibo_mediacenter.net.DownloadManager"));
+                            }
+                        }
+                );
+    }
+
+    //                                RuiBoApplication.getApplication().sendBroadcast(new Intent("com.msx7.josn.ruibo_mediacenter.net.DownloadManager"));
 //                                Headers responseHeaders = response.headers();
 //                                for (int i = 0; i < responseHeaders.size(); i++) {
 //                                    System.out.println(responseHeaders.name(i) + ": " + responseHeaders.value(i));
 //                                }
 //
 //                                System.out.println(response.body().string());
-                            }
-                        }
-                );
-    }
-
     public interface IDownFinish {
         void finish(String url, File file);
 

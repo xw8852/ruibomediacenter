@@ -2,76 +2,140 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background">
+    android:background="#FF0e252d">
 
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:orientation="horizontal">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|left"
+        android:layout_marginLeft="30dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="left"
+            android:orientation="horizontal">
 
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:drawablePadding="10dp"
-            android:drawableTop="@drawable/ic_open_account"
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/tranparent"
+                android:drawablePadding="10dp"
+                android:drawableTop="@drawable/ic_recharge"
+                android:gravity="center"
+                android:onClick="chongzhi"
+                android:text="会员充值"
+                android:textColor="@color/white"
+                android:textSize="32dp" />
+
+            <View
+                android:layout_width="30dp"
+                android:layout_height="1dp" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/tranparent"
+                android:drawablePadding="10dp"
+                android:drawableTop="@drawable/ic_administrator"
+                android:gravity="center"
+                android:onClick="onAdmin"
+                android:text="管理员"
+                android:textColor="@color/white"
+                android:textSize="32dp" />
+
+
+            <View
+                android:layout_width="30dp"
+                android:layout_height="1dp" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/tranparent"
+                android:drawablePadding="10dp"
+                android:drawableTop="@drawable/ic_song_library"
+                android:gravity="center"
+                android:onClick="onSong"
+                android:text="更新歌曲"
+                android:textColor="@color/white"
+                android:textSize="32dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="40dp"
             android:gravity="center"
-            android:onClick="onOpen"
-            android:background="@color/tranparent"
-            android:text="开通账号"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/white" />
+            android:orientation="horizontal">
 
-        <View
-            android:layout_width="30dp"
-            android:layout_height="1dp" />
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:drawablePadding="10dp"
-            android:drawableTop="@drawable/ic_administrator"
-            android:gravity="center"
-            android:onClick="onAdmin"
-            android:text="管理员"
-            android:background="@color/tranparent"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/white" />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/tranparent"
+                android:drawablePadding="10dp"
+                android:drawableTop="@drawable/ic_vip"
+                android:gravity="center"
+                android:onClick="baoyue"
+                android:text="会员包月"
+                android:textColor="@color/white"
+                android:textSize="32dp" />
 
-        <View
-            android:layout_width="30dp"
-            android:layout_height="1dp" />
+            <View
+                android:layout_width="30dp"
+                android:layout_height="1dp" />
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:drawablePadding="10dp"
-            android:drawableTop="@drawable/ic_member_management"
-            android:gravity="center"
-            android:background="@color/tranparent"
-            android:onClick="onUser"
-            android:text="会员管理"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/white" />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/tranparent"
+                android:drawablePadding="10dp"
+                android:drawableTop="@drawable/ic_member_management"
+                android:gravity="center"
+                android:onClick="onUser"
+                android:text="会员管理"
+                android:textColor="@color/white"
+                android:textSize="32dp" />
 
-        <View
-            android:layout_width="30dp"
-            android:layout_height="1dp" />
+            <View
+                android:layout_width="30dp"
+                android:layout_height="1dp" />
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:drawablePadding="10dp"
-            android:drawableTop="@drawable/ic_song_library"
-            android:gravity="center"
-            android:onClick="onSong"
-            android:background="@color/tranparent"
-            android:text="歌曲库"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/white" />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/tranparent"
+                android:drawablePadding="10dp"
+                android:drawableTop="@drawable/ic_back"
+                android:gravity="center"
+                android:onClick="onback"
+                android:text="备份"
+                android:textColor="@color/white"
+                android:textSize="32dp" />
+
+
+            <View
+                android:layout_width="30dp"
+                android:layout_height="1dp" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/tranparent"
+                android:drawablePadding="10dp"
+                android:drawableTop="@drawable/ic_shutdown"
+                android:gravity="center"
+                android:onClick="shutdown"
+                android:text="关机"
+                android:textColor="@color/white"
+                android:textSize="32dp" />
+        </LinearLayout>
     </LinearLayout>
+
 
     <ImageView
         android:layout_width="wrap_content"

@@ -1,6 +1,8 @@
 package com.msx7.josn.ruibo_mediacenter.net;
 
 import com.android.volley.Response;
+import com.google.gson.Gson;
+import com.google.gson.annotations.SerializedName;
 import com.msx7.josn.ruibo_mediacenter.common.UrlStatic;
 import com.msx7.josn.ruibo_mediacenter.util.SharedPreferencesUtil;
 
@@ -12,16 +14,38 @@ import com.msx7.josn.ruibo_mediacenter.util.SharedPreferencesUtil;
  */
 public class ResetPasswdRequest extends BaseJsonRequest {
 
-    String password;
 
-    public ResetPasswdRequest(String password, Response.Listener<String> listener, Response.ErrorListener errorListener) {
+    public ResetPasswdRequest(Post post, Response.Listener<String> listener, Response.ErrorListener errorListener) {
         super(Method.POST, UrlStatic.URL_CHANGEUSERPASSWORD(), listener, errorListener);
-        this.password = password;
-        addRequestJson(buildJson());
+        addRequestJson(new Gson().toJson(post));
     }
 
 
-    String buildJson() {
-        return "{\"loginname\":\"" + SharedPreferencesUtil.getUserInfo().loginname + "\",\"password\":\"" + SharedPreferencesUtil.getUserInfo().password + "\",\"newpassword\":\"" + password + "\",\"confirmnewspassword\":\"" + password + "\"}";
+    public  static class Post{
+
+        /**
+         * confirmnewspassword : 字符串内容
+         * id : 2147483647
+         * inmoneypassword : 字符串内容
+         * loginid : 2147483647
+         * loginname : 字符串内容
+         * newpassword : 字符串内容
+         */
+
+        @SerializedName("confirmnewspassword")
+        public String confirmnewspassword;
+        @SerializedName("id")
+        public int id;
+        @SerializedName("inmoneypassword")
+        public String inmoneypassword;
+        @SerializedName("loginid")
+        public int loginid;
+        @SerializedName("loginname")
+        public String loginname;
+        @SerializedName("newpassword")
+        public String newpassword;
+        @SerializedName("password")
+        public String password;
     }
+
 }

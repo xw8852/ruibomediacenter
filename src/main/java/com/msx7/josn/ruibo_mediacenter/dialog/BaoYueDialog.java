@@ -7,8 +7,6 @@ import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.android.volley.Response;
@@ -19,13 +17,10 @@ import com.msx7.josn.ruibo_mediacenter.R;
 import com.msx7.josn.ruibo_mediacenter.RuiBoApplication;
 import com.msx7.josn.ruibo_mediacenter.activity.BaseActivity;
 import com.msx7.josn.ruibo_mediacenter.bean.BaseBean;
-import com.msx7.josn.ruibo_mediacenter.bean.BeanAdminInfo;
 import com.msx7.josn.ruibo_mediacenter.bean.BeanUserInfo;
 import com.msx7.josn.ruibo_mediacenter.net.CloseUserRequest;
-import com.msx7.josn.ruibo_mediacenter.net.ResetAdminPasswdRequest;
 import com.msx7.josn.ruibo_mediacenter.net.ResetPasswdRequest;
 import com.msx7.josn.ruibo_mediacenter.net.getUserRequest;
-import com.msx7.josn.ruibo_mediacenter.util.SharedPreferencesUtil;
 import com.msx7.josn.ruibo_mediacenter.util.ToastUtil;
 import com.msx7.josn.ruibo_mediacenter.util.VolleyErrorUtils;
 import com.msx7.lib.annotations.Inject;
@@ -39,7 +34,7 @@ import java.util.List;
  * 作  者：Josn
  * 时  间：2016/2/27
  */
-public class UserManagerDialog extends BaseCustomDialog {
+public class BaoYueDialog extends BaseCustomDialog {
     @InjectView(R.id.tip)
     TextView mTips;
     @InjectView(R.id.loginName)
@@ -56,13 +51,13 @@ public class UserManagerDialog extends BaseCustomDialog {
 
     BaseActivity activity;
 
-    public UserManagerDialog(Context context) {
+    public BaoYueDialog(Context context) {
         super(context);
-        getLayoutInflater().inflate(R.layout.layout_dialog_user, (ViewGroup) findViewById(R.id.content));
+        getLayoutInflater().inflate(R.layout.layout_dialog_baoyue, (ViewGroup) findViewById(R.id.content));
         Inject.inject(this, findViewById(R.id.content));
         mTips.setText("");
         activity = (BaseActivity) context;
-        setTitle("会员管理");
+        setTitle("会员包月");
         mLoginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -70,7 +65,7 @@ public class UserManagerDialog extends BaseCustomDialog {
             }
         });
 
-        mLoginName.setFilters(new InputFilter[]{new InputFilter.LengthFilter(6)});
+        mLoginName. setFilters(new InputFilter[] { new InputFilter.LengthFilter(6) });
         mLoginName.setInputType(InputType.TYPE_NULL);
         mLoginName.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,38 +93,38 @@ public class UserManagerDialog extends BaseCustomDialog {
 
 
     void onLogin() {
-        String loginName = mLoginName.getText().toString();
-        if (TextUtils.isEmpty(loginName)) {
-            mTips.setText("请输入会员卡号或手机号码");
-            return;
-        }
-        activity.showProgess();
-        RuiBoApplication.getApplication().runVolleyRequest(new getUserRequest(loginName, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                activity.dismisProgess();
-                BaseBean<List<BeanUserInfo>> baseBean = new Gson().fromJson(response, new TypeToken<BaseBean<List<BeanUserInfo>>>() {
-                }.getType());
-                if ("200".equals(baseBean.code)) {
-                    if (baseBean.data.size() == 0) {
-                        mTips.setText("卡号无效");
-                        return;
-                    }
-                    beanUserInfo = baseBean.data.get(0);
-                    initUser();
-                    mLoginRoot.setVisibility(View.GONE);
-                    mUserRoot.setVisibility(View.VISIBLE);
-                } else {
-                    mTips.setText(baseBean.msg);
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                activity.dismisProgess();
-                mTips.setText(VolleyErrorUtils.getError(error));
-            }
-        }));
+//        String loginName = mLoginName.getText().toString();
+//        if (TextUtils.isEmpty(loginName)) {
+//            mTips.setText("请输入会员卡号或手机号码");
+//            return;
+//        }
+//        activity.showProgess();
+//        RuiBoApplication.getApplication().runVolleyRequest(new getUserRequest(loginName, new Response.Listener<String>() {
+//            @Override
+//            public void onResponse(String response) {
+//                activity.dismisProgess();
+//                BaseBean<List<BeanUserInfo>> baseBean = new Gson().fromJson(response, new TypeToken<BaseBean<List<BeanUserInfo>>>() {
+//                }.getType());
+//                if ("200".equals(baseBean.code)) {
+//                    if (baseBean.data.size() == 0) {
+//                        mTips.setText("卡号无效");
+//                        return;
+//                    }
+//                    beanUserInfo = baseBean.data.get(0);
+//                    initUser();
+//                    mLoginRoot.setVisibility(View.GONE);
+//                    mUserRoot.setVisibility(View.VISIBLE);
+//                } else {
+//                    mTips.setText(baseBean.msg);
+//                }
+//            }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                activity.dismisProgess();
+//                mTips.setText(VolleyErrorUtils.getError(error));
+//            }
+//        }));
     }
 
     BeanUserInfo beanUserInfo;

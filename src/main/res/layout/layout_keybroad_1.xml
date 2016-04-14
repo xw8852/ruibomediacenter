@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.msx7.lib.widget.shape.ShapeLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="10dp"
+    app:radius="16dp"
+    app:solide="@color/black">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:background="@drawable/key_bg_1"
+                android:gravity="center"
+                android:text="1"
+                android:id="@+id/num1"
+                android:textColor="@color/white"
+                android:textSize="32dp" />
+
+            <View
+                android:layout_width="10dp"
+                android:layout_height="1dp" />
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:background="@drawable/key_bg_1"
+                android:gravity="center"
+                android:text="2"
+                android:id="@+id/num2"
+                android:textColor="@color/white"
+                android:textSize="32dp" />
+
+            <View
+                android:layout_width="10dp"
+                android:layout_height="1dp" />
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:background="@drawable/key_bg_1"
+                android:gravity="center"
+                android:text="3"
+                android:id="@+id/num3"
+                android:textColor="@color/white"
+                android:textSize="32dp" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="10dp"
+            android:layout_height="10dp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:background="@drawable/key_bg_1"
+                android:gravity="center"
+                android:text="4"
+                android:id="@+id/num4"
+                android:textColor="@color/white"
+                android:textSize="32dp" />
+
+            <View
+                android:layout_width="10dp"
+                android:layout_height="1dp" />
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:background="@drawable/key_bg_1"
+                android:gravity="center"
+                android:text="5"
+                android:id="@+id/num5"
+                android:textColor="@color/white"
+                android:textSize="32dp" />
+
+            <View
+                android:layout_width="10dp"
+                android:layout_height="1dp" />
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:background="@drawable/key_bg_1"
+                android:gravity="center"
+                android:text="6"
+                android:id="@+id/num6"
+                android:textColor="@color/white"
+                android:textSize="32dp" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="10dp"
+            android:layout_height="10dp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="80dp">
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:background="@drawable/key_bg_1"
+                android:gravity="center"
+                android:text="7"
+                android:id="@+id/num7"
+                android:textColor="@color/white"
+                android:textSize="32dp" />
+
+            <View
+                android:layout_width="10dp"
+                android:layout_height="1dp" />
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:background="@drawable/key_bg_1"
+                android:gravity="center"
+                android:text="8"
+                android:id="@+id/num8"
+                android:textColor="@color/white"
+                android:textSize="32dp" />
+
+            <View
+                android:layout_width="10dp"
+                android:layout_height="10dp" />
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:background="@drawable/key_bg_1"
+                android:gravity="center"
+                android:text="9"
+                android:id="@+id/num9"
+                android:textColor="@color/white"
+                android:textSize="32dp" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="10dp"
+            android:layout_height="10dp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="80dp">
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:background="@drawable/key_bg_1"
+                android:gravity="center"
+                android:text="*"
+                android:id="@+id/num11"
+                android:textColor="@color/white"
+                android:textSize="32dp" />
+
+            <View
+                android:layout_width="10dp"
+                android:layout_height="1dp" />
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:background="@drawable/key_bg_1"
+                android:gravity="center"
+                android:text="0"
+                android:id="@+id/num10"
+                android:textColor="@color/white"
+                android:textSize="32dp" />
+
+            <View
+                android:layout_width="10dp"
+                android:layout_height="1dp" />
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:background="@drawable/key_bg_1"
+                android:gravity="center"
+                android:text="#"
+                android:id="@+id/num12"
+                android:textColor="@color/white"
+                android:textSize="32dp" />
+        </LinearLayout>
+    </LinearLayout>
+</com.msx7.lib.widget.shape.ShapeLinearLayout>

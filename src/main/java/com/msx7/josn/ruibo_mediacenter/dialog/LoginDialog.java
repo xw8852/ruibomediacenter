@@ -1,8 +1,12 @@
 package com.msx7.josn.ruibo_mediacenter.dialog;
 
 import android.content.Context;
+import android.text.InputFilter;
+import android.text.InputType;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
 
 import com.msx7.josn.ruibo_mediacenter.R;
@@ -27,17 +31,43 @@ public class LoginDialog extends BaseCustomDialog {
     @InjectView(R.id.login)
     TextView mLoginBtn;
 
+
     public LoginDialog(final Context context) {
         super(context);
         getLayoutInflater().inflate(R.layout.layout_dialog_login, (ViewGroup) findViewById(R.id.content));
         Inject.inject(this, findViewById(R.id.content));
         mTips.setText("");
         setTitle(R.string.user_login);
+        mLoginName. setFilters(new InputFilter[] { new InputFilter.LengthFilter(6) });
+        mLoginPassWd.setFilters(new InputFilter[] { new InputFilter.LengthFilter(6) });
+        mLoginPassWd.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
         ip.setVisibility(View.VISIBLE);
         ip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 new IpDialog(context).show();
+            }
+        });
+
+
+        mLoginName.setInputType(InputType.TYPE_NULL);
+        mLoginName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mLoginName.setText("");
+                int right = findViewById(R.id.root).getRight();
+                new Keyboard1(v, mLoginName).getPopupWindow().showAtLocation(v, Gravity.CENTER, right, 0);
+            }
+        });
+
+        mLoginPassWd.setInputType(InputType.TYPE_NULL);
+        mLoginPassWd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mLoginPassWd.setText("");
+
+                int right = findViewById(R.id.root).getRight();
+                new Keyboard1(v, mLoginPassWd).getPopupWindow().showAtLocation(v, Gravity.CENTER, right, 0);
             }
         });
     }

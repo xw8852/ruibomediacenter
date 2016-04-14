@@ -21,6 +21,9 @@ public class BeanMusic {
      * typename : 戏曲
      */
 
+    @SerializedName("code")
+    public long code;
+
     @SerializedName("id")
     public int id;
     @SerializedName("loginid")
@@ -43,7 +46,7 @@ public class BeanMusic {
         if (o == null) return false;
         if (!(o instanceof BeanMusic)) return false;
         BeanMusic music = (BeanMusic) o;
-        if (music.id <= 0 || id <= 0) return false;
-        return music.id == id;
+        if (music.code <= 0 || code <= 0) return false;
+        return music.code == code;
     }
 }

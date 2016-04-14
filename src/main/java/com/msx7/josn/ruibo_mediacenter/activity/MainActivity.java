@@ -33,21 +33,11 @@ import com.msx7.lib.annotations.InjectView;
 public class MainActivity extends BaseActivity {
     @InjectView(R.id.tip)
     TextView mTips;
-    @InjectView(R.id.passwd)
-    TextView mPasswd;
-    @InjectView(R.id.login)
-    View mLoginBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Inject.inject(this);
-        mLoginBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onLogin();
-            }
-        });
         findViewById(R.id.backpress).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -55,16 +45,43 @@ public class MainActivity extends BaseActivity {
             }
         });
         mTips.setText("");
+        findViewById(R.id.num1).setOnClickListener(numClickListener);
+        findViewById(R.id.num2).setOnClickListener(numClickListener);
+        findViewById(R.id.num3).setOnClickListener(numClickListener);
+        findViewById(R.id.num4).setOnClickListener(numClickListener);
+        findViewById(R.id.num5).setOnClickListener(numClickListener);
+        findViewById(R.id.num6).setOnClickListener(numClickListener);
+        findViewById(R.id.num7).setOnClickListener(numClickListener);
+        findViewById(R.id.num8).setOnClickListener(numClickListener);
+        findViewById(R.id.num9).setOnClickListener(numClickListener);
+        findViewById(R.id.num10).setOnClickListener(numClickListener);
+        findViewById(R.id.num11).setOnClickListener(numClickListener);
+        findViewById(R.id.num12).setOnClickListener(numClickListener);
     }
 
-    void onLogin() {
-        String passwd = mPasswd.getText().toString();
+    View.OnClickListener numClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            clickNumber(v);
+        }
+    };
+
+    String passwd = "";
+
+    void clickNumber(View v) {
+        passwd = passwd + ((TextView) v).getText().toString();
+        if (passwd.length() == 6)
+            onLogin(passwd);
+    }
+
+    void onLogin(String passwd) {
         if (TextUtils.isEmpty(passwd)) {
             mTips.setText("请输入管理员密码");
             return;
         }
         showProgess();
         RuiBoApplication.getApplication().runVolleyRequest(new AdminLoginRequest(passwd, responseListener, errorListener));
+        this.passwd = "";
     }
 
     Response.Listener<String> responseListener = new Response.Listener<String>() {

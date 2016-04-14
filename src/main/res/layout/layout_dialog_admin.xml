@@ -19,6 +19,7 @@
         android:textColor="@color/white"
         app:radius="10dp"
         app:solide="#ff791e" />
+
     <com.msx7.lib.widget.shape.ShapeTextView
         android:id="@+id/btn2"
         android:layout_width="match_parent"
@@ -42,6 +43,7 @@
         android:text="对账单"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/white"
+        android:visibility="gone"
         app:radius="10dp"
         app:solide="#ff791e" />
 </LinearLayout>

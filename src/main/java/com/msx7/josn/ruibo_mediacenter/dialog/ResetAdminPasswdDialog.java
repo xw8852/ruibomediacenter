@@ -1,7 +1,10 @@
 package com.msx7.josn.ruibo_mediacenter.dialog;
 
 import android.content.Context;
+import android.text.InputFilter;
+import android.text.InputType;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -40,7 +43,15 @@ public class ResetAdminPasswdDialog extends BaseCustomDialog {
         mOldPassWd.setVisibility(View.VISIBLE);
         mOldPassWd.setHint("请输入旧密码");
         getLoginNameView().setHint("请输入新密码");
-        getLoginNameView().setHint("请再次确认新密码");
+        getLoginPassWdView().setHint("请再次确认新密码");
+        mLoginName. setFilters(new InputFilter[] { new InputFilter.LengthFilter(6) });
+        mOldPassWd. setFilters(new InputFilter[] { new InputFilter.LengthFilter(6) });
+        mLoginPassWd. setFilters(new InputFilter[] { new InputFilter.LengthFilter(6) });
+
+        mOldPassWd.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
+        getLoginNameView().setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
+        getLoginPassWdView().setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
+
         getLoginBtn().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -48,6 +59,44 @@ public class ResetAdminPasswdDialog extends BaseCustomDialog {
             }
         });
         setTitle(R.string.reset_admin_password);
+
+
+
+        mOldPassWd.setInputType(InputType.TYPE_NULL);
+        mOldPassWd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mOldPassWd.setText("");
+                int right = findViewById(R.id.root).getRight();
+                new Keyboard1(v, mOldPassWd).getPopupWindow().showAtLocation(v, Gravity.CENTER, right, 0);
+            }
+        });
+
+
+
+
+        mLoginName.setInputType(InputType.TYPE_NULL);
+        mLoginName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mLoginName.setText("");
+                int right = findViewById(R.id.root).getRight();
+                new Keyboard1(v, mLoginName).getPopupWindow().showAtLocation(v, Gravity.CENTER, right, 0);
+            }
+        });
+
+
+
+        mLoginPassWd.setInputType(InputType.TYPE_NULL);
+        mLoginPassWd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mLoginPassWd.setText("");
+                int right = findViewById(R.id.root).getRight();
+                new Keyboard1(v, mLoginPassWd).getPopupWindow().showAtLocation(v, Gravity.CENTER, right, 0);
+            }
+        });
+
     }
 
 

@@ -35,6 +35,7 @@ import com.msx7.josn.ruibo_mediacenter.common.UrlStatic;
 import com.msx7.josn.ruibo_mediacenter.net.BaseJsonRequest;
 import com.msx7.josn.ruibo_mediacenter.net.OkHttpManager;
 import com.msx7.josn.ruibo_mediacenter.util.L;
+import com.msx7.josn.ruibo_mediacenter.util.SDUtils;
 import com.msx7.josn.ruibo_mediacenter.util.SharedPreferencesUtil;
 import com.msx7.josn.ruibo_mediacenter.util.ToastUtil;
 import com.msx7.josn.ruibo_mediacenter.util.VolleyErrorUtils;
@@ -67,11 +68,12 @@ public class CollectionView extends BeanView {
     @InjectView(R.id.search_btn)
     View mSearchBtn;
 
+    @InjectView(R.id.searchRoot)
+    View mSearchRoot;
+
     @InjectView(R.id.RecyclerView)
     RecyclerView mRecyclerView;
 
-    @InjectView(R.id.swip)
-    SwipeRefreshLayout mSwip;
 
     @InjectView(R.id.down)
     View mDownBtn;
@@ -88,38 +90,32 @@ public class CollectionView extends BeanView {
     MusicAdapter mMusicAdapter;
 
     void initSearch() {
-        mSearchContent.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
-        mSearchContent.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH ||
-                        actionId == EditorInfo.IME_ACTION_DONE ||
-                        event.getKeyCode() == KeyEvent.KEYCODE_SEARCH) {
-                    doSearch();
-                }
-                return false;
-            }
-        });
-        mSearchBtn.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                doSearch();
-            }
-        });
+        mSearchRoot.setVisibility(View.GONE);
+//        mSearchContent.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
+//        mSearchContent.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+//            @Override
+//            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+//                if (actionId == EditorInfo.IME_ACTION_SEARCH ||
+//                        actionId == EditorInfo.IME_ACTION_DONE ||
+//                        event.getKeyCode() == KeyEvent.KEYCODE_SEARCH) {
+//                    doSearch();
+//                }
+//                return false;
+//            }
+//        });
+//        mSearchBtn.setOnClickListener(new OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                doSearch();
+//            }
+//        });
         GridLayoutManager manager = new GridLayoutManager(getContext(), 2);
         mRecyclerView.setLayoutManager(manager);
         mRecyclerView.addItemDecoration(new MarginDecoration(getContext()));
         mMusicAdapter = new MusicAdapter(new ArrayList<BeanMusic>());
         mRecyclerView.setAdapter(mMusicAdapter);
         mMusicAdapter.setData(SharedPreferencesUtil.getCollection());
-        mSwip.setColorSchemeColors(0xff971e);
-        mSwip.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                mSwip.setRefreshing(false);
-                doSearch();
-            }
-        });
+
         mSelectAll.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -130,13 +126,6 @@ public class CollectionView extends BeanView {
                 }
             }
         });
-//        new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                mSwip.setRefreshing(true);
-//                doSearch();
-//            }
-//        }, 100);
         mclear.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -156,64 +145,44 @@ public class CollectionView extends BeanView {
         });
     }
 
+    public void showData() {
+        mMusicAdapter.setData(SearchView.sort(SharedPreferencesUtil.getCollection()));
+    }
+
     void download() {
         double money = 0.0;
         List<BeanMusic> urls = new ArrayList<BeanMusic>();
         BeanUserInfo info = SharedPreferencesUtil.getUserInfo();
+        //下载大小
+        long size = 0;
         for (String str : mMusicAdapter.mChecked) {
             BeanMusic beanMusic = mMusicAdapter.beanMusics.get(Integer.parseInt(str));
             beanMusic.loginid = info.loginid;
+            size = +beanMusic.size;
             urls.add(beanMusic);
-            money += mMusicAdapter.beanMusics.get(Integer.parseInt(str)).money;
+            money += beanMusic.money;
         }
-        if (money > SharedPreferencesUtil.getUserInfo().remainmoney) {
+        if (urls == null || urls.isEmpty()) {
+            ToastUtil.show("请选择歌曲");
+            return;
+        }
+        if (money > SharedPreferencesUtil.getUserInfo().totalmoney) {
             ToastUtil.show("余额不足,请充值");
             return;
         }
-        download(urls);
-    }
-
-    void doSearch() {
-        String search = mSearchContent.getText().toString().trim();
-        if (TextUtils.isEmpty(search)) {
-            mMusicAdapter.setData(SharedPreferencesUtil.getCollection());
+        if (!SDUtils.isExist()) {
+            ToastUtil.show("请将u盘插入usb1接口处");
             return;
         }
-        List<BeanMusic> musics = new ArrayList<BeanMusic>();
-        List<BeanMusic> data = SharedPreferencesUtil.getCollection();
-        for (BeanMusic music : data) {
-            if (music.name.contains(search)) {
-                musics.add(music);
-            }
+
+        if (SDUtils.getRemainSize() < size) {
+            ToastUtil.show("U盘存储空间不足");
+            return;
         }
-//        mMusicAdapter.clear();
-//        onCheckedItem();
-//        BaseJsonRequest request = new BaseJsonRequest(Request.Method.POST, UrlStatic.URL_GETMUSICLIST,
-//                new Response.Listener<String>() {
-//                    @Override
-//                    public void onResponse(String response) {
-//                        L.d(response);
-//                        mSwip.setRefreshing(false);
-//                        BaseBean<List<BeanMusic>> baseBean = new Gson().fromJson(response, new TypeToken<BaseBean<List<BeanMusic>>>() {
-//                        }.getType());
-//                        if ("200".equals(baseBean.code)) {
-//                            mMusicAdapter.addMore(baseBean.data);
-//                        } else {
-//                            ToastUtil.show(baseBean.msg);
-//                        }
-//                    }
-//                }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                mSwip.setRefreshing(false);
-//                ToastUtil.show(VolleyErrorUtils.getError(error));
-//            }
-//        });
-//        if (!TextUtils.isEmpty(mSearchContent.getText().toString()))
-//            request.addRequestJson("{\"name\":\"" + mSearchContent.getText().toString() + "\"}");
-//        mSwip.setRefreshing(true);
-//        RuiBoApplication.getApplication().runVolleyRequest(request);
+        download(urls);
+        SharedPreferencesUtil.clearCollection();
     }
+
 
     void onCheckedItem() {
         int count = 0;
@@ -240,16 +209,18 @@ public class CollectionView extends BeanView {
 
         public void clearCheck() {
             if (mChecked.size() != beanMusics.size()) return;
-            mChecked= new ArrayList<String>();
+            mChecked = new ArrayList<String>();
             onCheckedItem();
             notifyDataSetChanged();
         }
+
         public void clear() {
             beanMusics.clear();
             notifyDataSetChanged();
             mChecked.clear();
             onCheckedItem();
         }
+
         public void checkAll() {
             if (mChecked.size() == beanMusics.size()) return;
             for (int i = 0; i < beanMusics.size(); i++) {
@@ -284,7 +255,7 @@ public class CollectionView extends BeanView {
                 holder.itemView.setSelected(true);
             } else holder.itemView.setSelected(false);
 
-            holder.num.setText("歌曲编码:" + music.id);
+            holder.num.setText("歌曲编码:" + music.code);
             holder.name.setText(music.name);
             holder.money.setText(music.money + "元");
 

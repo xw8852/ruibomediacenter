@@ -55,13 +55,28 @@ public class SharedPreferencesUtil {
     }
 
 
+    public static final int getFailCount() {
+        return sharedPreferences.getInt("getFailCount", 0);
+    }
+
+    public static final void setFailCount(int count){
+        sharedPreferences.edit().putInt("getFailCount", count).commit();
+    }
+    public static final long getFailTime() {
+        return sharedPreferences.getLong("getFailTIME", 0);
+    }
+
+    public static final void setFailTIME(long count){
+        sharedPreferences.edit().putLong("getFailTIME", count).commit();
+    }
+
 
     public static final void addToCollection(BeanMusic music) {
         addToCollection(Arrays.asList(music));
     }
 
     public static final void addToCollection(List<BeanMusic> music) {
-        List<BeanMusic> musics=getCollection();
+        List<BeanMusic> musics = getCollection();
         musics.addAll(music);
         saveCollection(musics);
     }
@@ -72,10 +87,10 @@ public class SharedPreferencesUtil {
     }
 
     public static final List<BeanMusic> getCollection() {
-        List<BeanMusic> arr=new Gson().fromJson(sharedPreferences.getString("Collection", ""), new TypeToken<List<BeanMusic>>() {
+        List<BeanMusic> arr = new Gson().fromJson(sharedPreferences.getString("Collection", ""), new TypeToken<List<BeanMusic>>() {
         }.getType());
-        if(arr==null){
-            arr=new ArrayList<BeanMusic>();
+        if (arr == null) {
+            arr = new ArrayList<BeanMusic>();
         }
         return arr;
     }
@@ -90,7 +105,7 @@ public class SharedPreferencesUtil {
     }
 
     public static final String getServerIp() {
-        if(TextUtils.isEmpty(sharedPreferences.getString("saveServerIp", "")))
+        if (TextUtils.isEmpty(sharedPreferences.getString("saveServerIp", "")))
             return UrlStatic.BASE_UR;
         return sharedPreferences.getString("saveServerIp", "");
     }

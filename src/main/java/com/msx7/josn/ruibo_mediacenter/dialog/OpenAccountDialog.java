@@ -77,16 +77,18 @@ public class OpenAccountDialog extends BaseCustomDialog {
         }
         BeanUserInfo userInfo = new BeanUserInfo();
         userInfo.loginname = loginName;
+        userInfo.loginid = 1;
         userInfo.password = "111111";
         userInfo.totalmoney = _money;
         userInfo.remainmoney = _money;
         BaseJsonRequest request = new BaseJsonRequest(Request.Method.POST, UrlStatic.URL_USERREGISTER(), new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                BaseBean baseBean=new Gson().fromJson(response,BaseBean.class);
-                if("200".equals(baseBean.code)){
+                activity.dismisProgess();
+                BaseBean baseBean = new Gson().fromJson(response, BaseBean.class);
+                if ("200".equals(baseBean.code)) {
                     dismiss();
-                }else{
+                } else {
                     mTips.setText(baseBean.msg);
                 }
 
@@ -94,6 +96,7 @@ public class OpenAccountDialog extends BaseCustomDialog {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                activity.dismisProgess();
                 mTips.setText(VolleyErrorUtils.getError(error));
             }
         });

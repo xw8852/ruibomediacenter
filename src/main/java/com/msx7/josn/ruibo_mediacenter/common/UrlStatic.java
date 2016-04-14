@@ -56,11 +56,46 @@ public class UrlStatic {
     }
 
     public static String URL_GETMUSICLIST() {
-        return getServerIp() + "/adminapi/admin.getmusiclist";
+        return getServerIp() + "/userapi/user.searchmusic";
+    }
+
+    /**
+     * 收藏歌曲
+     *
+     * @return
+     */
+    public static String URL_FAVORITEMUSIC() {
+        return getServerIp() + "/userapi/user.favoritemusic";
+    }
+
+    /**
+     * 获取音乐类别
+     *
+     * @return
+     */
+    public static String URL_GETMUSICTYPE() {
+        return getServerIp() + "/adminapi/admin.getmusictypelist";
+    }
+
+    /**
+     * 设置音乐类别的价格
+     * @return
+     */
+    public static String URL_RESETMUSICTYPE() {
+        return getServerIp() + "/adminapi/admin.resetmusictypemoney";
+    }
+
+    /**
+     * 获取收藏歌曲
+     *
+     * @return
+     */
+    public static String URL_GETFAVORITEMUSIC() {
+        return getServerIp() + "/userapi/user.getfavoritemusic";
     }
 
     public static String URL_GETUSERACCOUNTDETAIL() {
-        return getServerIp() + "/userapi/admin.getuseraccountdetail";
+        return getServerIp() + "/userapi/user.getuseraccountdetail";
     }
 
     /**
@@ -93,7 +128,8 @@ public class UrlStatic {
 
     private static final String getServerIp() {
         String ip = SharedPreferencesUtil.getServerIp();
-        if (ip.matches("http://((?:(?:25[0-5]|2[0-4]\\d|((1\\d{2})|([1-9]?\\d)))\\.){3}(?:25[0-5]|2[0-4]\\d|((1\\d{2})|([1-9]?\\d))))")) return ip + ":88";
+        if (ip.matches("http://((?:(?:25[0-5]|2[0-4]\\d|((1\\d{2})|([1-9]?\\d)))\\.){3}(?:25[0-5]|2[0-4]\\d|((1\\d{2})|([1-9]?\\d))))"))
+            return ip + ":88";
         else return ip;
     }
 

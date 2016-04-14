@@ -3,4 +3,8 @@
     <dimen name="title_height">48dp</dimen>
     <dimen name="single_item">@dimen/title_height</dimen>
     <dimen name="item_margin">10dp</dimen>
+    <dimen name="dp10">10dp</dimen>
+    <dimen name="dp20">20dp</dimen>
+    <dimen name="dp30">30dp</dimen>
+    <dimen name="dp40">40dp</dimen>
 </resources>

@@ -14,12 +14,14 @@ import com.msx7.josn.ruibo_mediacenter.bean.BeanMusic;
 import com.msx7.josn.ruibo_mediacenter.common.UrlStatic;
 import com.msx7.josn.ruibo_mediacenter.dialog.DownloadDialog;
 import com.msx7.josn.ruibo_mediacenter.net.OkHttpManager;
+import com.msx7.josn.ruibo_mediacenter.util.SharedPreferencesUtil;
 import com.msx7.josn.ruibo_mediacenter.util.ToastUtil;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -45,7 +47,11 @@ public class BeanView extends LinearLayout {
     protected void download(final List<BeanMusic> urls) {
         showDialog();
         try {
-            new OkHttpClient().newCall(
+            OkHttpClient.Builder builder = new OkHttpClient.Builder();
+            builder.connectTimeout(15, TimeUnit.SECONDS);
+            builder.writeTimeout(15, TimeUnit.SECONDS);
+            OkHttpClient client = builder.build();
+            client.newCall(
                     new Request.Builder()
                             .url(UrlStatic.URL_DOWNLOADMUSIC())
                             .post(RequestBody.create(JSON, new Gson().toJson(urls)))
@@ -107,6 +113,7 @@ public class BeanView extends LinearLayout {
                     mDialog = new DownloadDialog(getContext());
                     mDialog.setCancelable(false);
                 }
+                mDialog.setCancelable(false);
                 mDialog.show();
             }
         });
@@ -145,6 +152,7 @@ public class BeanView extends LinearLayout {
                             ToastUtil.show("下载成功！");
                         }
                     });
+
                 }
             }
 
@@ -154,12 +162,12 @@ public class BeanView extends LinearLayout {
                 downcount++;
                 if (downcount == count) {
                     dismissDialog();
-                    RuiBoApplication.getApplication().getHandler().post(new Runnable() {
-                        @Override
-                        public void run() {
-                            ToastUtil.show("下载成功！");
-                        }
-                    });
+//                    RuiBoApplication.getApplication().getHandler().post(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            ToastUtil.show("下载成功！");
+//                        }
+//                    });
                 }
             }
         });

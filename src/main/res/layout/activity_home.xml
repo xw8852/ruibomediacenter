@@ -10,8 +10,8 @@
         android:layout_width="200dp"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:paddingBottom="30dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingBottom="30dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -20,6 +20,7 @@
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:layout_marginTop="10dp"
+            android:paddingBottom="10dp"
             android:layout_weight="1"
             android:background="@drawable/bg_left_top"
             android:orientation="horizontal">
@@ -28,7 +29,8 @@
                 android:id="@+id/loginbg"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/btn_login" />
+                android:src="@drawable/btn_login"
+                android:visibility="gone" />
 
             <LinearLayout
                 android:id="@+id/loginRoot"
@@ -38,74 +40,74 @@
                 android:orientation="vertical"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
-                android:visibility="gone">
+                android:visibility="visible">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
+                    android:gravity="left"
+                    android:paddingLeft="20dp"
+                    android:paddingTop="40dp"
+                    android:layout_weight="1"
                     android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/account_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
+                        android:gravity="left|center_vertical"
                         android:text="@string/account_name"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:textColor="@color/white" />
+                        android:textColor="@color/white"
+                        android:textSize="30sp" />
 
                     <TextView
                         android:id="@+id/account_money"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
-                        android:gravity="center"
+                        android:gravity="left|center_vertical"
                         android:text="@string/account_money"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:textColor="@color/white" />
+                        android:textColor="@color/white"
+                        android:textSize="30sp" />
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:gravity="center"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:layout_marginBottom="40dp"
                     android:orientation="horizontal">
 
                     <Button
                         android:id="@+id/resetPasswd"
                         android:layout_width="wrap_content"
                         android:layout_height="48dp"
+                        android:layout_weight="1"
                         android:background="@drawable/bg_left_btn"
                         android:gravity="center"
                         android:text="重设密码"
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:textColor="@color/white" />
 
+                    <View
+                        android:layout_width="10dp"
+                        android:layout_height="1dp"/>
                     <Button
-                        android:id="@+id/record"
+                        android:id="@+id/loginOut"
                         android:layout_width="wrap_content"
                         android:layout_height="48dp"
-                        android:layout_marginLeft="10dp"
+                        android:layout_weight="1"
                         android:background="@drawable/bg_left_btn"
                         android:gravity="center"
-                        android:text="交易记录"
+                        android:text="安全退出"
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:textColor="@color/white" />
                 </LinearLayout>
 
 
-                <Button
-                    android:id="@+id/loginOut"
-                    android:layout_width="wrap_content"
-                    android:layout_height="48dp"
-                    android:layout_marginTop="10dp"
-                    android:background="@drawable/bg_left_btn"
-                    android:gravity="center"
-                    android:text="安全退出"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="@color/white" />
             </LinearLayout>
 
         </LinearLayout>
@@ -126,17 +128,17 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp">
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
 
             <RadioGroup
+                android:id="@+id/group"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/group"
                 android:orientation="horizontal">
 
                 <RadioButton
@@ -156,7 +158,8 @@
                     android:layout_marginLeft="10dp"
                     android:layout_toRightOf="@+id/home"
                     android:background="@drawable/btn_collection"
-                    android:button="@null" />
+                    android:button="@null"
+                    android:enabled="false" />
             </RadioGroup>
 
             <View

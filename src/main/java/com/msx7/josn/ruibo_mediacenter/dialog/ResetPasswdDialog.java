@@ -1,6 +1,7 @@
 package com.msx7.josn.ruibo_mediacenter.dialog;
 
 import android.content.Context;
+import android.text.InputFilter;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +39,8 @@ public class ResetPasswdDialog extends BaseCustomDialog {
         getLoginBtn().setText("立即生效");
         getLoginNameView().setHint("请重设密码(6位)");
         getLoginPassWdView().setHint("请再次确认密码(6位)");
+        mLoginName. setFilters(new InputFilter[] { new InputFilter.LengthFilter(6) });
+        mLoginPassWd. setFilters(new InputFilter[] { new InputFilter.LengthFilter(6) });
         getLoginBtn().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -55,6 +58,10 @@ public class ResetPasswdDialog extends BaseCustomDialog {
             mTips.setText("请输入重设密码");
             return;
         }
+        if (passwd.length() != 6) {
+            mTips.setText("密码位数不正确");
+            return;
+        }
         if (TextUtils.isEmpty(surePasswd)) {
             mTips.setText("请再次确认密码");
             return;
@@ -64,7 +71,19 @@ public class ResetPasswdDialog extends BaseCustomDialog {
             return;
         }
         activity.showProgess();
-        RuiBoApplication.getApplication().runVolleyRequest(new ResetPasswdRequest(getLoginNameView().getText().toString(), new Response.Listener<String>() {
+        ResetPasswdRequest.Post post = new ResetPasswdRequest.Post();
+        BeanUserInfo userInfo = SharedPreferencesUtil.getUserInfo();
+        post.loginid = userInfo.loginid;
+        if (userInfo.loginid == 0) {
+            post.loginid = userInfo.id;
+        }
+        post.id = userInfo.id;
+        post.loginname = userInfo.loginname;
+        post.confirmnewspassword = surePasswd;
+        post.newpassword = passwd;
+        post.password = userInfo.password;
+        post.inmoneypassword = surePasswd;
+        RuiBoApplication.getApplication().runVolleyRequest(new ResetPasswdRequest(post, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 activity.dismisProgess();
@@ -74,7 +93,7 @@ public class ResetPasswdDialog extends BaseCustomDialog {
                     info.password = getLoginNameView().getText().toString();
                     SharedPreferencesUtil.saveUserInfo(info);
                     dismiss();
-
+                    ToastUtil.show("重设密码成功");
                 } else {
                     getTipView().setText(baseBean.msg);
                 }

@@ -75,6 +75,8 @@ public class HomeActivity extends BaseActivity {
     View toAdmin;
     @InjectView(R.id.root)
     View root;
+    @InjectView(R.id.collection)
+    View collection;
     @InjectView(R.id.group)
     RadioGroup group;
 
@@ -97,18 +99,12 @@ public class HomeActivity extends BaseActivity {
                 startActivity(intent);
             }
         });
-        if (SharedPreferencesUtil.getUserInfo() != null) {
-            showUserInfo();
-        } else
-            unlogin();
+        SharedPreferencesUtil.saveUserInfo(null);
+        SharedPreferencesUtil.clearCollection();
         DisplayMetrics dm = getResources().getDisplayMetrics();
         int height = Math.min(dm.widthPixels, dm.heightPixels);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(height / 2, height);
         root.setLayoutParams(params);
-//        L.d("way", dm.widthPixels + "," + dm.heightPixels);
-//        L.d("density = " + dm.density + ",densityDpi = " + dm.densityDpi);
-//        L.d("xDPi = " + dm.xdpi + ",yDpi = " + dm.ydpi);
-//        L.d("scaledDensity = " + dm.scaledDensity);
         group.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -116,9 +112,10 @@ public class HomeActivity extends BaseActivity {
                     mSearchView.setVisibility(View.VISIBLE);
                     mCollectionView.setVisibility(View.GONE);
                 } else if (checkedId == R.id.collection) {
+                    mSearchView.clear();
                     mSearchView.setVisibility(View.GONE);
                     mCollectionView.setVisibility(View.VISIBLE);
-
+                    mCollectionView.showData();
                 }
             }
         });
@@ -127,25 +124,48 @@ public class HomeActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        BaseJsonRequest request = new BaseJsonRequest(Request.Method.POST, UrlStatic.URL_GETUSERINFO(), new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                BaseBean<BeanUserInfo> baseBean = new Gson().fromJson(response, new TypeToken<BaseBean<BeanUserInfo>>() {
-                }.getType());
-                if ("200".equals(baseBean.code)) {
-                    SharedPreferencesUtil.saveUserInfo(baseBean.data);
+        if (SharedPreferencesUtil.getUserInfo() != null) {
+            showUserInfo();
+            collection.setEnabled(true);
+            BaseJsonRequest request = new BaseJsonRequest(Request.Method.POST, UrlStatic.URL_GETUSERINFO(), new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    BaseBean<BeanUserInfo> baseBean = new Gson().fromJson(response, new TypeToken<BaseBean<BeanUserInfo>>() {
+                    }.getType());
+                    if ("200".equals(baseBean.code)) {
+                        SharedPreferencesUtil.saveUserInfo(baseBean.data);
+                    }
                 }
+            }, null);
+            request.addRequestJson(new Gson().toJson(SharedPreferencesUtil.getUserInfo()));
+            RuiBoApplication.getApplication().runVolleyRequest(request);
+        } else {
+            mLoginView.setVisibility(View.VISIBLE);
+            mLoginRootView.setVisibility(View.GONE);
+            mSearchView.clear();
+            collection.setEnabled(false);
+            if (group.getCheckedRadioButtonId() == R.id.collection) {
+                ((RadioButton) group.findViewById(R.id.home)).setChecked(true);
             }
-        }, null);
-        RuiBoApplication.getApplication().runVolleyRequest(request);
-
-
+            unlogin();
+        }
     }
 
     /**
      * 初始化 登录界面信息
      */
     void unlogin() {
+
+        mLoginView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getLoginDialog().show();
+            }
+        });
+    }
+
+
+    LoginDialog getLoginDialog() {
         mLoginDialog = new LoginDialog(this);
         mLoginDialog.getLoginBtn().setOnClickListener(new View.OnClickListener() {
             @Override
@@ -164,14 +184,15 @@ public class HomeActivity extends BaseActivity {
                 login(loginName, loginPassWd);
             }
         });
-        mLoginView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mLoginDialog.getLoginPassWdView().setText("");
-                mLoginDialog.getLoginNameView().setText("");
-                mLoginDialog.show();
-            }
-        });
+        return mLoginDialog;
+    }
+
+    public static long FAIL_TIME = 0;
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        SharedPreferencesUtil.setFailCount(0);
     }
 
     /**
@@ -181,17 +202,30 @@ public class HomeActivity extends BaseActivity {
      * @param loginPassWd
      */
     void login(String loginName, String loginPassWd) {
+        if (SharedPreferencesUtil.getFailCount() >= 5 &&
+                System.currentTimeMillis() - SharedPreferencesUtil.getFailTime() < 1000 * 3600) {
+            mLoginDialog.getTipView().setText("登录失败5次，1小时内不能再次登录");
+            return;
+        } else if (System.currentTimeMillis() - SharedPreferencesUtil.getFailTime() >= 1000 * 3600) {
+            SharedPreferencesUtil.setFailCount(0);
+        }
         RuiBoApplication.getApplication().runVolleyRequest(new LoginRequest(loginName, loginPassWd, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                L.d(response);
                 dismisProgess();
                 BaseBean<BeanUserInfo> baseBean = new Gson().fromJson(response, new TypeToken<BaseBean<BeanUserInfo>>() {
                 }.getType());
                 if ("200".equals(baseBean.code)) {
                     mLoginDialog.dismiss();
                     SharedPreferencesUtil.saveUserInfo(baseBean.data);
+                    collection.setEnabled(true);
                     showUserInfo();
                 } else {
+                    SharedPreferencesUtil.setFailTIME(System.currentTimeMillis());
+                    SharedPreferencesUtil.setFailCount(SharedPreferencesUtil.getFailCount() + 1);
+                    mLoginDialog.getLoginNameView().setText("");
+                    mLoginDialog.getLoginPassWdView().setText("");
                     mLoginDialog.getTipView().setText(baseBean.msg);
                 }
             }
@@ -216,6 +250,11 @@ public class HomeActivity extends BaseActivity {
                 SharedPreferencesUtil.clearUserInfo();
                 mLoginView.setVisibility(View.VISIBLE);
                 mLoginRootView.setVisibility(View.GONE);
+                mSearchView.clear();
+                collection.setEnabled(false);
+                if (group.getCheckedRadioButtonId() == R.id.collection) {
+                    ((RadioButton) group.findViewById(R.id.home)).setChecked(true);
+                }
                 unlogin();
             }
         });
@@ -227,12 +266,12 @@ public class HomeActivity extends BaseActivity {
                 new ResetPasswdDialog(v.getContext()).show();
             }
         });
-        mRecordBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new RecordListDialog(v.getContext()).show();
-            }
-        });
+//        mRecordBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                new RecordListDialog(v.getContext()).show();
+//            }
+//        });
     }
 
     /**
@@ -270,10 +309,10 @@ public class HomeActivity extends BaseActivity {
     @InjectView(R.id.resetPasswd)
     View mResetPasswdBtn;
 
-    /**
-     * 交易记录
-     */
-    @InjectView(R.id.record)
-    View mRecordBtn;
+//    /**
+//     * 交易记录
+//     */
+//    @InjectView(R.id.record)
+//    View mRecordBtn;
 
 }

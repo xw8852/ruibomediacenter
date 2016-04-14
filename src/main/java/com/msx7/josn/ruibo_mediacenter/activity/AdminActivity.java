@@ -3,11 +3,23 @@ package com.msx7.josn.ruibo_mediacenter.activity;
 import android.os.Bundle;
 import android.view.View;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.google.gson.Gson;
 import com.msx7.josn.ruibo_mediacenter.R;
+import com.msx7.josn.ruibo_mediacenter.RuiBoApplication;
+import com.msx7.josn.ruibo_mediacenter.bean.BaseBean;
 import com.msx7.josn.ruibo_mediacenter.dialog.AdminDialog;
+import com.msx7.josn.ruibo_mediacenter.dialog.BaoYueDialog;
+import com.msx7.josn.ruibo_mediacenter.dialog.ChongZhiDialog;
 import com.msx7.josn.ruibo_mediacenter.dialog.OpenAccountDialog;
 import com.msx7.josn.ruibo_mediacenter.dialog.SyncSongDialog;
 import com.msx7.josn.ruibo_mediacenter.dialog.UserManagerDialog;
+import com.msx7.josn.ruibo_mediacenter.net.SyncSongRequest;
+import com.msx7.josn.ruibo_mediacenter.util.L;
+import com.msx7.josn.ruibo_mediacenter.util.SharedPreferencesUtil;
+import com.msx7.josn.ruibo_mediacenter.util.ToastUtil;
+import com.msx7.josn.ruibo_mediacenter.util.VolleyErrorUtils;
 
 /**
  * 文件名: LoginManager
@@ -27,6 +39,7 @@ public class AdminActivity extends BaseActivity {
                 finish();
             }
         });
+        SharedPreferencesUtil.clearUserInfo();
     }
 
     /**
@@ -62,6 +75,44 @@ public class AdminActivity extends BaseActivity {
      * @param v
      */
     public void onSong(View v) {
-        new SyncSongDialog(v.getContext()).show();
+        showProgess();
+        RuiBoApplication.getApplication().runVolleyRequest(new SyncSongRequest(2, responseListener, errorListener));
+
     }
+
+    Response.Listener<String> responseListener = new Response.Listener<String>() {
+        @Override
+        public void onResponse(String response) {
+            dismisProgess();
+            L.d(response);
+            BaseBean baseBean = new Gson().fromJson(response, BaseBean.class);
+            ToastUtil.show(baseBean.msg);
+
+        }
+    };
+    Response.ErrorListener errorListener = new Response.ErrorListener() {
+        @Override
+        public void onErrorResponse(VolleyError error) {
+            dismisProgess();
+            ToastUtil.show(VolleyErrorUtils.getError(error));
+        }
+    };
+
+    public void shutdown(View v) {
+    }
+
+
+    public void chongzhi(View v) {
+        new ChongZhiDialog(v.getContext()).show();
+    }
+
+
+    public void baoyue(View v) {
+        new BaoYueDialog(v.getContext()).show();
+    }
+
+
+    public void onback(View v) {
+    }
+
 }

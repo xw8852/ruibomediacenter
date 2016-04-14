@@ -19,6 +19,7 @@ import com.msx7.josn.ruibo_mediacenter.util.L;
 public class RuiBoApplication extends Application {
     private static RuiBoApplication application;
 
+    public static final String MUSIC_FILE = "/mnt/usb_storage/";
 
     @Override
     public void onCreate() {

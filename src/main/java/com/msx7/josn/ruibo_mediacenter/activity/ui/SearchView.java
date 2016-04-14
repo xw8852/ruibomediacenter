@@ -10,6 +10,7 @@ import android.os.storage.StorageManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -36,9 +37,11 @@ import com.msx7.josn.ruibo_mediacenter.bean.BaseBean;
 import com.msx7.josn.ruibo_mediacenter.bean.BeanMusic;
 import com.msx7.josn.ruibo_mediacenter.bean.BeanUserInfo;
 import com.msx7.josn.ruibo_mediacenter.common.UrlStatic;
+import com.msx7.josn.ruibo_mediacenter.dialog.Keyboard1;
 import com.msx7.josn.ruibo_mediacenter.net.BaseJsonRequest;
 import com.msx7.josn.ruibo_mediacenter.net.OkHttpManager;
 import com.msx7.josn.ruibo_mediacenter.util.L;
+import com.msx7.josn.ruibo_mediacenter.util.SDUtils;
 import com.msx7.josn.ruibo_mediacenter.util.SharedPreferencesUtil;
 import com.msx7.josn.ruibo_mediacenter.util.ToastUtil;
 import com.msx7.josn.ruibo_mediacenter.util.VolleyErrorUtils;
@@ -46,7 +49,11 @@ import com.msx7.lib.annotations.Inject;
 import com.msx7.lib.annotations.InjectView;
 
 import java.io.File;
+import java.sql.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
@@ -92,6 +99,20 @@ public class SearchView extends BeanView {
 
     MusicAdapter mMusicAdapter;
 
+    public void clear() {
+        mMusicAdapter.setData(new ArrayList<BeanMusic>());
+        mSearchContent.setText("");
+        mSearchContent.setInputType(InputType.TYPE_NULL);
+        mSearchContent.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mSearchContent.setText("");
+                mSearchContent.setTag("mSearchContent");
+                new Keyboard1(v, mSearchContent).getPopupWindow().showAsDropDown(v, 0, getResources().getDimensionPixelSize(R.dimen.dp10));
+            }
+        });
+    }
+
     void initSearch() {
         mSearchContent.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
         mSearchContent.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -105,6 +126,7 @@ public class SearchView extends BeanView {
                 return false;
             }
         });
+//        mSearchContent.
         mSearchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -141,17 +163,32 @@ public class SearchView extends BeanView {
                 doSearch();
             }
         }, 100);
+
         mCollection.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (SharedPreferencesUtil.getUserInfo() == null) {
+                    ToastUtil.show("请先登录");
+                    return;
+                }
                 if (mMusicAdapter.mChecked.size() <= 0) return;
+                List<BeanMusic> musics = SharedPreferencesUtil.getCollection();
+                BeanUserInfo userInfo = SharedPreferencesUtil.getUserInfo();
                 for (int i = 0; i < mMusicAdapter.mChecked.size(); i++) {
                     int position = Integer.parseInt(mMusicAdapter.mChecked.get(i));
-                    if (!SharedPreferencesUtil.getCollection().contains(mMusicAdapter.beanMusics.get(position))) {
-                        SharedPreferencesUtil.addToCollection(mMusicAdapter.beanMusics.get(position));
-                    }
+                    BeanMusic music = mMusicAdapter.beanMusics.get(position);
+                    music.loginid = userInfo.id;
+                    if (!musics.contains(music)) musics.add(music);
                 }
-                ToastUtil.show("添加成功，请继续选歌!");
+                Collections.sort(musics, new Comparator<BeanMusic>() {
+                    @Override
+                    public int compare(BeanMusic lhs, BeanMusic rhs) {
+                        return (int) (lhs.code - rhs.code);
+                    }
+                });
+                SharedPreferencesUtil.saveCollection(musics);
+                ToastUtil.show("歌曲收藏成功");
+
             }
         });
         mDownBtn.setOnClickListener(new OnClickListener() {
@@ -170,21 +207,46 @@ public class SearchView extends BeanView {
         double money = 0.0;
         List<BeanMusic> urls = new ArrayList<BeanMusic>();
         BeanUserInfo info = SharedPreferencesUtil.getUserInfo();
+        //下载大小
+        long size = 0;
         for (String str : mMusicAdapter.mChecked) {
             BeanMusic beanMusic = mMusicAdapter.beanMusics.get(Integer.parseInt(str));
             beanMusic.loginid = info.loginid;
+            size = +beanMusic.size;
             urls.add(beanMusic);
-            money += mMusicAdapter.beanMusics.get(Integer.parseInt(str)).money;
+            money += beanMusic.money;
         }
-        if (money > SharedPreferencesUtil.getUserInfo().remainmoney) {
+
+        if (urls == null || urls.isEmpty()) {
+            ToastUtil.show("请选择歌曲");
+            return;
+        }
+        if (money > SharedPreferencesUtil.getUserInfo().totalmoney) {
             ToastUtil.show("余额不足,请充值");
             return;
         }
+
+        if (!SDUtils.isExist()) {
+            ToastUtil.show("请将u盘插入usb1接口处");
+            return;
+        }
+
+
+        if (SDUtils.getRemainSize() < size) {
+            ToastUtil.show("U盘存储空间不足");
+            return;
+        }
+
+
         download(urls);
 
     }
 
     void doSearch() {
+        if (TextUtils.isEmpty(mSearchContent.getText().toString().trim())) {
+            mSwip.setRefreshing(false);
+            return;
+        }
         mMusicAdapter.clear();
         onCheckedItem();
         BaseJsonRequest request = new BaseJsonRequest(Request.Method.POST, UrlStatic.URL_GETMUSICLIST(),
@@ -196,7 +258,7 @@ public class SearchView extends BeanView {
                         BaseBean<List<BeanMusic>> baseBean = new Gson().fromJson(response, new TypeToken<BaseBean<List<BeanMusic>>>() {
                         }.getType());
                         if ("200".equals(baseBean.code)) {
-                            mMusicAdapter.addMore(baseBean.data);
+                            mMusicAdapter.addMore(sort(baseBean.data));
                         } else {
                             ToastUtil.show(baseBean.msg);
                         }
@@ -208,10 +270,34 @@ public class SearchView extends BeanView {
                 ToastUtil.show(VolleyErrorUtils.getError(error));
             }
         });
-        if (!TextUtils.isEmpty(mSearchContent.getText().toString().trim()))
-            request.addRequestJson("{\"name\":\"" + mSearchContent.getText().toString().trim() + "\"}");
+//        if (!TextUtils.isEmpty(mSearchContent.getText().toString().trim()))
+        request.addRequestJson(mSearchContent.getText().toString().trim());
         mSwip.setRefreshing(true);
         RuiBoApplication.getApplication().runVolleyRequest(request);
+    }
+
+    public static final List<BeanMusic> sort(List<BeanMusic> baseban) {
+        int i = 0;
+        int count = baseban.size();
+        BeanMusic[] musics = new BeanMusic[count];
+        while (i * 2 < count) {
+            musics[i * 2] = baseban.get(i);
+            i++;
+        }
+        if (count % 2 > 0 && musics[count - 1] == null) {
+            musics[count - 1] = baseban.get(i);
+            i++;
+        }
+        int j = 0;
+        while (j < count && i < count) {
+            if (musics[j] != null) {
+                j++;
+                continue;
+            }
+            musics[j] = baseban.get(i);
+            i++;
+        }
+        return Arrays.asList(musics);
     }
 
     void onCheckedItem() {
@@ -283,7 +369,7 @@ public class SearchView extends BeanView {
                 holder.itemView.setSelected(true);
             } else holder.itemView.setSelected(false);
 
-            holder.num.setText("歌曲编码:" + music.id);
+            holder.num.setText("歌曲编码:" + music.code);
             holder.name.setText(music.name);
             holder.money.setText(music.money + "元");
 

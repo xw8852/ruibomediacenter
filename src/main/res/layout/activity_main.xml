@@ -2,64 +2,239 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background"
+    android:background="#FF0e252d"
     android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="10dp"
-        android:textColor="@color/white"
-        android:text="管理员登录"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
     <LinearLayout
-        android:id="@+id/content"
-        android:layout_width="wrap_content"
-        android:layout_height="48dp"
-        android:layout_centerInParent="true"
-        android:orientation="horizontal">
-
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:background="@color/white"
-            android:id="@+id/passwd"
-            android:singleLine="true"
-            android:minWidth="200dp" />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:background="#ff971e"
-            android:gravity="center"
-            android:minWidth="100dp"
-            android:id="@+id/login"
-            android:text="登录"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="10dp"
+            android:text="管理员登录"
+            android:textSize="48sp"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/white" />
 
+        <TextView
+            android:id="@+id/tip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/content"
+            android:layout_below="@+id/content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:text="您输入的密码有误，请重新输入!"
+           android:textSize="22sp"
+            android:textColor="#ff971e" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/num1"
+                    android:layout_width="114dp"
+                    android:layout_height="114dp"
+                    android:background="@drawable/key_bg_2"
+                    android:gravity="center"
+                    android:text="1"
+                    android:textColor="@color/white"
+                    android:textSize="48sp" />
+
+                <View
+                    android:layout_width="30dp"
+                    android:layout_height="1dp" />
+
+                <TextView
+                    android:id="@+id/num2"
+                    android:layout_width="114dp"
+                    android:layout_height="114dp"
+                    android:background="@drawable/key_bg_2"
+                    android:gravity="center"
+                    android:text="2"
+                    android:textColor="@color/white"
+                    android:textSize="48sp" />
+
+                <View
+                    android:layout_width="30dp"
+                    android:layout_height="1dp" />
+
+                <TextView
+                    android:id="@+id/num3"
+                    android:layout_width="114dp"
+                    android:layout_height="114dp"
+                    android:background="@drawable/key_bg_2"
+                    android:gravity="center"
+                    android:text="3"
+                    android:textColor="@color/white"
+                    android:textSize="48sp" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="10dp"
+                android:layout_height="10dp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/num4"
+                    android:layout_width="114dp"
+                    android:layout_height="114dp"
+                    android:background="@drawable/key_bg_2"
+                    android:gravity="center"
+                    android:text="4"
+                    android:textColor="@color/white"
+                    android:textSize="48sp" />
+
+                <View
+                    android:layout_width="30dp"
+                    android:layout_height="1dp" />
+
+                <TextView
+                    android:id="@+id/num5"
+                    android:layout_width="114dp"
+                    android:layout_height="114dp"
+                    android:background="@drawable/key_bg_2"
+                    android:gravity="center"
+                    android:text="5"
+                    android:textColor="@color/white"
+                    android:textSize="48sp" />
+
+                <View
+                    android:layout_width="30dp"
+                    android:layout_height="1dp" />
+
+                <TextView
+                    android:id="@+id/num6"
+                    android:layout_width="114dp"
+                    android:layout_height="114dp"
+                    android:background="@drawable/key_bg_2"
+                    android:gravity="center"
+                    android:text="6"
+                    android:textColor="@color/white"
+                    android:textSize="48sp" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="10dp"
+                android:layout_height="10dp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="114dp">
+
+                <TextView
+                    android:id="@+id/num7"
+                    android:layout_width="114dp"
+                    android:layout_height="114dp"
+                    android:background="@drawable/key_bg_2"
+                    android:gravity="center"
+                    android:text="7"
+                    android:textColor="@color/white"
+                    android:textSize="48sp" />
+
+                <View
+                    android:layout_width="30dp"
+                    android:layout_height="1dp" />
+
+                <TextView
+                    android:id="@+id/num8"
+                    android:layout_width="114dp"
+                    android:layout_height="114dp"
+                    android:background="@drawable/key_bg_2"
+                    android:gravity="center"
+                    android:text="8"
+                    android:textColor="@color/white"
+                    android:textSize="48sp" />
+
+                <View
+                    android:layout_width="30dp"
+                    android:layout_height="10dp" />
+
+                <TextView
+                    android:id="@+id/num9"
+                    android:layout_width="114dp"
+                    android:layout_height="114dp"
+                    android:background="@drawable/key_bg_2"
+                    android:gravity="center"
+                    android:text="9"
+                    android:textColor="@color/white"
+                    android:textSize="48sp" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="10dp"
+                android:layout_height="10dp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="114dp">
+
+                <TextView
+                    android:id="@+id/num11"
+                    android:layout_width="114dp"
+                    android:layout_height="114dp"
+                    android:background="@drawable/key_bg_2"
+                    android:gravity="center"
+                    android:text="*"
+                    android:textColor="@color/white"
+                    android:textSize="48sp" />
+
+                <View
+                    android:layout_width="30dp"
+                    android:layout_height="1dp" />
+
+                <TextView
+                    android:id="@+id/num10"
+                    android:layout_width="114dp"
+                    android:layout_height="114dp"
+                    android:background="@drawable/key_bg_2"
+                    android:gravity="center"
+                    android:text="0"
+                    android:textColor="@color/white"
+                    android:textSize="48sp" />
+
+                <View
+                    android:layout_width="30dp"
+                    android:layout_height="1dp" />
+
+                <TextView
+                    android:id="@+id/num12"
+                    android:layout_width="114dp"
+                    android:layout_height="114dp"
+                    android:background="@drawable/key_bg_2"
+                    android:gravity="center"
+                    android:text="#"
+                    android:textColor="@color/white"
+                    android:textSize="48sp" />
+            </LinearLayout>
+        </LinearLayout>
+
     </LinearLayout>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/content"
-        android:layout_below="@+id/content"
-        android:layout_marginTop="10dp"
-        android:id="@+id/tip"
-        android:text="您输入的密码有误，请重新输入!"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="#ff971e" />
 
     <ImageView
-        android:layout_width="84dp"
-        android:layout_height="84dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_margin="20dp"
         android:id="@+id/backpress"
+        android:layout_width="114dp"
+        android:layout_height="114dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_margin="20dp"
         android:src="@drawable/ic_return_home" />
 </RelativeLayout>
