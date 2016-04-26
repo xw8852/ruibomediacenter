@@ -48,7 +48,7 @@
             android:layout_margin="10dp"
             android:gravity="center"
             android:padding="10dp"
-            android:text="登录"
+            android:text="提交"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/white"
             app:radius="10dp"

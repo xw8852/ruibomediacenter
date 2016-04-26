@@ -9,11 +9,14 @@ import android.widget.LinearLayout;
 import com.google.gson.Gson;
 import com.msx7.josn.ruibo_mediacenter.RuiBoApplication;
 import com.msx7.josn.ruibo_mediacenter.activity.BaseActivity;
+import com.msx7.josn.ruibo_mediacenter.activity.HomeActivity;
 import com.msx7.josn.ruibo_mediacenter.bean.BaseBean;
 import com.msx7.josn.ruibo_mediacenter.bean.BeanMusic;
 import com.msx7.josn.ruibo_mediacenter.common.UrlStatic;
 import com.msx7.josn.ruibo_mediacenter.dialog.DownloadDialog;
+import com.msx7.josn.ruibo_mediacenter.down.ThreadPool;
 import com.msx7.josn.ruibo_mediacenter.net.OkHttpManager;
+import com.msx7.josn.ruibo_mediacenter.util.L;
 import com.msx7.josn.ruibo_mediacenter.util.SharedPreferencesUtil;
 import com.msx7.josn.ruibo_mediacenter.util.ToastUtil;
 
@@ -73,8 +76,11 @@ public class BeanView extends LinearLayout {
                         public void onResponse(Call call, Response response) throws IOException {
                             if (response.code() == 200) {
                                 String str = response.body().string();
+                                L.d(call.request().url().toString());
+                                L.d(str);
                                 BaseBean baseBean = new Gson().fromJson(str, BaseBean.class);
                                 if ("200".equals(baseBean.code)) {
+                                    ((HomeActivity) getContext()).refreshUserInfo();
                                     downloadMusic(urls);
                                 }
                             } else {
@@ -136,40 +142,46 @@ public class BeanView extends LinearLayout {
         for (BeanMusic music : _urls) {
             urls.add(music.path);
         }
-        final int count = urls.size();
-        com.msx7.josn.ruibo_mediacenter.net.DownloadManager.download(urls, (BaseActivity) getContext(), new OkHttpManager.IDownFinish() {
-            int downcount = 0;
-
+        new ThreadPool().enqueue(urls, new ThreadPool.IDownListener() {
             @Override
-            public void finish(String url, File file) {
-                downcount++;
-                Log.d("finish", url);
-                if (downcount == count) {
-                    dismissDialog();
-                    RuiBoApplication.getApplication().getHandler().post(new Runnable() {
-                        @Override
-                        public void run() {
-                            ToastUtil.show("下载成功！");
-                        }
-                    });
-
-                }
+            public void finish(ThreadPool.Down down) {
+                dismissDialog();
+                RuiBoApplication.getApplication().getHandler().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        ToastUtil.show("下载成功！");
+                    }
+                });
             }
-
-            @Override
-            public void error(String url, File file) {
-                Log.d("FAIL", url);
-                downcount++;
-                if (downcount == count) {
-                    dismissDialog();
+        });
+//        final int count = urls.size();
+//        com.msx7.josn.ruibo_mediacenter.net.DownloadManager.download(urls, (BaseActivity) getContext(), new OkHttpManager.IDownFinish() {
+//            int downcount = 0;
+//
+//            @Override
+//            public void finish(String url, File file) {
+//                downcount++;
+//                Log.d("finish", url);
+//                if (downcount == count) {
+//                    dismissDialog();
 //                    RuiBoApplication.getApplication().getHandler().post(new Runnable() {
 //                        @Override
 //                        public void run() {
 //                            ToastUtil.show("下载成功！");
 //                        }
 //                    });
-                }
-            }
-        });
+//
+//                }
+//            }
+//
+//            @Override
+//            public void error(String url, File file) {
+//                Log.d("FAIL", url);
+//                downcount++;
+//                if (downcount == count) {
+//                    dismissDialog();
+//                }
+//            }
+//        });
     }
 }

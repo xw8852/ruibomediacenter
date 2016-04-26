@@ -12,16 +12,17 @@ import android.widget.TextView;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
+import com.google.gson.annotations.SerializedName;
 import com.google.gson.reflect.TypeToken;
 import com.msx7.josn.ruibo_mediacenter.R;
 import com.msx7.josn.ruibo_mediacenter.RuiBoApplication;
 import com.msx7.josn.ruibo_mediacenter.activity.BaseActivity;
 import com.msx7.josn.ruibo_mediacenter.bean.BaseBean;
+import com.msx7.josn.ruibo_mediacenter.bean.BeanAdminInfo;
 import com.msx7.josn.ruibo_mediacenter.bean.BeanUserInfo;
-import com.msx7.josn.ruibo_mediacenter.net.CloseUserRequest;
 import com.msx7.josn.ruibo_mediacenter.net.InputMoneyRequest;
-import com.msx7.josn.ruibo_mediacenter.net.ResetPasswdRequest;
 import com.msx7.josn.ruibo_mediacenter.net.getUserRequest;
+import com.msx7.josn.ruibo_mediacenter.util.SharedPreferencesUtil;
 import com.msx7.josn.ruibo_mediacenter.util.ToastUtil;
 import com.msx7.josn.ruibo_mediacenter.util.VolleyErrorUtils;
 import com.msx7.lib.annotations.Inject;
@@ -65,11 +66,11 @@ public class ChongZhiDialog extends BaseCustomDialog {
         mLoginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onLogin();
+                onInputMoney();
             }
         });
 
-        mLoginName. setFilters(new InputFilter[] { new InputFilter.LengthFilter(6) });
+        mLoginName.setFilters(new InputFilter[]{new InputFilter.LengthFilter(6)});
         mLoginName.setInputType(InputType.TYPE_NULL);
         mLoginName.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,42 +86,11 @@ public class ChongZhiDialog extends BaseCustomDialog {
             public void onClick(View v) {
                 price.setText("");
                 int right = findViewById(R.id.root).getRight();
-                new Keyboard1(v, price).getPopupWindow().showAtLocation(v, Gravity.CENTER, right, 0);
+                Keyboard1 keyboard1 = new Keyboard1(v, price);
+                keyboard1.setState(Keyboard1.State.SignNumber);
+                keyboard1.getPopupWindow().showAtLocation(v, Gravity.CENTER, right, 0);
             }
         });
-    }
-
-
-    void onLogin() {
-        String loginName = mLoginName.getText().toString();
-        if (TextUtils.isEmpty(loginName)) {
-            mTips.setText("请输入会员卡号或手机号码");
-            return;
-        }
-        activity.showProgess();
-        RuiBoApplication.getApplication().runVolleyRequest(new getUserRequest(loginName, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                BaseBean<List<BeanUserInfo>> baseBean = new Gson().fromJson(response, new TypeToken<BaseBean<List<BeanUserInfo>>>() {
-                }.getType());
-                if ("200".equals(baseBean.code)) {
-                    if (baseBean.data.size() == 0) {
-                        mTips.setText("卡号无效");
-                        return;
-                    }
-                    beanUserInfo = baseBean.data.get(0);
-                    onInputMoney();
-                } else {
-                    mTips.setText(baseBean.msg);
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                activity.dismisProgess();
-                mTips.setText(VolleyErrorUtils.getError(error));
-            }
-        }));
     }
 
 
@@ -140,15 +110,16 @@ public class ChongZhiDialog extends BaseCustomDialog {
             return;
         } finally {
         }
-//        beanUserInfo.remainmoney += money;
-        beanUserInfo.totalmoney = money;
-        RuiBoApplication.getApplication().runVolleyRequest(new InputMoneyRequest(beanUserInfo, new Response.Listener<String>() {
+        BeanAdminInfo info = SharedPreferencesUtil.getAdminUserInfo();
+        PostData postData = new PostData(info.id,  mLoginName.getText().toString(), price.getText().toString());
+        RuiBoApplication.getApplication().runVolleyRequest(new InputMoneyRequest(new Gson().toJson(postData), new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 activity.dismisProgess();
                 BaseBean baseBean = new Gson().fromJson(response, BaseBean.class);
                 if ("200".equals(baseBean.code)) {
                     dismiss();
+                    ToastUtil.show("充值成功");
                 } else {
                     mTips.setText(baseBean.msg);
                 }
@@ -163,7 +134,36 @@ public class ChongZhiDialog extends BaseCustomDialog {
     }
 
 
-    BeanUserInfo beanUserInfo;
+    public static class PostData {
 
+        /**
+         * id : 1
+         * loginid : 1
+         * loginname : 111111
+         * totalmoney : 2
+         */
+
+        @SerializedName("id")
+        public int id;
+        @SerializedName("type")
+        public int type;
+        @SerializedName("loginid")
+        public int loginid;
+        @SerializedName("loginname")
+        public String loginname;
+        @SerializedName("password")
+        public String password;
+        @SerializedName("totalmoney")
+        public String totalmoney;
+
+        public PostData(int id,  String loginname, String totalmoney) {
+            this.id = id;
+            this.loginid = id;
+            type = 0;
+            password = "111111";
+            this.loginname = loginname;
+            this.totalmoney = totalmoney;
+        }
+    }
 
 }

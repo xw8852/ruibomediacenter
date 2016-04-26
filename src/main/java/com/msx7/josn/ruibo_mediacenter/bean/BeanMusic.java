@@ -1,5 +1,7 @@
 package com.msx7.josn.ruibo_mediacenter.bean;
 
+import android.text.TextUtils;
+
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -44,9 +46,9 @@ public class BeanMusic {
     @Override
     public boolean equals(Object o) {
         if (o == null) return false;
-        if (!(o instanceof BeanMusic)) return false;
+        if (TextUtils.isEmpty(path)) return false;
         BeanMusic music = (BeanMusic) o;
-        if (music.code <= 0 || code <= 0) return false;
-        return music.code == code;
+        if (TextUtils.isEmpty(music.path)) return false;
+        return path.equals(music.path);
     }
 }

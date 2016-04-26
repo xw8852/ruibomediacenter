@@ -198,6 +198,7 @@ public class SetPriceDialog extends BaseCustomDialog {
 
         @InjectView(R.id.price)
         TextView price;
+        Keyboard1 keyboard1;
 
         public MusicTypeCell(Context context) {
             super(context);
@@ -210,7 +211,9 @@ public class SetPriceDialog extends BaseCustomDialog {
                 public void onClick(View v) {
                     price.setText("");
                     int right = SetPriceDialog.this.findViewById(R.id.root).getRight();
-                    new Keyboard1(v, price).getPopupWindow().showAtLocation(v, Gravity.CENTER, right, 0);
+                    keyboard1 = new Keyboard1(v, price);
+                    keyboard1.setState(Keyboard1.State.SignNumber);
+                    keyboard1.getPopupWindow().showAtLocation(v, Gravity.CENTER, right, 0);
                 }
             });
 
@@ -228,7 +231,7 @@ public class SetPriceDialog extends BaseCustomDialog {
                         return;
                     int index = s.toString().indexOf(".");
                     if (index < 0 || s.length() - index - 1 < 2) return;
-                    L.d(s+"  "+s.toString().substring(0, index + 2));
+                    L.d(s + "  " + s.toString().substring(0, index + 2));
                     price.setText(s.toString().substring(0, index + 2));
 //                    if (d % 0.1 > 0) {
 //                        d = d - d % 0.1;

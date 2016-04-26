@@ -1,20 +1,24 @@
 package com.msx7.josn.ruibo_mediacenter.activity;
 
+import android.app.ActivityManager;
 import android.os.Bundle;
 import android.view.View;
 
+import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.msx7.josn.ruibo_mediacenter.R;
 import com.msx7.josn.ruibo_mediacenter.RuiBoApplication;
 import com.msx7.josn.ruibo_mediacenter.bean.BaseBean;
+import com.msx7.josn.ruibo_mediacenter.common.UrlStatic;
 import com.msx7.josn.ruibo_mediacenter.dialog.AdminDialog;
 import com.msx7.josn.ruibo_mediacenter.dialog.BaoYueDialog;
 import com.msx7.josn.ruibo_mediacenter.dialog.ChongZhiDialog;
 import com.msx7.josn.ruibo_mediacenter.dialog.OpenAccountDialog;
 import com.msx7.josn.ruibo_mediacenter.dialog.SyncSongDialog;
 import com.msx7.josn.ruibo_mediacenter.dialog.UserManagerDialog;
+import com.msx7.josn.ruibo_mediacenter.net.BaseJsonRequest;
 import com.msx7.josn.ruibo_mediacenter.net.SyncSongRequest;
 import com.msx7.josn.ruibo_mediacenter.util.L;
 import com.msx7.josn.ruibo_mediacenter.util.SharedPreferencesUtil;
@@ -99,6 +103,26 @@ public class AdminActivity extends BaseActivity {
     };
 
     public void shutdown(View v) {
+        showProgess();
+        RuiBoApplication.getApplication().runVolleyRequest(new BaseJsonRequest(Request.Method.GET, UrlStatic.URL_CLOSEPC(),
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        dismisProgess();
+                        ToastUtil.show("关机成功");
+//                        L.d(response);
+//                        BaseBean baseBean = new Gson().fromJson(response, BaseBean.class);
+//                        ToastUtil.show(baseBean.msg);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                dismisProgess();
+                ToastUtil.show("关机成功");
+//                ToastUtil.show(VolleyErrorUtils.getError(error));
+            }
+        }));
+
     }
 
 
@@ -113,6 +137,23 @@ public class AdminActivity extends BaseActivity {
 
 
     public void onback(View v) {
+        showProgess();
+        RuiBoApplication.getApplication().runVolleyRequest(new BaseJsonRequest(Request.Method.GET, UrlStatic.URL_BACKUPDATA(),
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        dismisProgess();
+                        L.d(response);
+                        BaseBean baseBean = new Gson().fromJson(response, BaseBean.class);
+                        ToastUtil.show(baseBean.msg);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                dismisProgess();
+                ToastUtil.show(VolleyErrorUtils.getError(error));
+            }
+        }));
     }
 
 }

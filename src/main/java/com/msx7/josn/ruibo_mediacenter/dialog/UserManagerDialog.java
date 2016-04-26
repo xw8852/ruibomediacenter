@@ -25,6 +25,7 @@ import com.msx7.josn.ruibo_mediacenter.net.CloseUserRequest;
 import com.msx7.josn.ruibo_mediacenter.net.ResetAdminPasswdRequest;
 import com.msx7.josn.ruibo_mediacenter.net.ResetPasswdRequest;
 import com.msx7.josn.ruibo_mediacenter.net.getUserRequest;
+import com.msx7.josn.ruibo_mediacenter.util.L;
 import com.msx7.josn.ruibo_mediacenter.util.SharedPreferencesUtil;
 import com.msx7.josn.ruibo_mediacenter.util.ToastUtil;
 import com.msx7.josn.ruibo_mediacenter.util.VolleyErrorUtils;
@@ -100,7 +101,7 @@ public class UserManagerDialog extends BaseCustomDialog {
     void onLogin() {
         String loginName = mLoginName.getText().toString();
         if (TextUtils.isEmpty(loginName)) {
-            mTips.setText("请输入会员卡号或手机号码");
+            mTips.setText("请输入会员卡号");
             return;
         }
         activity.showProgess();
@@ -155,7 +156,10 @@ public class UserManagerDialog extends BaseCustomDialog {
 
     void initUser() {
         mEt1.setText("会员卡号:" + beanUserInfo.loginname);
-        mEt2.setText("账户余额:¥" + beanUserInfo.remainmoney);
+        if (beanUserInfo.type == 1) {
+            mEt2.setText("会员类型:包月用户");
+        } else
+            mEt2.setText("账户余额:¥" + beanUserInfo.remainmoney);
         mEt3.setText("手机号码:");
         mbtn1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -202,6 +206,7 @@ public class UserManagerDialog extends BaseCustomDialog {
         RuiBoApplication.getApplication().runVolleyRequest(new CloseUserRequest(beanUserInfo, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                L.d(response);
                 activity.dismisProgess();
                 BaseBean baseBean = new Gson().fromJson(response, BaseBean.class);
                 if ("200".equals(baseBean.code)) {

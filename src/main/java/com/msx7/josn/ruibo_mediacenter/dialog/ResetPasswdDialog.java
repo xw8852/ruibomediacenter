@@ -2,7 +2,9 @@ package com.msx7.josn.ruibo_mediacenter.dialog;
 
 import android.content.Context;
 import android.text.InputFilter;
+import android.text.InputType;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -48,12 +50,38 @@ public class ResetPasswdDialog extends BaseCustomDialog {
             }
         });
         setTitle(R.string.reset_password);
+
+        mLoginName.setInputType(InputType.TYPE_NULL);
+        mLoginName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mLoginName.setText("");
+                int right = findViewById(R.id.root).getRight();
+                keyboard1 = new Keyboard1(v, mLoginName).setState(Keyboard1.State.password);
+                keyboard1.getPopupWindow().showAtLocation(v, Gravity.CENTER, right, 0);
+            }
+        });
+
+
+        mLoginPassWd.setInputType(InputType.TYPE_NULL);
+        mLoginPassWd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mLoginPassWd.setText("");
+                int right = findViewById(R.id.root).getRight();
+                keyboard2 = new Keyboard1(v, mLoginPassWd).setState(Keyboard1.State.password);
+                keyboard2.getPopupWindow().showAtLocation(v, Gravity.CENTER, right, 0);
+            }
+        });
+
+
     }
 
-
+    Keyboard1 keyboard1;
+    Keyboard1 keyboard2;
     void goReset() {
-        String passwd = mLoginName.getText().toString();
-        String surePasswd = mLoginPassWd.getText().toString();
+        String passwd = keyboard1.getContent().substring(0, Math.min(6, keyboard1.getContent().length()));
+        String surePasswd = keyboard2.getContent().substring(0, Math.min(6, keyboard2.getContent().length()));
         if (TextUtils.isEmpty(passwd)) {
             mTips.setText("请输入重设密码");
             return;

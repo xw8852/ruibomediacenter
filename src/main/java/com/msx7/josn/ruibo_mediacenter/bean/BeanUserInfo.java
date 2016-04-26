@@ -42,4 +42,19 @@ public class BeanUserInfo {
      */
     @SerializedName("totalmoney")
     public double totalmoney;
+    /**
+     * enddate : null
+     * startdate : null
+     * type : 0
+     * typename : null
+     */
+
+    @SerializedName("enddate")
+    public String enddate;
+    @SerializedName("startdate")
+    public String startdate;
+    @SerializedName("type")
+    public int type;
+    @SerializedName("typename")
+    public String typename;
 }

@@ -19,6 +19,7 @@ import org.w3c.dom.Text;
  */
 public class Keyboard1 {
 
+    State state = State.Normal;
     PopupWindow popupWindow;
 
     View item;
@@ -62,6 +63,29 @@ public class Keyboard1 {
         });
     }
 
+    public State getState() {
+        return state;
+    }
+
+    public Keyboard1 setState(State state) {
+        this.state = state;
+        if (state != State.Normal) {
+            if (state == State.Number) {
+                ((TextView) root.findViewById(R.id.num11)).setText("*");
+                root.findViewById(R.id.num11).setEnabled(false);
+            } else {
+                ((TextView) root.findViewById(R.id.num11)).setText(".");
+                root.findViewById(R.id.num11).setEnabled(true);
+            }
+            root.findViewById(R.id.num12).setEnabled(false);
+        } else {
+            ((TextView) root.findViewById(R.id.num11)).setText("*");
+            root.findViewById(R.id.num11).setEnabled(true);
+            root.findViewById(R.id.num12).setEnabled(true);
+        }
+        return this;
+    }
+
     public PopupWindow getPopupWindow() {
         return popupWindow;
     }
@@ -73,12 +97,28 @@ public class Keyboard1 {
         }
     };
 
+    StringBuffer buffer = new StringBuffer();
+
+    public String getContent() {
+        return buffer.toString();
+    }
+
     void clickNumber(View v) {
+        if (state == State.password) {
+            buffer.append(((TextView) v).getText().toString());
+            String text = editText.getText().toString();
+            editText.setText(text + "*");
+            return;
+        }
         String text = editText.getText().toString();
         editText.setText(text + ((TextView) v).getText().toString());
     }
 
     public final Context getContext() {
         return item.getContext();
+    }
+
+    public static enum State {
+        Normal, Number, SignNumber, password
     }
 }

@@ -3,5 +3,6 @@
     <item android:drawable="@drawable/btn_collection_a" android:state_selected="true" />
     <item android:drawable="@drawable/btn_collection_a" android:state_pressed="true" />
     <item android:drawable="@drawable/btn_collection_a" android:state_checked="true" />
+    <item android:drawable="@drawable/btn_collection_enable" android:state_enabled="false" />
     <item android:drawable="@drawable/btn_collection_b" />
 </selector>

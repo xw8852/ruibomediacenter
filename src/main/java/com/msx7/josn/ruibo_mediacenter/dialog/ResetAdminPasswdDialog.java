@@ -40,13 +40,13 @@ public class ResetAdminPasswdDialog extends BaseCustomDialog {
         mTips.setText("");
         activity = (BaseActivity) context;
         getLoginBtn().setText("立即生效");
-        mOldPassWd.setVisibility(View.VISIBLE);
+        mOldPassWd.setVisibility(View.GONE);
         mOldPassWd.setHint("请输入旧密码");
         getLoginNameView().setHint("请输入新密码");
         getLoginPassWdView().setHint("请再次确认新密码");
-        mLoginName. setFilters(new InputFilter[] { new InputFilter.LengthFilter(6) });
-        mOldPassWd. setFilters(new InputFilter[] { new InputFilter.LengthFilter(6) });
-        mLoginPassWd. setFilters(new InputFilter[] { new InputFilter.LengthFilter(6) });
+        mLoginName.setFilters(new InputFilter[]{new InputFilter.LengthFilter(6)});
+        mOldPassWd.setFilters(new InputFilter[]{new InputFilter.LengthFilter(6)});
+        mLoginPassWd.setFilters(new InputFilter[]{new InputFilter.LengthFilter(6)});
 
         mOldPassWd.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
         getLoginNameView().setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
@@ -61,7 +61,6 @@ public class ResetAdminPasswdDialog extends BaseCustomDialog {
         setTitle(R.string.reset_admin_password);
 
 
-
         mOldPassWd.setInputType(InputType.TYPE_NULL);
         mOldPassWd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,18 +72,16 @@ public class ResetAdminPasswdDialog extends BaseCustomDialog {
         });
 
 
-
-
         mLoginName.setInputType(InputType.TYPE_NULL);
         mLoginName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mLoginName.setText("");
                 int right = findViewById(R.id.root).getRight();
-                new Keyboard1(v, mLoginName).getPopupWindow().showAtLocation(v, Gravity.CENTER, right, 0);
+                keyboard1 = new Keyboard1(v, mLoginName).setState(Keyboard1.State.password);
+                keyboard1.getPopupWindow().showAtLocation(v, Gravity.CENTER, right, 0);
             }
         });
-
 
 
         mLoginPassWd.setInputType(InputType.TYPE_NULL);
@@ -93,21 +90,24 @@ public class ResetAdminPasswdDialog extends BaseCustomDialog {
             public void onClick(View v) {
                 mLoginPassWd.setText("");
                 int right = findViewById(R.id.root).getRight();
-                new Keyboard1(v, mLoginPassWd).getPopupWindow().showAtLocation(v, Gravity.CENTER, right, 0);
+                keyboard2 = new Keyboard1(v, mLoginPassWd).setState(Keyboard1.State.password);
+                keyboard2.getPopupWindow().showAtLocation(v, Gravity.CENTER, right, 0);
             }
         });
 
     }
 
+    Keyboard1 keyboard1;
+    Keyboard1 keyboard2;
 
     void goReset() {
-        String passwd = mLoginName.getText().toString();
-        String oldPasswd = mOldPassWd.getText().toString();
-        String surePasswd = mLoginPassWd.getText().toString();
-        if (TextUtils.isEmpty(oldPasswd)) {
-            mTips.setText("请输入旧密码");
-            return;
-        }
+        String passwd =keyboard1.getContent().substring(0, Math.min(6, keyboard1.getContent().length()));
+//        String oldPasswd = mOldPassWd.getText().toString();
+        String surePasswd = keyboard2.getContent().substring(0, Math.min(6, keyboard2.getContent().length()));
+//        if (TextUtils.isEmpty(oldPasswd)) {
+//            mTips.setText("请输入旧密码");
+//            return;
+//        }
         if (TextUtils.isEmpty(passwd)) {
             mTips.setText("请输入重设密码");
             return;
@@ -122,7 +122,7 @@ public class ResetAdminPasswdDialog extends BaseCustomDialog {
         }
 
         activity.showProgess();
-        RuiBoApplication.getApplication().runVolleyRequest(new ResetAdminPasswdRequest(oldPasswd, passwd, new Response.Listener<String>() {
+        RuiBoApplication.getApplication().runVolleyRequest(new ResetAdminPasswdRequest(passwd, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 activity.dismisProgess();

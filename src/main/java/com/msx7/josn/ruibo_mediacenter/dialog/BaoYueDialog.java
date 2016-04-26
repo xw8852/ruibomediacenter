@@ -17,10 +17,15 @@ import com.msx7.josn.ruibo_mediacenter.R;
 import com.msx7.josn.ruibo_mediacenter.RuiBoApplication;
 import com.msx7.josn.ruibo_mediacenter.activity.BaseActivity;
 import com.msx7.josn.ruibo_mediacenter.bean.BaseBean;
+import com.msx7.josn.ruibo_mediacenter.bean.BeanAdminInfo;
 import com.msx7.josn.ruibo_mediacenter.bean.BeanUserInfo;
+import com.msx7.josn.ruibo_mediacenter.dialog.ChongZhiDialog.PostData;
 import com.msx7.josn.ruibo_mediacenter.net.CloseUserRequest;
+import com.msx7.josn.ruibo_mediacenter.net.InputMoneyRequest;
 import com.msx7.josn.ruibo_mediacenter.net.ResetPasswdRequest;
 import com.msx7.josn.ruibo_mediacenter.net.getUserRequest;
+import com.msx7.josn.ruibo_mediacenter.util.L;
+import com.msx7.josn.ruibo_mediacenter.util.SharedPreferencesUtil;
 import com.msx7.josn.ruibo_mediacenter.util.ToastUtil;
 import com.msx7.josn.ruibo_mediacenter.util.VolleyErrorUtils;
 import com.msx7.lib.annotations.Inject;
@@ -43,11 +48,6 @@ public class BaoYueDialog extends BaseCustomDialog {
     @InjectView(R.id.login)
     TextView mLoginBtn;
 
-    @InjectView(R.id.UserRoot)
-    View mUserRoot;
-
-    @InjectView(R.id.loginRoot)
-    View mLoginRoot;
 
     BaseActivity activity;
 
@@ -65,7 +65,7 @@ public class BaoYueDialog extends BaseCustomDialog {
             }
         });
 
-        mLoginName. setFilters(new InputFilter[] { new InputFilter.LengthFilter(6) });
+        mLoginName.setFilters(new InputFilter[]{new InputFilter.LengthFilter(6)});
         mLoginName.setInputType(InputType.TYPE_NULL);
         mLoginName.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,182 +78,37 @@ public class BaoYueDialog extends BaseCustomDialog {
     }
 
 
-    public TextView getLoginBtn() {
-        return mLoginBtn;
-    }
-
-    public TextView getLoginNameView() {
-        return mLoginName;
-    }
-
-
-    public TextView getTipView() {
-        return mTips;
-    }
-
-
     void onLogin() {
-//        String loginName = mLoginName.getText().toString();
-//        if (TextUtils.isEmpty(loginName)) {
-//            mTips.setText("请输入会员卡号或手机号码");
-//            return;
-//        }
-//        activity.showProgess();
-//        RuiBoApplication.getApplication().runVolleyRequest(new getUserRequest(loginName, new Response.Listener<String>() {
-//            @Override
-//            public void onResponse(String response) {
-//                activity.dismisProgess();
-//                BaseBean<List<BeanUserInfo>> baseBean = new Gson().fromJson(response, new TypeToken<BaseBean<List<BeanUserInfo>>>() {
-//                }.getType());
-//                if ("200".equals(baseBean.code)) {
-//                    if (baseBean.data.size() == 0) {
-//                        mTips.setText("卡号无效");
-//                        return;
-//                    }
-//                    beanUserInfo = baseBean.data.get(0);
-//                    initUser();
-//                    mLoginRoot.setVisibility(View.GONE);
-//                    mUserRoot.setVisibility(View.VISIBLE);
-//                } else {
-//                    mTips.setText(baseBean.msg);
-//                }
-//            }
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                activity.dismisProgess();
-//                mTips.setText(VolleyErrorUtils.getError(error));
-//            }
-//        }));
-    }
-
-    BeanUserInfo beanUserInfo;
-
-    @InjectView(R.id.et1)
-    TextView mEt1;
-
-    @InjectView(R.id.et2)
-    TextView mEt2;
-
-    @InjectView(R.id.et3)
-    TextView mEt3;
-
-    @InjectView(R.id.btn1)
-    TextView mbtn1;
-
-    @InjectView(R.id.btn2)
-    TextView mbtn2;
-
-    @InjectView(R.id.btn3)
-    TextView mbtn3;
-
-
-    void initUser() {
-        mEt1.setText("会员卡号:" + beanUserInfo.loginname);
-        mEt2.setText("账户余额:¥" + beanUserInfo.remainmoney);
-        mEt3.setText("手机号码:");
-        mbtn1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onCloseAccount();
-            }
-        });
-        mbtn2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onInMoney();
-            }
-        });
-        mbtn3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onResetPasswd();
-            }
-        });
-
-//        mEt1.setInputType(InputType.TYPE_NULL);
-//        mEt1.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                mEt1.setText("");
-//                int right = findViewById(R.id.root).getRight();
-//                new Keyboard1(v, mEt1).getPopupWindow().showAtLocation(v, Gravity.CENTER, right, 0);
-//            }
-//        });
-//
-//        mEt2.setInputType(InputType.TYPE_NULL);
-//        mEt2.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                mEt2.setText("");
-//                int right = findViewById(R.id.root).getRight();
-//                new Keyboard1(v, mEt2).getPopupWindow().showAtLocation(v, Gravity.CENTER, right, 0);
-//            }
-//        });
-    }
-
-    void onCloseAccount() {
+        String loginName = mLoginName.getText().toString();
+        if (TextUtils.isEmpty(loginName)) {
+            mTips.setText("请输入会员卡号");
+            return;
+        }
         activity.showProgess();
-        RuiBoApplication.getApplication().runVolleyRequest(new CloseUserRequest(beanUserInfo, new Response.Listener<String>() {
+        BeanAdminInfo info = SharedPreferencesUtil.getAdminUserInfo();
+        PostData postData = new PostData(info.id, mLoginName.getText().toString(), "0");
+        postData.type = 1;
+        RuiBoApplication.getApplication().runVolleyRequest(new InputMoneyRequest(new Gson().toJson(postData), new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 activity.dismisProgess();
+                L.d(response);
                 BaseBean baseBean = new Gson().fromJson(response, BaseBean.class);
                 if ("200".equals(baseBean.code)) {
-                    ToastUtil.show("销户成功");
+                    ToastUtil.show("会员包月成功");
                     dismiss();
                 } else {
-                    getTipView().setText(baseBean.msg);
+                    mTips.setText(baseBean.msg);
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 activity.dismisProgess();
+                mTips.setText(VolleyErrorUtils.getError(error));
             }
         }));
-    }
 
-    void onInMoney() {
-        new InputMoneyDialog(activity, beanUserInfo, new InputMoneyDialog.IGetMoney() {
-            @Override
-            public void input(double money) {
-                beanUserInfo.totalmoney += money;
-                beanUserInfo.remainmoney += money;
-                mEt2.setText("账户余额:¥" + beanUserInfo.remainmoney);
-            }
-        }).show();
-    }
-
-
-    void onResetPasswd() {
-        activity.showProgess();
-        ResetPasswdRequest.Post post = new ResetPasswdRequest.Post();
-        post.id = beanUserInfo.id;
-        post.loginid = beanUserInfo.id;
-        post.loginname = beanUserInfo.loginname;
-        post.confirmnewspassword = "111111";
-        post.newpassword = "111111";
-        post.password = beanUserInfo.password;
-        post.inmoneypassword = "111111";
-        RuiBoApplication.getApplication().runVolleyRequest(new ResetPasswdRequest(post, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                activity.dismisProgess();
-                BaseBean baseBean = new Gson().fromJson(response, BaseBean.class);
-                if ("200".equals(baseBean.code)) {
-                    beanUserInfo.password = "111111";
-                    ToastUtil.show("重设初始密码成功");
-                } else {
-                    getTipView().setText(baseBean.msg);
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                activity.dismisProgess();
-            }
-        }));
     }
 
 

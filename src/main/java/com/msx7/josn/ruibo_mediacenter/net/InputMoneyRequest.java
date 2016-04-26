@@ -13,12 +13,10 @@ import com.msx7.josn.ruibo_mediacenter.common.UrlStatic;
  */
 public class InputMoneyRequest extends BaseJsonRequest {
 
-    BeanUserInfo info;
 
-    public InputMoneyRequest(BeanUserInfo info, Response.Listener<String> listener, Response.ErrorListener errorListener) {
-        super(Method.POST, UrlStatic.URL_USERINMONEY(), listener, errorListener);
-        this.info = info;
-        addRequestJson(new Gson().toJson(info));
+    public InputMoneyRequest(String json, Response.Listener<String> listener, Response.ErrorListener errorListener) {
+        super(Method.POST, UrlStatic.URL_USERREGISTER(), listener, errorListener);
+        addRequestJson(json);
     }
 
 }

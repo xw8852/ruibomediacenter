@@ -13,7 +13,6 @@
         android:src="@drawable/bg_right_list" />
 
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -21,121 +20,69 @@
         android:layout_alignTop="@+id/topBg"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:visibility="visible"
         android:layout_marginTop="10dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="visible">
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/searchRoot"
-            android:gravity="right|center_vertical">
+            android:orientation="horizontal">
 
             <ImageView
-                android:id="@+id/bg"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:scaleType="fitXY"
-                android:src="@drawable/bg_search" />
-
-            <EditText
-                android:id="@+id/search_content"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="10dp"
-                android:layout_toLeftOf="@+id/search_btn"
-                android:background="@drawable/bg_search_white"
-                android:maxLines="1"
-                android:singleLine="true"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-            <ImageView
-                android:id="@+id/search_btn"
+                android:id="@+id/selectAll"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/bg"
-                android:layout_alignParentRight="true"
-                android:layout_alignTop="@+id/bg"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:src="@drawable/btn_search" />
+                android:src="@drawable/select_btn"
+                android:button="@null"
+                android:checked="true"
+                android:gravity="center"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/white" />
+            <ImageView
+                android:id="@+id/clear"
+                android:layout_width="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_height="wrap_content"
+                android:src="@drawable/clear_btn"
+                android:button="@null"
+                android:checked="true"
+                android:gravity="center"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/white" />
+            <TextView
+                android:id="@+id/tip"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical|right"
+                android:paddingRight="10dp"
+                android:text=""
+                android:textColor="@color/white"
+                android:textSize="@dimen/font_medium" />
+            <ImageView
+                android:id="@+id/down"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:button="@null"
+                android:checked="true"
+                android:gravity="center"
+                android:src="@drawable/btn_download"
+                android:text="下载"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/white" />
 
-        </RelativeLayout>
+        </LinearLayout>
 
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/RecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp">
 
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/RecyclerView"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-            </android.support.v7.widget.RecyclerView>
+        </android.support.v7.widget.RecyclerView>
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="5dp"
-        android:layout_marginLeft="3dp"
-        android:id="@+id/bgBottom"
-        android:gravity="center_vertical"
-        android:layout_marginRight="3dp"
-        android:background="@drawable/bg_right_bottom"
-        android:padding="10dp">
 
-        <CheckBox
-            android:id="@+id/selectAll"
-            android:layout_width="120dp"
-            android:layout_height="40dp"
-            android:background="@drawable/shape_yellow_btn"
-            android:button="@null"
-            android:checked="true"
-            android:gravity="center"
-            android:text="全选"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/white" />
-
-        <Button
-            android:id="@+id/clear"
-            android:layout_width="120dp"
-            android:layout_height="40dp"
-            android:layout_marginLeft="10dp"
-            android:background="@drawable/shape_yellow_btn"
-            android:button="@null"
-            android:checked="true"
-            android:gravity="center"
-            android:text="清空"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/white" />
-        <!--ff971e-->
-        <TextView
-            android:id="@+id/tip"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            android:gravity="center_vertical|right"
-            android:paddingRight="10dp"
-
-            android:text=""
-            android:textColor="@color/white"
-            android:textSize="@dimen/font_medium" />
-
-        <Button
-            android:id="@+id/down"
-            android:layout_width="120dp"
-            android:layout_height="40dp"
-            android:background="@drawable/shape_yellow_btn"
-            android:button="@null"
-            android:checked="true"
-            android:gravity="center"
-            android:text="下载"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/white" />
-
-    </LinearLayout>
 </RelativeLayout>

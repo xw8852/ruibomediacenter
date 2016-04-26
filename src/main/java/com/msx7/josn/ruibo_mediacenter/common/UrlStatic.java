@@ -42,6 +42,12 @@ public class UrlStatic {
     public static String URL_UPLOADMUSIC() {
         return getServerIp() + "/adminapi/admin.uploadmusic";
     }
+    public static String URL_BACKUPDATA() {
+        return getServerIp() + "/adminapi/admin.backupdata";
+    }
+    public static String URL_CLOSEPC() {
+        return getServerIp() + "/adminapi/admin.closepc";
+    }
 
     public static String URL_GETUSERLIST() {
         return getServerIp() + "/adminapi/admin.getuserlist";

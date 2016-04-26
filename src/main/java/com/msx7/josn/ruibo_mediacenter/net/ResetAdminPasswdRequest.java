@@ -18,7 +18,7 @@ public class ResetAdminPasswdRequest extends BaseJsonRequest {
     String password;
     String newpassword;
 
-    public ResetAdminPasswdRequest(String password, String newpassword, Response.Listener<String> listener, Response.ErrorListener errorListener) {
+    public ResetAdminPasswdRequest( String newpassword, Response.Listener<String> listener, Response.ErrorListener errorListener) {
         super(Method.POST, UrlStatic.URL_CHANGEADMINPASSWORD(), listener, errorListener);
         this.password = password;
         this.newpassword = newpassword;
@@ -27,7 +27,7 @@ public class ResetAdminPasswdRequest extends BaseJsonRequest {
         admin.id = info.id;
         admin.loginid = info.id;
         admin.loginname = info.loginname;
-        admin.password = password;
+//        admin.password = password;
         admin.newpassword = newpassword;
         admin.confirmnewspassword = newpassword;
         addRequestJson(buildJson(admin));
@@ -59,7 +59,7 @@ public class ResetAdminPasswdRequest extends BaseJsonRequest {
         public String loginname;
         @SerializedName("newpassword")
         public String newpassword;
-        @SerializedName("password")
-        public String password;
+//        @SerializedName("password")
+//        public String password;
     }
 }

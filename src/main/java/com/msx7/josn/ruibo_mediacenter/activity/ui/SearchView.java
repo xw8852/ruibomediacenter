@@ -1,19 +1,15 @@
 package com.msx7.josn.ruibo_mediacenter.activity.ui;
 
-import android.app.DownloadManager;
 import android.content.Context;
 import android.graphics.Rect;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Handler;
-import android.os.storage.StorageManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,7 +18,6 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -32,14 +27,12 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.msx7.josn.ruibo_mediacenter.R;
 import com.msx7.josn.ruibo_mediacenter.RuiBoApplication;
-import com.msx7.josn.ruibo_mediacenter.activity.BaseActivity;
 import com.msx7.josn.ruibo_mediacenter.bean.BaseBean;
 import com.msx7.josn.ruibo_mediacenter.bean.BeanMusic;
 import com.msx7.josn.ruibo_mediacenter.bean.BeanUserInfo;
 import com.msx7.josn.ruibo_mediacenter.common.UrlStatic;
 import com.msx7.josn.ruibo_mediacenter.dialog.Keyboard1;
 import com.msx7.josn.ruibo_mediacenter.net.BaseJsonRequest;
-import com.msx7.josn.ruibo_mediacenter.net.OkHttpManager;
 import com.msx7.josn.ruibo_mediacenter.util.L;
 import com.msx7.josn.ruibo_mediacenter.util.SDUtils;
 import com.msx7.josn.ruibo_mediacenter.util.SharedPreferencesUtil;
@@ -48,13 +41,10 @@ import com.msx7.josn.ruibo_mediacenter.util.VolleyErrorUtils;
 import com.msx7.lib.annotations.Inject;
 import com.msx7.lib.annotations.InjectView;
 
-import java.io.File;
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -98,6 +88,11 @@ public class SearchView extends BeanView {
     TextView mTip;
 
     MusicAdapter mMusicAdapter;
+
+    public void showEnable(boolean enable) {
+        mDownBtn.setEnabled(enable);
+        mCollection.setEnabled(enable);
+    }
 
     public void clear() {
         mMusicAdapter.setData(new ArrayList<BeanMusic>());
@@ -188,6 +183,7 @@ public class SearchView extends BeanView {
                 });
                 SharedPreferencesUtil.saveCollection(musics);
                 ToastUtil.show("歌曲收藏成功");
+                mMusicAdapter.clear();
 
             }
         });
@@ -211,7 +207,7 @@ public class SearchView extends BeanView {
         long size = 0;
         for (String str : mMusicAdapter.mChecked) {
             BeanMusic beanMusic = mMusicAdapter.beanMusics.get(Integer.parseInt(str));
-            beanMusic.loginid = info.loginid;
+            beanMusic.loginid = info.id;
             size = +beanMusic.size;
             urls.add(beanMusic);
             money += beanMusic.money;
@@ -221,7 +217,7 @@ public class SearchView extends BeanView {
             ToastUtil.show("请选择歌曲");
             return;
         }
-        if (money > SharedPreferencesUtil.getUserInfo().totalmoney) {
+        if (info.type != 1 && money > SharedPreferencesUtil.getUserInfo().totalmoney) {
             ToastUtil.show("余额不足,请充值");
             return;
         }
@@ -236,10 +232,8 @@ public class SearchView extends BeanView {
             ToastUtil.show("U盘存储空间不足");
             return;
         }
-
-
         download(urls);
-
+        mMusicAdapter.clear();
     }
 
     void doSearch() {
@@ -364,7 +358,6 @@ public class SearchView extends BeanView {
         public void onBindViewHolder(final MusicViewHolder holder, final int position) {
 
             BeanMusic music = beanMusics.get(position);
-
             if (mChecked.contains("" + position)) {
                 holder.itemView.setSelected(true);
             } else holder.itemView.setSelected(false);

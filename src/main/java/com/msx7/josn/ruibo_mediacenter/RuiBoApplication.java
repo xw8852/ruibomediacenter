@@ -8,6 +8,7 @@ import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+import com.liulishuo.filedownloader.FileDownloader;
 import com.msx7.josn.ruibo_mediacenter.util.L;
 
 /**
@@ -26,6 +27,10 @@ public class RuiBoApplication extends Application {
         super.onCreate();
         handler = new Handler();
         application = this;
+        /**
+         * 仅仅是缓存Application的Context，不耗时
+         */
+        FileDownloader.init(getApplicationContext());
 
     }
 

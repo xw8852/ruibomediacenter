@@ -69,6 +69,26 @@
                         android:text="@string/account_money"
                         android:textColor="@color/white"
                         android:textSize="30sp" />
+                    <TextView
+                        android:id="@+id/startTime"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        android:layout_marginTop="5dp"
+                        android:gravity="left|center_vertical"
+                        android:text="@string/account_money"
+                        android:textColor="@color/white"
+                        android:textSize="30sp" />
+                    <TextView
+                        android:id="@+id/endTime"
+                        android:visibility="gone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:gravity="left|center_vertical"
+                        android:text="@string/account_money"
+                        android:textColor="@color/white"
+                        android:textSize="30sp" />
                 </LinearLayout>
 
                 <LinearLayout

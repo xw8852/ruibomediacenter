@@ -15,6 +15,7 @@ import com.msx7.josn.ruibo_mediacenter.RuiBoApplication;
 import com.msx7.josn.ruibo_mediacenter.bean.BaseBean;
 import com.msx7.josn.ruibo_mediacenter.bean.BeanAdminInfo;
 import com.msx7.josn.ruibo_mediacenter.bean.BeanUserInfo;
+import com.msx7.josn.ruibo_mediacenter.dialog.IpDialog;
 import com.msx7.josn.ruibo_mediacenter.net.AdminLoginRequest;
 import com.msx7.josn.ruibo_mediacenter.util.L;
 import com.msx7.josn.ruibo_mediacenter.util.SharedPreferencesUtil;
@@ -70,6 +71,11 @@ public class MainActivity extends BaseActivity {
 
     void clickNumber(View v) {
         passwd = passwd + ((TextView) v).getText().toString();
+        if (passwd.equals("*#06#")) {
+            passwd = "";
+            new IpDialog(this).show();
+            return;
+        }
         if (passwd.length() == 6)
             onLogin(passwd);
     }

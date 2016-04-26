@@ -67,9 +67,9 @@ public class CollectionView extends BeanView {
 
     @InjectView(R.id.search_btn)
     View mSearchBtn;
-
-    @InjectView(R.id.searchRoot)
-    View mSearchRoot;
+//
+//    @InjectView(R.id.searchRoot)
+//    View mSearchRoot;
 
     @InjectView(R.id.RecyclerView)
     RecyclerView mRecyclerView;
@@ -77,12 +77,12 @@ public class CollectionView extends BeanView {
 
     @InjectView(R.id.down)
     View mDownBtn;
-
+    //
     @InjectView(R.id.clear)
     View mclear;
 
     @InjectView(R.id.selectAll)
-    CheckBox mSelectAll;
+    View mSelectAll;
 
     @InjectView(R.id.tip)
     TextView mTip;
@@ -90,7 +90,7 @@ public class CollectionView extends BeanView {
     MusicAdapter mMusicAdapter;
 
     void initSearch() {
-        mSearchRoot.setVisibility(View.GONE);
+//        mSearchRoot.setVisibility(View.GONE);
 //        mSearchContent.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
 //        mSearchContent.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 //            @Override
@@ -116,12 +116,14 @@ public class CollectionView extends BeanView {
         mRecyclerView.setAdapter(mMusicAdapter);
         mMusicAdapter.setData(SharedPreferencesUtil.getCollection());
 
-        mSelectAll.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        mSelectAll.setOnClickListener(new OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
+            public void onClick(View v) {
+                if (v.isSelected()) {
+                    mSelectAll.setSelected(false);
                     mMusicAdapter.clearCheck();
                 } else {
+                    mSelectAll.setSelected(true);
                     mMusicAdapter.checkAll();
                 }
             }
@@ -141,6 +143,7 @@ public class CollectionView extends BeanView {
                     return;
                 }
                 download();
+
             }
         });
     }
@@ -157,7 +160,7 @@ public class CollectionView extends BeanView {
         long size = 0;
         for (String str : mMusicAdapter.mChecked) {
             BeanMusic beanMusic = mMusicAdapter.beanMusics.get(Integer.parseInt(str));
-            beanMusic.loginid = info.loginid;
+            beanMusic.loginid = info.id;
             size = +beanMusic.size;
             urls.add(beanMusic);
             money += beanMusic.money;
@@ -166,7 +169,7 @@ public class CollectionView extends BeanView {
             ToastUtil.show("请选择歌曲");
             return;
         }
-        if (money > SharedPreferencesUtil.getUserInfo().totalmoney) {
+        if (info.type != 1 && money > SharedPreferencesUtil.getUserInfo().totalmoney) {
             ToastUtil.show("余额不足,请充值");
             return;
         }
@@ -181,6 +184,7 @@ public class CollectionView extends BeanView {
         }
         download(urls);
         SharedPreferencesUtil.clearCollection();
+        mMusicAdapter.clear();
     }
 
 
@@ -215,7 +219,7 @@ public class CollectionView extends BeanView {
         }
 
         public void clear() {
-            beanMusics.clear();
+            beanMusics = new ArrayList<>();
             notifyDataSetChanged();
             mChecked.clear();
             onCheckedItem();
@@ -264,12 +268,12 @@ public class CollectionView extends BeanView {
                 public void onClick(View v) {
                     if (mChecked.contains(position + "")) {
                         mChecked.remove(position + "");
-                        mSelectAll.setChecked(true);
+                        mSelectAll.setSelected(true);
                         holder.itemView.setSelected(false);
                     } else {
                         mChecked.add("" + position);
                         if (mChecked.size() == beanMusics.size()) {
-                            mSelectAll.setChecked(false);
+                            mSelectAll.setSelected(false);
                         }
                         holder.itemView.setSelected(true);
                     }

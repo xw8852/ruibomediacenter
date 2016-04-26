@@ -2,4 +2,7 @@
 <resources>
     <string name="account_name">卡&#160;&#160;\t&#160;&#160;号&#160;:&#160;%1$s</string>
     <string name="account_money">余&#160;&#160;\t&#160;&#160;额&#160;:&#160;%1$s</string>
+    <string name="huiyuan">会&#160;&#160;\t&#160;&#160;员&#160;:&#160;%1$s</string>
+    <string name="start_time">生&#160;&#160;效\t日&#160;&#160;期&#160;:&#160;%1$s</string>
+    <string name="end_time">失&#160;&#160;效\t日&#160;&#160;期&#160;:&#160;%1$s</string>
 </resources>

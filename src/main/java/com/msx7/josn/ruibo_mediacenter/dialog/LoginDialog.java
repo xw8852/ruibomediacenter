@@ -38,10 +38,11 @@ public class LoginDialog extends BaseCustomDialog {
         Inject.inject(this, findViewById(R.id.content));
         mTips.setText("");
         setTitle(R.string.user_login);
-        mLoginName. setFilters(new InputFilter[] { new InputFilter.LengthFilter(6) });
-        mLoginPassWd.setFilters(new InputFilter[] { new InputFilter.LengthFilter(6) });
-        mLoginPassWd.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
-        ip.setVisibility(View.VISIBLE);
+        mLoginName.setFilters(new InputFilter[]{new InputFilter.LengthFilter(6)});
+        mLoginPassWd.setFilters(new InputFilter[]{new InputFilter.LengthFilter(6)});
+//        mLoginPassWd.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
+        mLoginPassWd.setInputType(InputType.TYPE_NUMBER_VARIATION_PASSWORD);
+//        ip.setVisibility(View.VISIBLE);
         ip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -65,11 +66,17 @@ public class LoginDialog extends BaseCustomDialog {
             @Override
             public void onClick(View v) {
                 mLoginPassWd.setText("");
-
                 int right = findViewById(R.id.root).getRight();
-                new Keyboard1(v, mLoginPassWd).getPopupWindow().showAtLocation(v, Gravity.CENTER, right, 0);
+                keyboard1 = new Keyboard1(v, mLoginPassWd).setState(Keyboard1.State.password);
+                keyboard1.getPopupWindow().showAtLocation(v, Gravity.CENTER, right, 0);
             }
         });
+    }
+
+    Keyboard1 keyboard1;
+
+    public String getPasswd() {
+        return keyboard1.getContent().substring(0, Math.min(6, keyboard1.getContent().length()));
     }
 
     public TextView getLoginBtn() {

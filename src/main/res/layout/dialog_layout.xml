@@ -10,8 +10,7 @@
         android:layout_height="@dimen/title_height"
         android:background="@color/dialog_title_bg"
         android:gravity="center_vertical"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp">
+        android:paddingLeft="10dp">
 
         <TextView
             android:id="@+id/Title"
@@ -26,9 +25,12 @@
             android:id="@+id/close"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="10dp"
+            android:paddingLeft="20dp"
+            android:scaleType="centerInside"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
             android:paddingRight="10dp"
-            android:src="@drawable/close" />
+            android:src="@drawable/ic_dialog_close_normal_holo" />
 
     </LinearLayout>
 

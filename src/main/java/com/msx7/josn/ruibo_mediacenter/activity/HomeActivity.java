@@ -44,6 +44,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.msx7.josn.ruibo_mediacenter.net.OkHttpManager;
+import com.msx7.josn.ruibo_mediacenter.util.DateUtil;
 import com.msx7.josn.ruibo_mediacenter.util.L;
 import com.msx7.josn.ruibo_mediacenter.util.SharedPreferencesUtil;
 import com.msx7.josn.ruibo_mediacenter.util.ToastUtil;
@@ -99,6 +100,7 @@ public class HomeActivity extends BaseActivity {
                 startActivity(intent);
             }
         });
+        mSearchView.showEnable(false);
         SharedPreferencesUtil.saveUserInfo(null);
         SharedPreferencesUtil.clearCollection();
         DisplayMetrics dm = getResources().getDisplayMetrics();
@@ -155,7 +157,7 @@ public class HomeActivity extends BaseActivity {
      * 初始化 登录界面信息
      */
     void unlogin() {
-
+        mSearchView.showEnable(false);
         mLoginView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -175,7 +177,7 @@ public class HomeActivity extends BaseActivity {
                     mLoginDialog.getTipView().setText("账号不能为空");
                     return;
                 }
-                String loginPassWd = mLoginDialog.getLoginPassWdView().getText().toString();
+                String loginPassWd = mLoginDialog.getPasswd();
                 if (TextUtils.isEmpty(loginPassWd)) {
                     mLoginDialog.getTipView().setText("密码不能为空");
                     return;
@@ -242,6 +244,7 @@ public class HomeActivity extends BaseActivity {
      * 展示用户信息
      */
     void showUserInfo() {
+        mSearchView.showEnable(true);
         mLoginView.setVisibility(View.GONE);
         mLoginRootView.setVisibility(View.VISIBLE);
         mLoginOutBtn.setOnClickListener(new View.OnClickListener() {
@@ -259,7 +262,18 @@ public class HomeActivity extends BaseActivity {
             }
         });
         mAccountName.setText(getString(R.string.account_name, SharedPreferencesUtil.getUserInfo().loginname));
-        mAccountMoney.setText(getString(R.string.account_money, SharedPreferencesUtil.getUserInfo().remainmoney + ""));
+        BeanUserInfo userInfo = SharedPreferencesUtil.getUserInfo();
+        mAccountMoney.setText(getString(R.string.account_money, String.valueOf(userInfo.remainmoney)));
+        if (userInfo.type == 1) {
+            mAccountMoney.setText(getString(R.string.huiyuan, "包月制"));
+            mstartTime.setVisibility(View.VISIBLE);
+            mendTime.setVisibility(View.VISIBLE);
+            mstartTime.setText(getString(R.string.start_time, DateUtil.converTime(userInfo.startdate)));
+            mendTime.setText(getString(R.string.start_time, DateUtil.converTime(userInfo.enddate)));
+        } else {
+            mstartTime.setVisibility(View.GONE);
+            mendTime.setVisibility(View.GONE);
+        }
         mResetPasswdBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -272,6 +286,26 @@ public class HomeActivity extends BaseActivity {
 //                new RecordListDialog(v.getContext()).show();
 //            }
 //        });
+    }
+
+    /**
+     * 更新用户信息
+     */
+    public void refreshUserInfo() {
+        BeanUserInfo userInfo = SharedPreferencesUtil.getUserInfo();
+        RuiBoApplication.getApplication().runVolleyRequest(new LoginRequest(userInfo.loginname, userInfo.password, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                L.d(response);
+                BaseBean<BeanUserInfo> baseBean = new Gson().fromJson(response, new TypeToken<BaseBean<BeanUserInfo>>() {
+                }.getType());
+                if ("200".equals(baseBean.code)) {
+                    SharedPreferencesUtil.saveUserInfo(baseBean.data);
+                    collection.setEnabled(true);
+                    showUserInfo();
+                }
+            }
+        }, null));
     }
 
     /**
@@ -291,6 +325,12 @@ public class HomeActivity extends BaseActivity {
      */
     @InjectView(R.id.account_money)
     TextView mAccountMoney;
+
+    @InjectView(R.id.startTime)
+    TextView mstartTime;
+
+    @InjectView(R.id.endTime)
+    TextView mendTime;
 
     /**
      * 用户信息根节点

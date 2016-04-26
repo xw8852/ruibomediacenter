@@ -105,25 +105,25 @@ public class InputMoneyDialog extends BaseCustomDialog {
         activity.showProgess();
         info.totalmoney = money;
         _money = money;
-        RuiBoApplication.getApplication().runVolleyRequest(new InputMoneyRequest(info, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                activity.dismisProgess();
-                BaseBean baseBean = new Gson().fromJson(response,BaseBean.class);
-                if ("200".equals(baseBean.code)) {
-                    if (mIGetMoney != null) mIGetMoney.input(_money);
-                    dismiss();
-                } else {
-                    mTips.setText(baseBean.msg);
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                activity.dismisProgess();
-                mTips.setText(VolleyErrorUtils.getError(error));
-            }
-        }));
+//        RuiBoApplication.getApplication().runVolleyRequest(new InputMoneyRequest(info, new Response.Listener<String>() {
+//            @Override
+//            public void onResponse(String response) {
+//                activity.dismisProgess();
+//                BaseBean baseBean = new Gson().fromJson(response,BaseBean.class);
+//                if ("200".equals(baseBean.code)) {
+//                    if (mIGetMoney != null) mIGetMoney.input(_money);
+//                    dismiss();
+//                } else {
+//                    mTips.setText(baseBean.msg);
+//                }
+//            }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                activity.dismisProgess();
+//                mTips.setText(VolleyErrorUtils.getError(error));
+//            }
+//        }));
     }
 
     public static interface IGetMoney {
