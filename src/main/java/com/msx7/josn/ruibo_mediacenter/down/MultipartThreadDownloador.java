@@ -1,5 +1,7 @@
 package com.msx7.josn.ruibo_mediacenter.down;
 
+import android.util.Log;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -54,9 +56,10 @@ public class MultipartThreadDownloador {
 
     Status status;
     int count;
+    IDownListner listner;
 
-    public void download(final IDownListner listner) {
-
+    public void download(IDownListner listner1) {
+        this.listner = listner1;
         DownloadThread[] threads = new DownloadThread[threadCount];
         try {
             createFileByUrl();
@@ -79,16 +82,20 @@ public class MultipartThreadDownloador {
                 threads[i] = new DownloadThread(new URL(urlStr), localFile, start, end, new IDownListner() {
                     @Override
                     public void onStatus(Status status) {
-                        count++;
-                        if (!status.isSuccess) {
-                            if (listner != null) {
-                                status.isSuccess = false;
-                                listner.onStatus(status);
+                        synchronized (MultipartThreadDownloador.class) {
+                            count++;
+                            Log.d("MSG", "count:" + count+","+threadCount);
+                            if (!status.isSuccess) {
+                                if (listner != null) {
+                                    status.isSuccess = false;
+                                    listner.onStatus(status);
+                                }
                             }
-                        } else if (count == threadCount) {
-                            if (listner != null) {
-                                status.isSuccess = true;
-                                listner.onStatus(status);
+                            if (count >= threadCount) {
+                                if (listner != null) {
+                                    status.isSuccess = true;
+                                    listner.onStatus(status);
+                                }
                             }
                         }
                     }

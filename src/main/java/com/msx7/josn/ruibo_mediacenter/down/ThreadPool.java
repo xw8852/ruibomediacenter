@@ -1,5 +1,6 @@
 package com.msx7.josn.ruibo_mediacenter.down;
 
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.liulishuo.filedownloader.BaseDownloadTask;
@@ -8,6 +9,7 @@ import com.liulishuo.filedownloader.FileDownloadQueueSet;
 import com.liulishuo.filedownloader.FileDownloader;
 import com.msx7.josn.ruibo_mediacenter.RuiBoApplication;
 import com.msx7.josn.ruibo_mediacenter.util.L;
+import com.msx7.josn.ruibo_mediacenter.util.SDUtils;
 import com.msx7.josn.ruibo_mediacenter.util.SharedPreferencesUtil;
 
 import java.io.File;
@@ -37,6 +39,8 @@ public class ThreadPool {
     Down down;
     List<String> urls;
     IDownListener listener;
+    String path;
+
 
     void downMode(List<String> urls) {
         L.d("downMode---1");
@@ -45,7 +49,7 @@ public class ThreadPool {
         int i = 0;
         for (String url : urls) {
             String pathName = url.substring(url.lastIndexOf("/") + 1);
-            File file = new File(RuiBoApplication.MUSIC_FILE + pathName);
+            File file = new File(path + pathName);
             if (file.exists()) {
                 pathName = System.currentTimeMillis() + pathName;
             }
@@ -65,7 +69,7 @@ public class ThreadPool {
                 }
             }
             L.d("downMode---1--" + i);
-            tasks.add(FileDownloader.getImpl().create(url).setPath(RuiBoApplication.MUSIC_FILE + pathName)
+            tasks.add(FileDownloader.getImpl().create(url).setPath(path + pathName)
                     .setTag(i + 1));
             i++;
 //            Status status = new Status(url, pathName);
@@ -91,7 +95,7 @@ public class ThreadPool {
             Status status = new Status();
             status.name = url;
             String pathName = url.substring(url.lastIndexOf("/") + 1);
-            File file = new File(RuiBoApplication.MUSIC_FILE + pathName);
+            File file = new File(path + pathName);
             if (file.exists()) {
                 pathName = System.currentTimeMillis() + pathName;
             }
@@ -120,8 +124,11 @@ public class ThreadPool {
         downStatus(urlQueue.poll());
     }
 
-    public void enqueue(List<String> urls, IDownListener listener) {
+    public void enqueue(List<String> urls, String path, IDownListener listener) {
         this.urls = urls;
+        this.path = path;
+        if (!TextUtils.isEmpty(path) && !path.endsWith("/"))
+            path += "/";
         this.listener = listener;
         down = new Down();
         downMode2(urls);
@@ -143,6 +150,7 @@ public class ThreadPool {
         @Override
         protected void blockComplete(BaseDownloadTask task) {
             //在完成前同步调用该方法，此时已经下载完成
+            onStatus(new Status(task.getUrl(), task.getPath(), true));
         }
 
         @Override
@@ -197,7 +205,7 @@ public class ThreadPool {
         if (status.isSuccess) {
             down.successList.add(status);
         } else down.failList.add(status);
-        if (down.failList.size() + down.successList.size() == urls.size()) {
+        if (down.failList.size() + down.successList.size() >= urls.size()) {
             if (listener != null) {
                 listener.finish(down);
             }
@@ -206,10 +214,11 @@ public class ThreadPool {
 
     void downStatus(final Status _status) {
         if (_status != null)
-            new MultipartThreadDownloador(_status.url, RuiBoApplication.MUSIC_FILE, _status.toPath, 6)
+            new MultipartThreadDownloador(_status.url, path, _status.toPath, 6)
                     .download(new MultipartThreadDownloador.IDownListner() {
                         @Override
                         public void onStatus(Status status) {
+                            Log.d("MSG", "ThreadPool---status:" + status.name);
                             if (status.isSuccess) {
                                 down.successList.add(status);
                             } else {
@@ -221,7 +230,7 @@ public class ThreadPool {
                             if (_status != null) {
                                 downStatus(_status);
                             }
-                            if (down.failList.size() + down.successList.size() == urls.size()) {
+                            if (down.failList.size() + down.successList.size() >= urls.size()) {
                                 if (!down.failList.isEmpty()) {
                                     List<String> _urls = new ArrayList<String>();
                                     for (Status _tmp : down.failList) {
@@ -229,6 +238,10 @@ public class ThreadPool {
                                     }
                                     down.failList.clear();
                                     downMode(_urls);
+                                    return;
+                                }
+                                if (listener != null) {
+                                    listener.finish(down);
                                 }
                             }
                         }

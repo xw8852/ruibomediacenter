@@ -3,6 +3,7 @@ package com.msx7.josn.ruibo_mediacenter.activity;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.baidu.mobstat.StatService;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.msx7.josn.ruibo_mediacenter.RuiBoApplication;
@@ -93,6 +94,7 @@ public class HomeActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Inject.inject(this);
+        StatService.setDebugOn(true);
         toAdmin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

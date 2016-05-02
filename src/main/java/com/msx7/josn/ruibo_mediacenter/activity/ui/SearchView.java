@@ -222,17 +222,18 @@ public class SearchView extends BeanView {
             return;
         }
 
-        if (!SDUtils.isExist()) {
-            ToastUtil.show("请将u盘插入usb1接口处");
+        String path = SDUtils.getPath();
+        if (TextUtils.isEmpty(path)) {
+            ToastUtil.show("请插入u盘");
             return;
         }
 
 
-        if (SDUtils.getRemainSize() < size) {
+        if (SDUtils.getRemainSize(path) < size) {
             ToastUtil.show("U盘存储空间不足");
             return;
         }
-        download(urls);
+        download(urls, path);
         mMusicAdapter.clear();
     }
 
@@ -241,6 +242,7 @@ public class SearchView extends BeanView {
             mSwip.setRefreshing(false);
             return;
         }
+
         mMusicAdapter.clear();
         onCheckedItem();
         BaseJsonRequest request = new BaseJsonRequest(Request.Method.POST, UrlStatic.URL_GETMUSICLIST(),

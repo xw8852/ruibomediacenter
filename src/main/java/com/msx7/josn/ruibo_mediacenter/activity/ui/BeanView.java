@@ -47,7 +47,7 @@ public class BeanView extends LinearLayout {
 
     public static final MediaType JSON = MediaType.parse("application/json;charset=utf-8");
 
-    protected void download(final List<BeanMusic> urls) {
+    protected void download(final List<BeanMusic> urls, final String path) {
         showDialog();
         try {
             OkHttpClient.Builder builder = new OkHttpClient.Builder();
@@ -62,10 +62,10 @@ public class BeanView extends LinearLayout {
                     .enqueue(new Callback() {
                         @Override
                         public void onFailure(Call call, IOException e) {
-                            dismissDialog();
                             RuiBoApplication.getApplication().getHandler().post(new Runnable() {
                                 @Override
                                 public void run() {
+                                    dismissDialog();
                                     ToastUtil.show("下载失败，请稍后重试");
                                 }
                             });
@@ -81,13 +81,14 @@ public class BeanView extends LinearLayout {
                                 BaseBean baseBean = new Gson().fromJson(str, BaseBean.class);
                                 if ("200".equals(baseBean.code)) {
                                     ((HomeActivity) getContext()).refreshUserInfo();
-                                    downloadMusic(urls);
+                                    downloadMusic(urls, path);
                                 }
                             } else {
-                                dismissDialog();
+
                                 RuiBoApplication.getApplication().getHandler().post(new Runnable() {
                                     @Override
                                     public void run() {
+                                        dismissDialog();
                                         ToastUtil.show("下载失败，请稍后重试");
                                     }
                                 });
@@ -137,18 +138,18 @@ public class BeanView extends LinearLayout {
 
     }
 
-    void downloadMusic(List<BeanMusic> _urls) {
+    void downloadMusic(List<BeanMusic> _urls, String path) {
         List<String> urls = new ArrayList<String>();
         for (BeanMusic music : _urls) {
             urls.add(music.path);
         }
-        new ThreadPool().enqueue(urls, new ThreadPool.IDownListener() {
+        new ThreadPool().enqueue(urls, path, new ThreadPool.IDownListener() {
             @Override
             public void finish(ThreadPool.Down down) {
-                dismissDialog();
                 RuiBoApplication.getApplication().getHandler().post(new Runnable() {
                     @Override
                     public void run() {
+                        dismissDialog();
                         ToastUtil.show("下载成功！");
                     }
                 });

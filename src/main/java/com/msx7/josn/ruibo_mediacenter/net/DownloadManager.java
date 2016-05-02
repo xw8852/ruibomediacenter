@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.msx7.josn.ruibo_mediacenter.RuiBoApplication;
 import com.msx7.josn.ruibo_mediacenter.activity.BaseActivity;
+import com.msx7.josn.ruibo_mediacenter.util.SDUtils;
 import com.msx7.josn.ruibo_mediacenter.util.SdCardUtils;
 import com.msx7.josn.ruibo_mediacenter.util.SharedPreferencesUtil;
 import com.msx7.josn.ruibo_mediacenter.util.ToastUtil;
@@ -38,9 +39,9 @@ public class DownloadManager {
                 url = SharedPreferencesUtil.getServerIp() + ":88/ftp/" + url;
             }
             String pathName = url.substring(url.lastIndexOf("/") + 1);
-            File file = new File(RuiBoApplication.MUSIC_FILE + pathName);
+            File file = new File(SDUtils.getPath() + pathName);
             if (file.exists()) {
-                file = new File(RuiBoApplication.MUSIC_FILE  + System.currentTimeMillis() + pathName);
+                file = new File(SDUtils.getPath()   + System.currentTimeMillis() + pathName);
             }
             Log.d("MSG", "url:" + url + " path: " + file.getPath());
             try {

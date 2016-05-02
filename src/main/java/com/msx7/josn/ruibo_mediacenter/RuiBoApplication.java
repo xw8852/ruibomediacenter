@@ -1,6 +1,7 @@
 package com.msx7.josn.ruibo_mediacenter;
 
 import android.app.Application;
+import android.os.Environment;
 import android.os.Handler;
 
 import com.android.volley.AuthFailureError;
@@ -10,6 +11,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.liulishuo.filedownloader.FileDownloader;
 import com.msx7.josn.ruibo_mediacenter.util.L;
+import com.msx7.josn.ruibo_mediacenter.util.SDUtils;
 
 /**
  * 文件名: RuiBoApplication
@@ -20,7 +22,7 @@ import com.msx7.josn.ruibo_mediacenter.util.L;
 public class RuiBoApplication extends Application {
     private static RuiBoApplication application;
 
-    public static final String MUSIC_FILE = "/mnt/usb_storage/";
+//    public static String MUSIC_FILE = "/mnt/usb_storage/";
 
     @Override
     public void onCreate() {
@@ -31,7 +33,9 @@ public class RuiBoApplication extends Application {
          * 仅仅是缓存Application的Context，不耗时
          */
         FileDownloader.init(getApplicationContext());
-
+//        MUSIC_FILE = Environment.getExternalStorageDirectory().getPath() + "/";
+//        MUSIC_FILE = "/sdcard/";
+        SDUtils.getPath();
     }
 
     Handler handler;

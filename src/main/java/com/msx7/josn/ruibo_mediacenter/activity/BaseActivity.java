@@ -1,6 +1,8 @@
 package com.msx7.josn.ruibo_mediacenter.activity;
 
 import android.app.Activity;
+
+import com.baidu.mobstat.StatService;
 import com.msx7.josn.ruibo_mediacenter.dialog.ProgressDialog;
 
 /**
@@ -24,5 +26,17 @@ public class BaseActivity extends Activity{
 
     public void dismisProgess() {
         if (mProgessDialog != null) mProgessDialog.dismiss();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        StatService.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        StatService.onPause(this);
     }
 }
