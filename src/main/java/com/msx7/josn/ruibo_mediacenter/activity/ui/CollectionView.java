@@ -62,259 +62,94 @@ public class CollectionView extends BeanView {
     }
 
 
-    @InjectView(R.id.search_content)
-    EditText mSearchContent;
-
-    @InjectView(R.id.search_btn)
-    View mSearchBtn;
-//
-//    @InjectView(R.id.searchRoot)
-//    View mSearchRoot;
-
-    @InjectView(R.id.RecyclerView)
-    RecyclerView mRecyclerView;
+    @InjectView(R.id.SongPageView)
+    SongPageView mSongPageView;
 
 
-    @InjectView(R.id.down)
+    @InjectView(R.id.down2)
     View mDownBtn;
     //
-    @InjectView(R.id.clear)
-    View mclear;
+    @InjectView(R.id.clear2)
+    View mdelete;
 
-    @InjectView(R.id.selectAll)
-    View mSelectAll;
+    @InjectView(R.id.selectAll2)
+    CheckBox mSelectAll;
 
     @InjectView(R.id.tip)
     TextView mTip;
 
-    MusicAdapter mMusicAdapter;
 
     void initSearch() {
-//        mSearchRoot.setVisibility(View.GONE);
-//        mSearchContent.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
-//        mSearchContent.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-//            @Override
-//            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-//                if (actionId == EditorInfo.IME_ACTION_SEARCH ||
-//                        actionId == EditorInfo.IME_ACTION_DONE ||
-//                        event.getKeyCode() == KeyEvent.KEYCODE_SEARCH) {
-//                    doSearch();
-//                }
-//                return false;
-//            }
-//        });
-//        mSearchBtn.setOnClickListener(new OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                doSearch();
-//            }
-//        });
-        GridLayoutManager manager = new GridLayoutManager(getContext(), 2);
-        mRecyclerView.setLayoutManager(manager);
-        mRecyclerView.addItemDecoration(new MarginDecoration(getContext()));
-        mMusicAdapter = new MusicAdapter(new ArrayList<BeanMusic>());
-        mRecyclerView.setAdapter(mMusicAdapter);
-        mMusicAdapter.setData(SharedPreferencesUtil.getCollection());
-
-        mSelectAll.setOnClickListener(new OnClickListener() {
+        mSelectAll.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View v) {
-                if (v.isSelected()) {
-                    mSelectAll.setSelected(false);
-                    mMusicAdapter.clearCheck();
-                } else {
-                    mSelectAll.setSelected(true);
-                    mMusicAdapter.checkAll();
-                }
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                mSongPageView.setSelectedAll(isChecked);
             }
         });
-        mclear.setOnClickListener(new OnClickListener() {
+        mdelete.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                SharedPreferencesUtil.clearCollection();
-                mMusicAdapter.clear();
+                List<BeanMusic> musics = SharedPreferencesUtil.getCollection();
+                List<BeanMusic> delMusics = mSongPageView.getSelectedMusics();
+                if (delMusics != null) {
+                    musics.removeAll(delMusics);
+                }
+                SharedPreferencesUtil.saveCollection(musics);
+                showData();
+                doSelect(mSongPageView.getSelectedMusics());
+            }
+        });
+        mDownBtn.setEnabled(false);
+        mSongPageView.setDoSelect(new SingleFragment.IDoSelect() {
+            @Override
+            public void doSelect(List<BeanMusic> musics) {
+                doSelect(musics);
             }
         });
         mDownBtn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (SharedPreferencesUtil.getUserInfo() == null) {
-                    ToastUtil.show("请先登录");
-                    return;
-                }
                 download();
-
             }
         });
     }
 
+    void doSelect(List<BeanMusic> musics) {
+        BeanUserInfo beanUserInfo = SharedPreferencesUtil.getUserInfo();
+        if (beanUserInfo == null) {
+            mDownBtn.setEnabled(false);
+            return;
+        }
+        if (musics.size() > beanUserInfo.entity.DownloadMusicAmount) {
+            mDownBtn.setEnabled(false);
+            return;
+        }
+        if (musics.size() > 0) {
+            mDownBtn.setEnabled(true);
+            return;
+        }
+        double size = 0;
+        for (BeanMusic music : mSongPageView.getAllSelectedMusic()) {
+            size += music.size;
+        }
+        if (size  > beanUserInfo.entity.DownloadMusicSize) {
+            mDownBtn.setEnabled(false);
+            return;
+        }
+    }
+
     public void showData() {
-        mMusicAdapter.setData(SearchView.sort(SharedPreferencesUtil.getCollection()));
+        mSongPageView.showData(SharedPreferencesUtil.getCollection());
     }
 
     void download() {
-        double money = 0.0;
-        List<BeanMusic> urls = new ArrayList<BeanMusic>();
-        BeanUserInfo info = SharedPreferencesUtil.getUserInfo();
-        //下载大小
-        long size = 0;
-        for (String str : mMusicAdapter.mChecked) {
-            BeanMusic beanMusic = mMusicAdapter.beanMusics.get(Integer.parseInt(str));
-            beanMusic.loginid = info.id;
-            size = +beanMusic.size;
-            urls.add(beanMusic);
-            money += beanMusic.money;
-        }
-        if (urls == null || urls.isEmpty()) {
-            ToastUtil.show("请选择歌曲");
-            return;
-        }
-        if (info.type != 1 && money > SharedPreferencesUtil.getUserInfo().totalmoney) {
-            ToastUtil.show("余额不足,请充值");
-            return;
-        }
-        String path = SDUtils.getPath();
-        if (TextUtils.isEmpty(path)) {
-            ToastUtil.show("请插入u盘");
-            return;
-        }
+        download(mSongPageView);
+    }
 
-
-        if (SDUtils.getRemainSize(path) < size) {
-            ToastUtil.show("U盘存储空间不足");
-            return;
-        }
-        download(urls, path);
-        SharedPreferencesUtil.clearCollection();
-        mMusicAdapter.clear();
+    public void clear() {
+        SharedPreferencesUtil.saveCollection(new ArrayList<BeanMusic>());
+        showData();
     }
 
 
-    void onCheckedItem() {
-        int count = 0;
-        double money = 0.0;
-        for (String str : mMusicAdapter.mChecked) {
-            count++;
-            money += mMusicAdapter.beanMusics.get(Integer.parseInt(str)).money;
-        }
-        if (count > 0) {
-            mTip.setText("已选中" + count + "首歌曲，下载需支付" + money + "元");
-        } else {
-            mTip.setText("");
-        }
-    }
-
-    class MusicAdapter extends RecyclerView.Adapter<MusicViewHolder> {
-        List<BeanMusic> beanMusics;
-        List<String> mChecked = new ArrayList<String>();
-
-        public MusicAdapter(List<BeanMusic> musics) {
-            if (musics == null) musics = new ArrayList<BeanMusic>();
-            this.beanMusics = musics;
-        }
-
-        public void clearCheck() {
-            if (mChecked.size() != beanMusics.size()) return;
-            mChecked = new ArrayList<String>();
-            onCheckedItem();
-            notifyDataSetChanged();
-        }
-
-        public void clear() {
-            beanMusics = new ArrayList<>();
-            notifyDataSetChanged();
-            mChecked.clear();
-            onCheckedItem();
-        }
-
-        public void checkAll() {
-            if (mChecked.size() == beanMusics.size()) return;
-            for (int i = 0; i < beanMusics.size(); i++) {
-                if (!mChecked.contains("" + i)) mChecked.add("" + i);
-            }
-            onCheckedItem();
-            notifyDataSetChanged();
-        }
-
-        public void setData(List<BeanMusic> musics) {
-            if (musics == null) musics = new ArrayList<BeanMusic>();
-            this.beanMusics = musics;
-            notifyDataSetChanged();
-        }
-
-        public void addMore(List<BeanMusic> musics) {
-            this.beanMusics.addAll(musics);
-            notifyDataSetChanged();
-        }
-
-        @Override
-        public MusicViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new MusicViewHolder(LayoutInflater.from(getContext()).inflate(R.layout.layout_item_list, null));
-        }
-
-        @Override
-        public void onBindViewHolder(final MusicViewHolder holder, final int position) {
-
-            BeanMusic music = beanMusics.get(position);
-
-            if (mChecked.contains("" + position)) {
-                holder.itemView.setSelected(true);
-            } else holder.itemView.setSelected(false);
-
-            holder.num.setText("歌曲编码:" + music.code);
-            holder.name.setText(music.name);
-            holder.money.setText(music.money + "元");
-
-            holder.itemView.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mChecked.contains(position + "")) {
-                        mChecked.remove(position + "");
-                        mSelectAll.setSelected(true);
-                        holder.itemView.setSelected(false);
-                    } else {
-                        mChecked.add("" + position);
-                        if (mChecked.size() == beanMusics.size()) {
-                            mSelectAll.setSelected(false);
-                        }
-                        holder.itemView.setSelected(true);
-                    }
-                    onCheckedItem();
-                }
-            });
-        }
-
-        @Override
-        public int getItemCount() {
-            return beanMusics.size();
-        }
-    }
-
-    class MusicViewHolder extends RecyclerView.ViewHolder {
-        @InjectView(R.id.num)
-        TextView num;
-        @InjectView(R.id.name)
-        TextView name;
-        @InjectView(R.id.money)
-        TextView money;
-
-        public MusicViewHolder(View itemView) {
-            super(itemView);
-            Inject.inject(this, itemView);
-        }
-    }
-
-    public class MarginDecoration extends RecyclerView.ItemDecoration {
-        private int margin;
-
-        public MarginDecoration(Context context) {
-            margin = context.getResources().getDimensionPixelSize(R.dimen.item_margin);
-        }
-
-        @Override
-        public void getItemOffsets(
-                Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-            outRect.set(margin, margin, margin, margin);
-        }
-    }
 }

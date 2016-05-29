@@ -45,6 +45,9 @@ public class UrlStatic {
     public static String URL_BACKUPDATA() {
         return getServerIp() + "/adminapi/admin.backupdata";
     }
+    public static String URL_SETTINGMUSIC() {
+        return getServerIp() + "/adminapi/admin.settingmusic";
+    }
     public static String URL_CLOSEPC() {
         return getServerIp() + "/adminapi/admin.closepc";
     }
@@ -72,6 +75,10 @@ public class UrlStatic {
      */
     public static String URL_FAVORITEMUSIC() {
         return getServerIp() + "/userapi/user.favoritemusic";
+    }
+
+    public static String URL_DOWNLOADMUSICCHECK() {
+        return getServerIp() + "/userapi/user.downloadmusiccheck";
     }
 
     /**

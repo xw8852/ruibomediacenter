@@ -25,6 +25,7 @@ import com.msx7.josn.ruibo_mediacenter.net.CloseUserRequest;
 import com.msx7.josn.ruibo_mediacenter.net.ResetAdminPasswdRequest;
 import com.msx7.josn.ruibo_mediacenter.net.ResetPasswdRequest;
 import com.msx7.josn.ruibo_mediacenter.net.getUserRequest;
+import com.msx7.josn.ruibo_mediacenter.ui.NumberTextWatcher;
 import com.msx7.josn.ruibo_mediacenter.util.L;
 import com.msx7.josn.ruibo_mediacenter.util.SharedPreferencesUtil;
 import com.msx7.josn.ruibo_mediacenter.util.ToastUtil;
@@ -70,17 +71,9 @@ public class UserManagerDialog extends BaseCustomDialog {
                 onLogin();
             }
         });
-
         mLoginName.setFilters(new InputFilter[]{new InputFilter.LengthFilter(6)});
         mLoginName.setInputType(InputType.TYPE_NULL);
-        mLoginName.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mLoginName.setText("");
-                int right = findViewById(R.id.root).getRight();
-                new Keyboard1(v, mLoginName).getPopupWindow().showAtLocation(v, Gravity.CENTER, right, 0);
-            }
-        });
+        mLoginName.addTextChangedListener(new NumberTextWatcher(mLoginName));
     }
 
 

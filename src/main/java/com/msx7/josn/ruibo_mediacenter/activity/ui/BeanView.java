@@ -1,38 +1,37 @@
 package com.msx7.josn.ruibo_mediacenter.activity.ui;
 
-import android.app.Dialog;
+import android.app.Activity;
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.widget.LinearLayout;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.google.gson.Gson;
+import com.google.gson.annotations.SerializedName;
+import com.google.gson.reflect.TypeToken;
+import com.msx7.josn.ruibo_mediacenter.R;
 import com.msx7.josn.ruibo_mediacenter.RuiBoApplication;
 import com.msx7.josn.ruibo_mediacenter.activity.BaseActivity;
-import com.msx7.josn.ruibo_mediacenter.activity.HomeActivity;
+import com.msx7.josn.ruibo_mediacenter.activity.net.UserInfoNet;
 import com.msx7.josn.ruibo_mediacenter.bean.BaseBean;
 import com.msx7.josn.ruibo_mediacenter.bean.BeanMusic;
+import com.msx7.josn.ruibo_mediacenter.bean.BeanUserInfo;
+import com.msx7.josn.ruibo_mediacenter.common.SyncUserInfo;
 import com.msx7.josn.ruibo_mediacenter.common.UrlStatic;
-import com.msx7.josn.ruibo_mediacenter.dialog.DownloadDialog;
-import com.msx7.josn.ruibo_mediacenter.down.ThreadPool;
-import com.msx7.josn.ruibo_mediacenter.net.OkHttpManager;
-import com.msx7.josn.ruibo_mediacenter.util.L;
+import com.msx7.josn.ruibo_mediacenter.dialog.CheckDownDialog;
+import com.msx7.josn.ruibo_mediacenter.net.BaseJsonRequest;
 import com.msx7.josn.ruibo_mediacenter.util.SharedPreferencesUtil;
 import com.msx7.josn.ruibo_mediacenter.util.ToastUtil;
 
-import java.io.File;
-import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
+import static com.android.volley.Request.Method.POST;
+
 
 /**
  * 文件名: BeanView
@@ -45,144 +44,90 @@ public class BeanView extends LinearLayout {
         super(context, attrs);
     }
 
-    public static final MediaType JSON = MediaType.parse("application/json;charset=utf-8");
+    private SongPageView songPageView;
 
-    protected void download(final List<BeanMusic> urls, final String path) {
-        showDialog();
-        try {
-            OkHttpClient.Builder builder = new OkHttpClient.Builder();
-            builder.connectTimeout(15, TimeUnit.SECONDS);
-            builder.writeTimeout(15, TimeUnit.SECONDS);
-            OkHttpClient client = builder.build();
-            client.newCall(
-                    new Request.Builder()
-                            .url(UrlStatic.URL_DOWNLOADMUSIC())
-                            .post(RequestBody.create(JSON, new Gson().toJson(urls)))
-                            .build())
-                    .enqueue(new Callback() {
-                        @Override
-                        public void onFailure(Call call, IOException e) {
-                            RuiBoApplication.getApplication().getHandler().post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    dismissDialog();
-                                    ToastUtil.show("下载失败，请稍后重试");
-                                }
-                            });
+    protected void download(final SongPageView sPageView) {
+        this.songPageView = sPageView;
+        int songs = songPageView.getSelectedMusics().size();
+        double money = SharedPreferencesUtil.getUserInfo().entity.DownloadOneMusicPrice * songs;
+        money = Math.min(money, SharedPreferencesUtil.getUserInfo().entity.DownloadAllMusicPrice);
 
-                        }
+        final BaseActivity activity = (BaseActivity) getContext();
+        activity.showProgess();
 
-                        @Override
-                        public void onResponse(Call call, Response response) throws IOException {
-                            if (response.code() == 200) {
-                                String str = response.body().string();
-                                L.d(call.request().url().toString());
-                                L.d(str);
-                                BaseBean baseBean = new Gson().fromJson(str, BaseBean.class);
-                                if ("200".equals(baseBean.code)) {
-                                    ((HomeActivity) getContext()).refreshUserInfo();
-                                    downloadMusic(urls, path);
-                                }
-                            } else {
-
-                                RuiBoApplication.getApplication().getHandler().post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        dismissDialog();
-                                        ToastUtil.show("下载失败，请稍后重试");
-                                    }
-                                });
-                            }
-                        }
-                    });
-        } catch (Exception e) {
-            e.printStackTrace();
-            dismissDialog();
-            RuiBoApplication.getApplication().getHandler().post(new Runnable() {
-                @Override
-                public void run() {
-                    ToastUtil.show("下载失败，请稍后重试");
+        String url = UrlStatic.URL_DOWNLOADMUSICCHECK();
+        final CheckPost post = new CheckPost(SharedPreferencesUtil.getUserInfo().id, money, songPageView.getSelectedMusics());
+        BaseJsonRequest
+                jsonRequest = new BaseJsonRequest(POST, url
+                , new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                activity.dismisProgess();
+                BaseBean<UserInfoNet.UserInfo.EntityEntity> baseBean = new Gson().fromJson(
+                        response, new TypeToken<BaseBean<UserInfoNet.UserInfo.EntityEntity>>() {
+                        }.getType()
+                );
+                if (!"200".equals(baseBean.code)) {
+                    ToastUtil.show(baseBean.msg);
+                    return;
                 }
-            });
-        } finally {
+                SyncUserInfo.SyncUserInfo();
+                double size = 0;
+                for (BeanMusic music : songPageView.getSelectedMusics()) {
+                    size += music.size;
+                }
+                DecimalFormat a = new DecimalFormat(".##");
+                if (baseBean.data.DownloadMusicRemainDiskSpace <= 0) {
+                    ToastUtil.show("您还没有插入U盘");
+                    return;
+                }
+                if (size > baseBean.data.DownloadMusicRemainDiskSpace) {
+                    ToastUtil.show("U盘空间不足，还需" + a.format(baseBean.data.DownloadMusicRemainDiskSpace - size) + "M");
+                    return;
+                }
+                double money = baseBean.data.DownloadOneMusicPrice * songPageView.getSelectedMusics().size();
+                money = Math.min(money, SharedPreferencesUtil.getUserInfo().entity.DownloadAllMusicPrice);
+                post.money = money;
+                CheckDownDialog dialog = new CheckDownDialog(songPageView.getContext());
+                dialog.show();
+                dialog.show(size,
+                        (int) (100 * size / baseBean.data.DownloadMusicSize),
+                        baseBean.data.DownloadMusicRemainDiskSpace,
+                        (int) (100 * baseBean.data.DownloadMusicRemainDiskSpace / baseBean.data.DownloadMusicTotalDiskSpace
+                        ), baseBean.data.PrintPrice);
+                dialog.setPostData(post);
 
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                ToastUtil.show(R.string.error);
+                activity.dismisProgess();
+            }
+        }
+        );
+        jsonRequest.addRequestJson(new Gson().toJson(post));
+        RuiBoApplication.getApplication().runVolleyRequest(jsonRequest);
+    }
+
+    public static class CheckPost {
+        @SerializedName("musiclist")
+        public List<BeanMusic> musiclist;
+        @SerializedName("loginid")
+        public long loginId;
+        @SerializedName("money")
+        public double money;
+
+        @SerializedName("needprint")
+        public int needprint;
+
+        public CheckPost(long loginId, double money, List<BeanMusic> musiclist) {
+            this.loginId = loginId;
+            this.money = money;
+            this.musiclist = musiclist;
         }
 
     }
 
-    Dialog mDialog;
 
-    void showDialog() {
-        RuiBoApplication.getApplication().getHandler().post(new Runnable() {
-            @Override
-            public void run() {
-                if (mDialog == null) {
-                    mDialog = new DownloadDialog(getContext());
-                    mDialog.setCancelable(false);
-                }
-                mDialog.setCancelable(false);
-                mDialog.show();
-            }
-        });
-    }
-
-    void dismissDialog() {
-        RuiBoApplication.getApplication().getHandler().post(new Runnable() {
-            @Override
-            public void run() {
-                if (mDialog != null) {
-                    mDialog.dismiss();
-                }
-            }
-        });
-
-    }
-
-    void downloadMusic(List<BeanMusic> _urls, String path) {
-        List<String> urls = new ArrayList<String>();
-        for (BeanMusic music : _urls) {
-            urls.add(music.path);
-        }
-        new ThreadPool().enqueue(urls, path, new ThreadPool.IDownListener() {
-            @Override
-            public void finish(ThreadPool.Down down) {
-                RuiBoApplication.getApplication().getHandler().post(new Runnable() {
-                    @Override
-                    public void run() {
-                        dismissDialog();
-                        ToastUtil.show("下载成功！");
-                    }
-                });
-            }
-        });
-//        final int count = urls.size();
-//        com.msx7.josn.ruibo_mediacenter.net.DownloadManager.download(urls, (BaseActivity) getContext(), new OkHttpManager.IDownFinish() {
-//            int downcount = 0;
-//
-//            @Override
-//            public void finish(String url, File file) {
-//                downcount++;
-//                Log.d("finish", url);
-//                if (downcount == count) {
-//                    dismissDialog();
-//                    RuiBoApplication.getApplication().getHandler().post(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            ToastUtil.show("下载成功！");
-//                        }
-//                    });
-//
-//                }
-//            }
-//
-//            @Override
-//            public void error(String url, File file) {
-//                Log.d("FAIL", url);
-//                downcount++;
-//                if (downcount == count) {
-//                    dismissDialog();
-//                }
-//            }
-//        });
-    }
 }

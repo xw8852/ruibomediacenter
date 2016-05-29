@@ -35,11 +35,11 @@ public class ResetPasswdRequest extends BaseJsonRequest {
         @SerializedName("confirmnewspassword")
         public String confirmnewspassword;
         @SerializedName("id")
-        public int id;
+        public long id;
         @SerializedName("inmoneypassword")
         public String inmoneypassword;
         @SerializedName("loginid")
-        public int loginid;
+        public long loginid;
         @SerializedName("loginname")
         public String loginname;
         @SerializedName("newpassword")

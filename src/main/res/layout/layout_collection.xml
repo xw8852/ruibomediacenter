@@ -5,19 +5,11 @@
     android:layout_marginRight="10dp"
     android:layout_weight="1">
 
-    <ImageView
-        android:id="@+id/topBg"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="fitXY"
-        android:src="@drawable/bg_right_list" />
 
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/bgBottom"
-        android:layout_alignTop="@+id/topBg"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
@@ -29,22 +21,22 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <ImageView
-                android:id="@+id/selectAll"
+            <CheckBox
+                android:id="@+id/selectAll2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/select_btn"
+                android:src="@drawable/btn_select"
                 android:button="@null"
                 android:checked="true"
                 android:gravity="center"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@color/white" />
             <ImageView
-                android:id="@+id/clear"
+                android:id="@+id/clear2"
                 android:layout_width="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_height="wrap_content"
-                android:src="@drawable/clear_btn"
+                android:src="@drawable/btn_del"
                 android:button="@null"
                 android:checked="true"
                 android:gravity="center"
@@ -61,7 +53,7 @@
                 android:textColor="@color/white"
                 android:textSize="@dimen/font_medium" />
             <ImageView
-                android:id="@+id/down"
+                android:id="@+id/down2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:button="@null"
@@ -74,14 +66,10 @@
 
         </LinearLayout>
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/RecyclerView"
+        <com.msx7.josn.ruibo_mediacenter.activity.ui.SongPageView
+            android:id="@+id/SongPageView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp">
-
-        </android.support.v7.widget.RecyclerView>
+            android:layout_height="match_parent" />
     </LinearLayout>
 
 

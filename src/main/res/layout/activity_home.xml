@@ -5,142 +5,6 @@
     android:background="@drawable/bg_allpage"
     android:orientation="horizontal">
 
-    <LinearLayout
-        android:id="@+id/root"
-        android:layout_width="200dp"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:paddingBottom="30dp">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="20dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginTop="10dp"
-            android:paddingBottom="10dp"
-            android:layout_weight="1"
-            android:background="@drawable/bg_left_top"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:id="@+id/loginbg"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:src="@drawable/btn_login"
-                android:visibility="gone" />
-
-            <LinearLayout
-                android:id="@+id/loginRoot"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:visibility="visible">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="left"
-                    android:paddingLeft="20dp"
-                    android:paddingTop="40dp"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/account_name"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="left|center_vertical"
-                        android:text="@string/account_name"
-                        android:textColor="@color/white"
-                        android:textSize="30sp" />
-
-                    <TextView
-                        android:id="@+id/account_money"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:gravity="left|center_vertical"
-                        android:text="@string/account_money"
-                        android:textColor="@color/white"
-                        android:textSize="30sp" />
-                    <TextView
-                        android:id="@+id/startTime"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:visibility="gone"
-                        android:layout_marginTop="5dp"
-                        android:gravity="left|center_vertical"
-                        android:text="@string/account_money"
-                        android:textColor="@color/white"
-                        android:textSize="30sp" />
-                    <TextView
-                        android:id="@+id/endTime"
-                        android:visibility="gone"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:gravity="left|center_vertical"
-                        android:text="@string/account_money"
-                        android:textColor="@color/white"
-                        android:textSize="30sp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:gravity="center"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:layout_marginBottom="40dp"
-                    android:orientation="horizontal">
-
-                    <Button
-                        android:id="@+id/resetPasswd"
-                        android:layout_width="wrap_content"
-                        android:layout_height="48dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/bg_left_btn"
-                        android:gravity="center"
-                        android:text="重设密码"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:textColor="@color/white" />
-
-                    <View
-                        android:layout_width="10dp"
-                        android:layout_height="1dp"/>
-                    <Button
-                        android:id="@+id/loginOut"
-                        android:layout_width="wrap_content"
-                        android:layout_height="48dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/bg_left_btn"
-                        android:gravity="center"
-                        android:text="安全退出"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:textColor="@color/white" />
-                </LinearLayout>
-
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_weight="1"
-            android:background="@drawable/bg_left_top"
-            android:src="@drawable/bg_left_bottom" />
-    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -182,13 +46,84 @@
                     android:enabled="false" />
             </RadioGroup>
 
-            <View
+
+            <LinearLayout
+                android:id="@+id/userInfo"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="right|center_vertical"
+                android:orientation="horizontal"
+                android:visibility="invisible">
+
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/account"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/huiyuan"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textColor="@color/white" />
+
+                    <TextView
+                        android:id="@+id/money"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/huiyuan"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textColor="@color/white" />
+
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/resetPasswd"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/home"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignTop="@+id/home"
+                    android:background="@drawable/btn_default"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:text="修改密码"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/white" />
+
+                <Button
+                    android:id="@+id/logOut"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/home"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignTop="@+id/home"
+                    android:background="@drawable/btn_default"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:text="安全退出"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/white" />
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/toLogin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/home"
+                android:layout_alignParentRight="true"
                 android:layout_alignTop="@+id/home"
-                android:layout_toRightOf="@+id/collection"
-                android:layout_weight="1" />
+                android:background="@drawable/btn_default"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="会员登录"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/white" />
 
             <Button
                 android:id="@+id/toAdmin"
@@ -199,6 +134,7 @@
                 android:layout_alignTop="@+id/home"
                 android:background="@drawable/btn_default"
                 android:gravity="center"
+                android:padding="10dp"
                 android:text="管理中心"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@color/white" />
@@ -207,8 +143,9 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginRight="10dp"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:paddingTop="10dp"
+            android:background="@drawable/bg_big">
 
             <com.msx7.josn.ruibo_mediacenter.activity.ui.SearchView
                 android:id="@+id/SearchView"

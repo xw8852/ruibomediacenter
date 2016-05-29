@@ -43,28 +43,27 @@ public class MultipartThreadDownloador {
      */
     private long fileSize;
 
-    public MultipartThreadDownloador(String urlStr, String dirStr,
+    public MultipartThreadDownloador(Status _status, String dirStr,
                                      String filename, int threadCount) {
-        this.urlStr = urlStr;
+        this.urlStr = _status.url;
         this.dirStr = dirStr;
         this.filename = filename;
         this.threadCount = threadCount;
-        status = new Status();
-        status.url = urlStr;
-        status.toPath = dirStr + "/" + filename;
+        status = _status;
     }
 
     Status status;
     int count;
     IDownListner listner;
+    DownloadThread[] threads;
 
     public void download(IDownListner listner1) {
         this.listner = listner1;
-        DownloadThread[] threads = new DownloadThread[threadCount];
+        threads = new DownloadThread[threadCount];
         try {
             createFileByUrl();
             if (fileSize / (1024 * 1024.0) > 100) {
-                threadCount = threadCount * 2;
+//                threadCount = threadCount * 2;
                 threadCount = Math.min(threadCount, 10);
                 threads = new DownloadThread[threadCount];
             }
@@ -84,12 +83,13 @@ public class MultipartThreadDownloador {
                     public void onStatus(Status status) {
                         synchronized (MultipartThreadDownloador.class) {
                             count++;
-                            Log.d("MSG", "count:" + count+","+threadCount);
+                            Log.d("MSG", "count:" + count + "," + threadCount);
                             if (!status.isSuccess) {
                                 if (listner != null) {
                                     status.isSuccess = false;
                                     listner.onStatus(status);
                                 }
+                                clearFiler();
                             }
                             if (count >= threadCount) {
                                 if (listner != null) {
@@ -114,6 +114,15 @@ public class MultipartThreadDownloador {
         } finally {
         }
 
+    }
+
+    void clearFiler() {
+        for (DownloadThread thread : threads) {
+            if (thread != null) thread.cancel();
+        }
+        File file = new File(dirStr + "/" + filename);
+        if (file.exists())
+            file.deleteOnExit();
     }
 
     /**
@@ -247,17 +256,20 @@ public class MultipartThreadDownloador {
                     System.out.println(Thread.currentThread().getName() + "完成下载  ： " + startPos + " -- " + endPos);
                     this.isFinish = true;
                     if (this.listner != null) {
-                        listner.onStatus(new Status(true));
+                        status.isSuccess = true;
+                        listner.onStatus(status);
                     }
                 } else {
                     if (this.listner != null) {
-                        listner.onStatus(new Status(false));
+                        status.isSuccess = false;
+                        listner.onStatus(status);
                     }
                 }
             } catch (IOException e) {
                 e.printStackTrace();
                 if (this.listner != null) {
-                    listner.onStatus(new Status(false));
+                    status.isSuccess = false;
+                    listner.onStatus(status);
                 }
             }
         }

@@ -2,12 +2,14 @@ package com.msx7.josn.ruibo_mediacenter.dialog;
 
 import android.content.Context;
 import android.graphics.drawable.BitmapDrawable;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.msx7.josn.ruibo_mediacenter.R;
+import com.msx7.josn.ruibo_mediacenter.util.ToastUtil;
 
 import org.w3c.dom.Text;
 
@@ -61,6 +63,13 @@ public class Keyboard1 {
                 editText.setSelected(false);
             }
         });
+        editText.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+//                ToastUtil.show("KeyCode:" + keyCode);
+                return false;
+            }
+        });
     }
 
     public State getState() {
@@ -90,10 +99,14 @@ public class Keyboard1 {
         return popupWindow;
     }
 
+    long lastTime;
     View.OnClickListener numClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            clickNumber(v);
+            if (System.currentTimeMillis() - lastTime > 400) {
+                lastTime = System.currentTimeMillis();
+                clickNumber(v);
+            }
         }
     };
 

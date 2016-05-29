@@ -25,7 +25,7 @@ public class BeanUserInfo {
     @SerializedName("consumemoney")
     public double consumemoney;
     @SerializedName("id")
-    public int id;
+    public long id;
     @SerializedName("loginid")
     public int loginid;
     @SerializedName("loginname")
@@ -57,4 +57,58 @@ public class BeanUserInfo {
     public int type;
     @SerializedName("typename")
     public String typename;
+    /**
+     * closed : 0
+     * entity : {"DownloadAllMusicPrice":10,"DownloadMusicAmount":200,"DownloadMusicRemainDiskSpace":20795,"DownloadMusicSize":1024,"DownloadMusicTotalDiskSpace":102400,"DownloadOneMusicPrice":1,"PrintPrice":1,"StoreMusicRemainDiskSpace":20795,"StoreMusicTotalDiskSpace":102400}
+     * userstatus : null
+     * usertype : null
+     */
+
+    @SerializedName("closed")
+    public int closed;
+    /**
+     * DownloadAllMusicPrice : 10
+     * DownloadMusicAmount : 200
+     * DownloadMusicRemainDiskSpace : 20795
+     * DownloadMusicSize : 1024
+     * DownloadMusicTotalDiskSpace : 102400
+     * DownloadOneMusicPrice : 1
+     * PrintPrice : 1
+     * StoreMusicRemainDiskSpace : 20795
+     * StoreMusicTotalDiskSpace : 102400
+     */
+
+    @SerializedName("entity")
+    public EntityEntity entity;
+    @SerializedName("userstatus")
+    public Object userstatus;
+    @SerializedName("usertype")
+    public Object usertype;
+
+    public static class EntityEntity {
+        @SerializedName("DownloadAllMusicPrice")
+        public double DownloadAllMusicPrice;
+        @SerializedName("DownloadMusicAmount")
+        public long DownloadMusicAmount;
+        /**
+         * 下载歌曲剩余磁盘空间大小
+         */
+        @SerializedName("DownloadMusicRemainDiskSpace")
+        public double DownloadMusicRemainDiskSpace;
+        /**
+         * DownloadMusicSize
+         */
+        @SerializedName("DownloadMusicSize")
+        public double DownloadMusicSize;
+        @SerializedName("DownloadMusicTotalDiskSpace")
+        public double DownloadMusicTotalDiskSpace;
+        @SerializedName("DownloadOneMusicPrice")
+        public double DownloadOneMusicPrice;
+        @SerializedName("PrintPrice")
+        public double PrintPrice;
+        @SerializedName("StoreMusicRemainDiskSpace")
+        public double StoreMusicRemainDiskSpace;
+        @SerializedName("StoreMusicTotalDiskSpace")
+        public double StoreMusicTotalDiskSpace;
+    }
 }

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.msx7.josn.ruibo_mediacenter.activity.ui.FullGridView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:horizontalSpacing="10dp"
+    android:numColumns="3"
+    android:listSelector="@color/tranparent"
+    android:orientation="vertical"
+    android:verticalSpacing="10dp">
+
+</com.msx7.josn.ruibo_mediacenter.activity.ui.FullGridView>

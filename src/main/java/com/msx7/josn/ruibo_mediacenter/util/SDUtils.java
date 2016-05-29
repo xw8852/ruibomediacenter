@@ -62,25 +62,25 @@ public class SDUtils {
 
     public static final String getPath() {
         String path = null;
-        StorageManager sm = (StorageManager) RuiBoApplication.getApplication().getSystemService(Context.STORAGE_SERVICE);
-        try {
-            String[] paths = (String[]) sm.getClass().getMethod("getVolumePaths", null).invoke(sm, null);
-
-            for (int i = 0; i < paths.length; i++) {
-                Log.i("iii", paths[i]);
-                String status = (String) sm.getClass().getMethod("getVolumeState", String.class).invoke(sm, paths[i]);
-                if (status.equals(android.os.Environment.MEDIA_MOUNTED)) {
-                    Log.i("ddd", paths[i] + "," + Environment.getExternalStorageDirectory().getPath());
-                    if (Environment.getExternalStorageDirectory().getPath().equals(paths[i]))
-                        continue;
-                    path = paths[i];
-                    path += "/";
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-        }
+//        StorageManager sm = (StorageManager) RuiBoApplication.getApplication().getSystemService(Context.STORAGE_SERVICE);
+//        try {
+//            String[] paths = (String[]) sm.getClass().getMethod("getVolumePaths", null).invoke(sm, null);
+//
+//            for (int i = 0; i < paths.length; i++) {
+//                Log.i("iii", paths[i]);
+//                String status = (String) sm.getClass().getMethod("getVolumeState", String.class).invoke(sm, paths[i]);
+//                if (status.equals(android.os.Environment.MEDIA_MOUNTED)) {
+//                    Log.i("ddd", paths[i] + "," + Environment.getExternalStorageDirectory().getPath());
+//                    if (Environment.getExternalStorageDirectory().getPath().equals(paths[i]))
+//                        continue;
+//                    path = paths[i];
+//                    path += "/";
+//                }
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        } finally {
+//        }
         return path;
     }
 }

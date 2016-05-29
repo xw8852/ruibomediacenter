@@ -41,7 +41,9 @@
             app:strokeColor="#a6a6a6"
             app:strokeWidth="1dp" />
 
-
+        <View
+            android:layout_width="1dp"
+            android:layout_height="20dp"/>
         <com.msx7.lib.widget.shape.ShapeTextView
             android:id="@+id/login"
             android:layout_width="match_parent"

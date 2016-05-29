@@ -93,7 +93,7 @@ public class ThreadPool {
     void downMode2(List<String> urls) {
         for (String url : urls) {
             Status status = new Status();
-            status.name = url;
+            status.name = new String(url);
             String pathName = url.substring(url.lastIndexOf("/") + 1);
             File file = new File(path + pathName);
             if (file.exists()) {
@@ -131,33 +131,34 @@ public class ThreadPool {
             path += "/";
         this.listener = listener;
         down = new Down();
-        downMode2(urls);
+        downMode(urls);
+//        downMode2(urls);
     }
 
     FileDownloadLargeFileListener downloadListener = new FileDownloadLargeFileListener() {
         @Override
         protected void pending(BaseDownloadTask task, long soFarBytes, long totalBytes) {
             //等待，已经进入下载队列
-            L.d("pending--->" + task.getUrl());
-            L.d("pending--->" + task.getPath());
+//            L.d("pending--->" + task.getUrl());
+//            L.d("pending--->" + task.getPath());
         }
 
         @Override
         protected void progress(BaseDownloadTask task, long soFarBytes, long totalBytes) {
-            L.d("progress--->" + task.getUrl() + "," + task.getPath() + "," + soFarBytes + "," + totalBytes + "," + (soFarBytes / totalBytes));
+            L.d("progress--->" + task.getPath() + "," + ((0.0f + soFarBytes) / totalBytes));
         }
 
         @Override
         protected void blockComplete(BaseDownloadTask task) {
             //在完成前同步调用该方法，此时已经下载完成
-            onStatus(new Status(task.getUrl(), task.getPath(), true));
+//            onStatus(new Status(task.getUrl(), task.getPath(), true));
         }
 
         @Override
         protected void completed(BaseDownloadTask task) {
             //完成整个下载过程
-            L.d("completed--->" + task.getUrl());
-            L.d("completed--->" + task.getPath());
+//            L.d("completed--->" + task.getUrl());
+//            L.d("completed--->" + task.getPath());
             onStatus(new Status(task.getUrl(), task.getPath(), true));
         }
 
@@ -170,29 +171,29 @@ public class ThreadPool {
         protected void error(BaseDownloadTask task, Throwable e) {
             //下载出现错误
             e.printStackTrace();
-            L.d("error--->" + task.getUrl());
-            L.d("error--->" + task.getPath());
+//            L.d("error--->" + task.getUrl());
+//            L.d("error--->" + task.getPath());
             onStatus(new Status(task.getUrl(), task.getPath(), false));
         }
 
         @Override
         protected void warn(BaseDownloadTask task) {
             //在下载队列中(正在等待/正在下载)已经存在相同下载连接与相同存储路径的任务
-            L.d("warn--->" + task.getUrl());
-            L.d("warn--->" + task.getPath());
+//            L.d("warn--->" + task.getUrl());
+//            L.d("warn--->" + task.getPath());
             onStatus(new Status(task.getUrl(), task.getPath(), false));
         }
 
         @Override
         protected void pending(BaseDownloadTask task, int soFarBytes, int totalBytes) {
-            L.d("pending--1->" + task.getUrl());
-            L.d("pending--1->" + task.getPath());
+//            L.d("pending--1->" + task.getUrl());
+//            L.d("pending--1->" + task.getPath());
         }
 
         @Override
         protected void progress(BaseDownloadTask task, int soFarBytes, int totalBytes) {
-            L.d("progress--1->" + task.getUrl());
-            L.d("progress--1->" + task.getPath());
+//            L.d("progress--1->" + task.getUrl());
+//            L.d("progress--1->" + task.getPath());
         }
 
         @Override
@@ -212,40 +213,40 @@ public class ThreadPool {
         }
     }
 
-    void downStatus(final Status _status) {
-        if (_status != null)
-            new MultipartThreadDownloador(_status.url, path, _status.toPath, 6)
-                    .download(new MultipartThreadDownloador.IDownListner() {
-                        @Override
-                        public void onStatus(Status status) {
-                            Log.d("MSG", "ThreadPool---status:" + status.name);
-                            if (status.isSuccess) {
-                                down.successList.add(status);
-                            } else {
-                                status.name = _status.name;
-                                down.failList.add(status);
-                                L.d("----" + _status.name);
-                            }
-                            Status _status = urlQueue.poll();
-                            if (_status != null) {
-                                downStatus(_status);
-                            }
-                            if (down.failList.size() + down.successList.size() >= urls.size()) {
-                                if (!down.failList.isEmpty()) {
-                                    List<String> _urls = new ArrayList<String>();
-                                    for (Status _tmp : down.failList) {
-                                        _urls.add(_tmp.name);
-                                    }
-                                    down.failList.clear();
-                                    downMode(_urls);
-                                    return;
+    void downStatus(Status _status) {
+        if (_status == null) return;
+        Log.d("MSG", "name：" + _status.name);
+        new MultipartThreadDownloador(_status, path, _status.toPath, 2)
+                .download(new MultipartThreadDownloador.IDownListner() {
+                    @Override
+                    public void onStatus(Status status) {
+                        Log.d("MSG", "ThreadPool---status:" + status.name);
+                        if (status.isSuccess) {
+                            down.successList.add(status);
+                        } else {
+                            down.failList.add(status);
+                            L.d("----" + status.name);
+                        }
+                        Status _status = urlQueue.poll();
+                        if (_status != null) {
+                            downStatus(_status);
+                        }
+                        if (down.failList.size() + down.successList.size() >= urls.size()) {
+                            if (!down.failList.isEmpty()) {
+                                List<String> _urls = new ArrayList<String>();
+                                for (Status _tmp : down.failList) {
+                                    _urls.add(_tmp.name);
                                 }
-                                if (listener != null) {
-                                    listener.finish(down);
-                                }
+                                down.failList.clear();
+                                downMode(_urls);
+                                return;
+                            }
+                            if (listener != null) {
+                                listener.finish(down);
                             }
                         }
-                    });
+                    }
+                });
     }
 
     public interface IDownListener {

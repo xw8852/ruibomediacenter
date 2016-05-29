@@ -67,7 +67,7 @@ public class AdminDialog extends BaseCustomDialog {
         btn2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new SetPriceDialog(activity).show();
+                new SetPriceDialog2(activity).show();
                 dismiss();
             }
         });

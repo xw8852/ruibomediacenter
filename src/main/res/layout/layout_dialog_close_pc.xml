@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:minWidth="350dp"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <TextView
+        android:id="@+id/tip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="是否关闭服务器?"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/font_color_6" />
+
+    <View
+        android:layout_width="1dp"
+        android:layout_height="20dp"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <com.msx7.lib.widget.shape.ShapeTextView
+            android:id="@+id/sure"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:minWidth="200dp"
+            android:padding="10dp"
+            android:text="关机"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/white"
+            app:radius="10dp"
+            app:solide="#ff791e" />
+
+        <com.msx7.lib.widget.shape.ShapeTextView
+            android:id="@+id/cancel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:minWidth="200dp"
+            android:padding="10dp"
+            android:text="取消"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/white"
+            app:radius="10dp"
+            app:solide="#ff791e" />
+
+    </LinearLayout>
+
+</LinearLayout>

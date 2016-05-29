@@ -3,6 +3,7 @@ package com.msx7.josn.ruibo_mediacenter.activity;
 import android.app.ActivityManager;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -11,10 +12,12 @@ import com.google.gson.Gson;
 import com.msx7.josn.ruibo_mediacenter.R;
 import com.msx7.josn.ruibo_mediacenter.RuiBoApplication;
 import com.msx7.josn.ruibo_mediacenter.bean.BaseBean;
+import com.msx7.josn.ruibo_mediacenter.bean.BeanAdminInfo;
 import com.msx7.josn.ruibo_mediacenter.common.UrlStatic;
 import com.msx7.josn.ruibo_mediacenter.dialog.AdminDialog;
 import com.msx7.josn.ruibo_mediacenter.dialog.BaoYueDialog;
 import com.msx7.josn.ruibo_mediacenter.dialog.ChongZhiDialog;
+import com.msx7.josn.ruibo_mediacenter.dialog.ClosePcDialog;
 import com.msx7.josn.ruibo_mediacenter.dialog.OpenAccountDialog;
 import com.msx7.josn.ruibo_mediacenter.dialog.SyncSongDialog;
 import com.msx7.josn.ruibo_mediacenter.dialog.UserManagerDialog;
@@ -25,6 +28,8 @@ import com.msx7.josn.ruibo_mediacenter.util.SharedPreferencesUtil;
 import com.msx7.josn.ruibo_mediacenter.util.ToastUtil;
 import com.msx7.josn.ruibo_mediacenter.util.VolleyErrorUtils;
 
+import java.text.DecimalFormat;
+
 /**
  * 文件名: LoginManager
  * 描  述:
@@ -32,6 +37,8 @@ import com.msx7.josn.ruibo_mediacenter.util.VolleyErrorUtils;
  * 时  间：2016/2/16
  */
 public class AdminActivity extends BaseActivity {
+
+    TextView mTipDir;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +51,13 @@ public class AdminActivity extends BaseActivity {
             }
         });
         SharedPreferencesUtil.clearUserInfo();
+        mTipDir = (TextView) findViewById(R.id.tipDir);
+        BeanAdminInfo adminInfo = SharedPreferencesUtil.getAdminUserInfo();
+        DecimalFormat a = new DecimalFormat("##############.##");
+        mTipDir.setText("磁盘空间总共" + a.format(adminInfo.entity.StoreMusicTotalDiskSpace / 1024.0) + "G，可用空间" +
+                a.format(adminInfo.entity.StoreMusicRemainDiskSpace / 1024.0) + "G");
+
+
     }
 
     /**
@@ -102,27 +116,9 @@ public class AdminActivity extends BaseActivity {
         }
     };
 
-    public void shutdown(View v) {
-        showProgess();
-        RuiBoApplication.getApplication().runVolleyRequest(new BaseJsonRequest(Request.Method.GET, UrlStatic.URL_CLOSEPC(),
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        dismisProgess();
-                        ToastUtil.show("关机成功");
-//                        L.d(response);
-//                        BaseBean baseBean = new Gson().fromJson(response, BaseBean.class);
-//                        ToastUtil.show(baseBean.msg);
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                dismisProgess();
-                ToastUtil.show("关机成功");
-//                ToastUtil.show(VolleyErrorUtils.getError(error));
-            }
-        }));
 
+    public void shutdown(View v) {
+        new ClosePcDialog(this).show();
     }
 
 

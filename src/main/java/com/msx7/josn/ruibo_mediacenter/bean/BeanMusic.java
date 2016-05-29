@@ -27,9 +27,9 @@ public class BeanMusic {
     public long code;
 
     @SerializedName("id")
-    public int id;
+    public long id;
     @SerializedName("loginid")
-    public int loginid;
+    public long loginid;
     @SerializedName("money")
     public double money;
     @SerializedName("name")
@@ -37,7 +37,7 @@ public class BeanMusic {
     @SerializedName("path")
     public String path;
     @SerializedName("size")
-    public long size;
+    public double size;
     @SerializedName("typeid")
     public int typeid;
     @SerializedName("typename")
@@ -46,9 +46,7 @@ public class BeanMusic {
     @Override
     public boolean equals(Object o) {
         if (o == null) return false;
-        if (TextUtils.isEmpty(path)) return false;
         BeanMusic music = (BeanMusic) o;
-        if (TextUtils.isEmpty(music.path)) return false;
-        return path.equals(music.path);
+        return id == music.id;
     }
 }

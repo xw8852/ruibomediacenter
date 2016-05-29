@@ -22,6 +22,7 @@ import com.msx7.josn.ruibo_mediacenter.bean.BeanAdminInfo;
 import com.msx7.josn.ruibo_mediacenter.bean.BeanUserInfo;
 import com.msx7.josn.ruibo_mediacenter.net.InputMoneyRequest;
 import com.msx7.josn.ruibo_mediacenter.net.getUserRequest;
+import com.msx7.josn.ruibo_mediacenter.ui.NumberTextWatcher;
 import com.msx7.josn.ruibo_mediacenter.util.SharedPreferencesUtil;
 import com.msx7.josn.ruibo_mediacenter.util.ToastUtil;
 import com.msx7.josn.ruibo_mediacenter.util.VolleyErrorUtils;
@@ -72,25 +73,29 @@ public class ChongZhiDialog extends BaseCustomDialog {
 
         mLoginName.setFilters(new InputFilter[]{new InputFilter.LengthFilter(6)});
         mLoginName.setInputType(InputType.TYPE_NULL);
-        mLoginName.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mLoginName.setText("");
-                int right = findViewById(R.id.root).getRight();
-                new Keyboard1(v, mLoginName).getPopupWindow().showAtLocation(v, Gravity.CENTER, right, 0);
-            }
-        });
+        mLoginName.addTextChangedListener(new NumberTextWatcher(mLoginName));
+//        mLoginName.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                v.requestFocus();
+////                mLoginName.setText("");
+////                int right = findViewById(R.id.root).getRight();
+////                new Keyboard1(v, mLoginName).getPopupWindow().showAtLocation(v, Gravity.CENTER, right, 0);
+//            }
+//        });
         price.setInputType(InputType.TYPE_NULL);
-        price.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                price.setText("");
-                int right = findViewById(R.id.root).getRight();
-                Keyboard1 keyboard1 = new Keyboard1(v, price);
-                keyboard1.setState(Keyboard1.State.SignNumber);
-                keyboard1.getPopupWindow().showAtLocation(v, Gravity.CENTER, right, 0);
-            }
-        });
+        price.addTextChangedListener(new NumberTextWatcher(price));
+//        price.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                v.requestFocus();
+////                price.setText("");
+////                int right = findViewById(R.id.root).getRight();
+////                Keyboard1 keyboard1 = new Keyboard1(v, price);
+////                keyboard1.setState(Keyboard1.State.SignNumber);
+////                keyboard1.getPopupWindow().showAtLocation(v, Gravity.CENTER, right, 0);
+//            }
+//        });
     }
 
 
@@ -111,7 +116,7 @@ public class ChongZhiDialog extends BaseCustomDialog {
         } finally {
         }
         BeanAdminInfo info = SharedPreferencesUtil.getAdminUserInfo();
-        PostData postData = new PostData(info.id,  mLoginName.getText().toString(), price.getText().toString());
+        PostData postData = new PostData(info.id, mLoginName.getText().toString(), price.getText().toString());
         RuiBoApplication.getApplication().runVolleyRequest(new InputMoneyRequest(new Gson().toJson(postData), new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -156,7 +161,7 @@ public class ChongZhiDialog extends BaseCustomDialog {
         @SerializedName("totalmoney")
         public String totalmoney;
 
-        public PostData(int id,  String loginname, String totalmoney) {
+        public PostData(int id, String loginname, String totalmoney) {
             this.id = id;
             this.loginid = id;
             type = 0;
