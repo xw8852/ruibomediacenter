@@ -40,7 +40,7 @@ import java.util.List;
  */
 public class SongPageView extends LinearLayout implements IMusicSelcted {
 
-    public static final int EVG_PAGE_SONG = 27;
+    public static int EVG_PAGE_SONG = 27;
 
     @InjectView(R.id.ViewPager)
     ViewPager mViewPager;
@@ -57,6 +57,7 @@ public class SongPageView extends LinearLayout implements IMusicSelcted {
         inflate(context, R.layout.layout_song_page_view, this);
         Inject.inject(this, this);
 
+        EVG_PAGE_SONG = SharedPreferencesUtil.getRow1() * SharedPreferencesUtil.getRow2();
         mTips.setText("");
         mDownTips.setText("");
 
@@ -65,6 +66,7 @@ public class SongPageView extends LinearLayout implements IMusicSelcted {
         selecters = new ArrayList<>();
         musics = new ArrayList<>();
     }
+
 
     void next() {
         int page = Math.min(mViewPager.getCurrentItem() + 1, pageCount);
@@ -112,6 +114,9 @@ public class SongPageView extends LinearLayout implements IMusicSelcted {
         setTip(mViewPager.getCurrentItem());
     }
 
+    public void setTips(){
+        setTip(mViewPager.getCurrentItem());
+    }
     void setTip(int position) {
         if (musics.size() <= 0) {
             mTips.setText("");
@@ -135,7 +140,7 @@ public class SongPageView extends LinearLayout implements IMusicSelcted {
             buffer.append(",下载需支付");
             buffer.append("<font color=\"#ff971e\">");
 
-            int size =getSelectedMusics().size();
+            int size = getSelectedMusics().size();
             double money = beanUserInfo.entity.DownloadOneMusicPrice * size;
             buffer.append("" + Math.min(money, beanUserInfo.entity.DownloadAllMusicPrice));
 
@@ -164,7 +169,11 @@ public class SongPageView extends LinearLayout implements IMusicSelcted {
     List<BeanMusic> origin;
     List<BeanMusic> selecters = new ArrayList<>();
     int pageCount = 0;
+    FragmentManager fm;
 
+    public void setFragmentManager(FragmentManager fm) {
+        this.fm = fm;
+    }
 
     public void showData(List<BeanMusic> musics) {
         if (musics == null) musics = new ArrayList<>();

@@ -38,7 +38,7 @@ public class LoginDialog extends BaseCustomDialog {
         Inject.inject(this, findViewById(R.id.content));
         mTips.setText("");
         setTitle(R.string.user_login);
-        mLoginName.setFilters(new InputFilter[]{new InputFilter.LengthFilter(6)});
+        mLoginName.setFilters(new InputFilter[]{new InputFilter.LengthFilter(8)});
         mLoginPassWd.setFilters(new InputFilter[]{new InputFilter.LengthFilter(6)});
 //        mLoginPassWd.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
         mLoginPassWd.setInputType(InputType.TYPE_NUMBER_VARIATION_PASSWORD);

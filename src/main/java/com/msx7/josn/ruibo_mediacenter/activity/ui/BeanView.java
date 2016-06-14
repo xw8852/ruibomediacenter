@@ -22,6 +22,7 @@ import com.msx7.josn.ruibo_mediacenter.common.SyncUserInfo;
 import com.msx7.josn.ruibo_mediacenter.common.UrlStatic;
 import com.msx7.josn.ruibo_mediacenter.dialog.CheckDownDialog;
 import com.msx7.josn.ruibo_mediacenter.net.BaseJsonRequest;
+import com.msx7.josn.ruibo_mediacenter.util.L;
 import com.msx7.josn.ruibo_mediacenter.util.SharedPreferencesUtil;
 import com.msx7.josn.ruibo_mediacenter.util.ToastUtil;
 
@@ -62,6 +63,7 @@ public class BeanView extends LinearLayout {
                 , new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                L.d(response);
                 activity.dismisProgess();
                 BaseBean<UserInfoNet.UserInfo.EntityEntity> baseBean = new Gson().fromJson(
                         response, new TypeToken<BaseBean<UserInfoNet.UserInfo.EntityEntity>>() {

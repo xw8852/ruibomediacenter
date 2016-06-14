@@ -63,7 +63,7 @@ public class CollectionView extends BeanView {
 
 
     @InjectView(R.id.SongPageView)
-    SongPageView mSongPageView;
+    public SongPageView mSongPageView;
 
 
     @InjectView(R.id.down2)
@@ -84,6 +84,8 @@ public class CollectionView extends BeanView {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 mSongPageView.setSelectedAll(isChecked);
+                doALlSelect(SharedPreferencesUtil.getCollection());
+                mSongPageView.setTips();
             }
         });
         mdelete.setOnClickListener(new OnClickListener() {
@@ -96,14 +98,13 @@ public class CollectionView extends BeanView {
                 }
                 SharedPreferencesUtil.saveCollection(musics);
                 showData();
-                doSelect(mSongPageView.getSelectedMusics());
             }
         });
         mDownBtn.setEnabled(false);
         mSongPageView.setDoSelect(new SingleFragment.IDoSelect() {
             @Override
             public void doSelect(List<BeanMusic> musics) {
-                doSelect(musics);
+                doALlSelect(musics);
             }
         });
         mDownBtn.setOnClickListener(new OnClickListener() {
@@ -114,7 +115,13 @@ public class CollectionView extends BeanView {
         });
     }
 
-    void doSelect(List<BeanMusic> musics) {
+    void doALlSelect(List<BeanMusic> musics) {
+        if (musics == null || musics.isEmpty()) {
+            mDownBtn.setEnabled(false);
+            mdelete.setEnabled(false);
+            return;
+        }
+        mdelete.setEnabled(true);
         BeanUserInfo beanUserInfo = SharedPreferencesUtil.getUserInfo();
         if (beanUserInfo == null) {
             mDownBtn.setEnabled(false);
@@ -132,13 +139,15 @@ public class CollectionView extends BeanView {
         for (BeanMusic music : mSongPageView.getAllSelectedMusic()) {
             size += music.size;
         }
-        if (size  > beanUserInfo.entity.DownloadMusicSize) {
+        if (size > beanUserInfo.entity.DownloadMusicSize) {
             mDownBtn.setEnabled(false);
             return;
         }
     }
 
     public void showData() {
+        mSongPageView.setSelectedAll(false);
+        mdelete.setEnabled(false);
         mSongPageView.showData(SharedPreferencesUtil.getCollection());
     }
 

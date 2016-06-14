@@ -69,7 +69,7 @@ public class SearchView extends BeanView {
 
 
     @InjectView(R.id.SongPageView)
-    SongPageView mSongPageView;
+   public SongPageView mSongPageView;
 
 
     @InjectView(R.id.down1)
@@ -89,6 +89,9 @@ public class SearchView extends BeanView {
         mDownBtn.setEnabled(enable);
         mCollection.setEnabled(enable);
         mSelectAll.setEnabled(enable);
+        if(!enable){
+            mSongPageView.setSelectedAll(false);
+        }
         if (enable && mSongPageView.getSelectedMusics().size() > 0) {
             doSelected(mSongPageView.getSelectedMusics());
         }
@@ -130,6 +133,7 @@ public class SearchView extends BeanView {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 mSongPageView.setSelectedAll(isChecked);
                 doSelected(mSongPageView.getSelectedMusics());
+                mSongPageView.setTips();
             }
         });
         mSongPageView.setDoSelect(new SingleFragment.IDoSelect() {
@@ -187,7 +191,7 @@ public class SearchView extends BeanView {
                 });
                 SharedPreferencesUtil.saveCollection(_musics);
                 ToastUtil.show("歌曲收藏成功");
-                clear();
+//                clear();
             }
         });
         mDownBtn.setOnClickListener(new OnClickListener() {
@@ -205,6 +209,10 @@ public class SearchView extends BeanView {
 
 
     void doSelected(List<BeanMusic> musics) {
+        if(musics==null||musics.isEmpty()){
+            mDownBtn.setEnabled(false);
+            return;
+        }
         BeanUserInfo beanUserInfo = SharedPreferencesUtil.getUserInfo();
         if (beanUserInfo == null) {
             mDownBtn.setEnabled(false);
@@ -232,6 +240,7 @@ public class SearchView extends BeanView {
 
     void doSearch() {
         if (TextUtils.isEmpty(mSearchContent.getText().toString().trim())) {
+            clear();
             return;
         }
         SyncUserInfo.SyncUserInfo();
@@ -245,6 +254,7 @@ public class SearchView extends BeanView {
                         BaseBean<List<BeanMusic>> baseBean = new Gson().fromJson(response, new TypeToken<BaseBean<List<BeanMusic>>>() {
                         }.getType());
                         if ("200".equals(baseBean.code)) {
+                            clear();
                             mDownBtn.setEnabled(false);
                             mSongPageView.setSelectedAll(false);
                             mSongPageView.showData(baseBean.data);

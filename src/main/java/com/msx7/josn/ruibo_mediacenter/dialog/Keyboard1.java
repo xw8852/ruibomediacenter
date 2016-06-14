@@ -21,12 +21,14 @@ import org.w3c.dom.Text;
  */
 public class Keyboard1 {
 
+    public static long DIVIDER_TIME = 400;
     State state = State.Normal;
     PopupWindow popupWindow;
 
     View item;
     View root;
     TextView editText;
+    CharSequence hint;
 
     public Keyboard1(View item, final TextView editText) {
         this.item = item;
@@ -57,10 +59,13 @@ public class Keyboard1 {
             editText.setBackgroundResource(R.drawable.bg_text);
         }
         editText.setSelected(true);
+        hint = editText.getHint();
+        editText.setHint("");
         popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {
                 editText.setSelected(false);
+                editText.setHint(hint);
             }
         });
         editText.setOnKeyListener(new View.OnKeyListener() {
@@ -103,7 +108,7 @@ public class Keyboard1 {
     View.OnClickListener numClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            if (System.currentTimeMillis() - lastTime > 400) {
+            if (System.currentTimeMillis() - lastTime > DIVIDER_TIME) {
                 lastTime = System.currentTimeMillis();
                 clickNumber(v);
             }

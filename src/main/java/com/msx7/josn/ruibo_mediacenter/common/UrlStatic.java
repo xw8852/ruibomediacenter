@@ -80,6 +80,9 @@ public class UrlStatic {
     public static String URL_DOWNLOADMUSICCHECK() {
         return getServerIp() + "/userapi/user.downloadmusiccheck";
     }
+    public static String URL_PRINTREPORT() {
+        return getServerIp() + "/adminapi/admin.printreport";
+    }
 
     /**
      * 获取音乐类别

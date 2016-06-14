@@ -29,7 +29,7 @@ public class SyncUserInfo {
             @Override
             public void onResponse(String response) {
                 if (TextUtils.isEmpty(response)) return;
-                BaseBean<BeanUserInfo> baseBean = new Gson().fromJson(response, new TypeToken<BeanUserInfo>() {
+                BaseBean<BeanUserInfo> baseBean = new Gson().fromJson(response, new TypeToken< BaseBean<BeanUserInfo>>() {
                 }.getType());
                 if (baseBean == null) return;
                 if ("200".equals(baseBean.code)) {

@@ -71,9 +71,17 @@ public class UserManagerDialog extends BaseCustomDialog {
                 onLogin();
             }
         });
-        mLoginName.setFilters(new InputFilter[]{new InputFilter.LengthFilter(6)});
+
+        mLoginName.setFilters(new InputFilter[]{new InputFilter.LengthFilter(8)});
         mLoginName.setInputType(InputType.TYPE_NULL);
-        mLoginName.addTextChangedListener(new NumberTextWatcher(mLoginName));
+        mLoginName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mLoginName.setText("");
+                int right = findViewById(R.id.root).getRight();
+                new Keyboard1(v, mLoginName).getPopupWindow().showAtLocation(v, Gravity.CENTER, right, 0);
+            }
+        });
     }
 
 

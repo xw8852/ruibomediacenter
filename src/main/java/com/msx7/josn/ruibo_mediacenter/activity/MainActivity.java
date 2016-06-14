@@ -3,6 +3,7 @@ package com.msx7.josn.ruibo_mediacenter.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
 
@@ -19,6 +20,7 @@ import com.msx7.josn.ruibo_mediacenter.dialog.IpDialog;
 import com.msx7.josn.ruibo_mediacenter.net.AdminLoginRequest;
 import com.msx7.josn.ruibo_mediacenter.util.L;
 import com.msx7.josn.ruibo_mediacenter.util.SharedPreferencesUtil;
+import com.msx7.josn.ruibo_mediacenter.util.ToastUtil;
 import com.msx7.josn.ruibo_mediacenter.util.VolleyErrorUtils;
 import com.msx7.lib.annotations.Inject;
 import com.msx7.lib.annotations.InjectActivity;
@@ -58,6 +60,100 @@ public class MainActivity extends BaseActivity {
         findViewById(R.id.num10).setOnClickListener(numClickListener);
         findViewById(R.id.num11).setOnClickListener(numClickListener);
         findViewById(R.id.num12).setOnClickListener(numClickListener);
+
+    }
+
+    StringBuffer buffer = new StringBuffer();
+
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+
+//        ToastUtil.show("keyCode:" + keyCode);
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_0:
+            case KeyEvent.KEYCODE_NUMPAD_0:
+                buffer.append("0");
+                if (buffer.length() == 6) {
+                    onLogin(buffer.toString());
+                }
+                return true;
+
+            case KeyEvent.KEYCODE_1:
+            case KeyEvent.KEYCODE_NUMPAD_1:
+                buffer.append("1");
+                if (buffer.length() == 6) {
+                    onLogin(buffer.toString());
+                }
+                return true;
+
+
+            case KeyEvent.KEYCODE_2:
+            case KeyEvent.KEYCODE_NUMPAD_2:
+                buffer.append("2");
+                if (buffer.length() == 6) {
+                    onLogin(buffer.toString());
+                }
+                return true;
+
+            case KeyEvent.KEYCODE_3:
+            case KeyEvent.KEYCODE_NUMPAD_3:
+                buffer.append("3");
+                if (buffer.length() == 6) {
+                    onLogin(buffer.toString());
+                }
+                return true;
+
+            case KeyEvent.KEYCODE_5:
+            case KeyEvent.KEYCODE_NUMPAD_5:
+                buffer.append("5");
+                if (buffer.length() == 6) {
+                    onLogin(buffer.toString());
+                }
+                return true;
+
+            case KeyEvent.KEYCODE_4:
+            case KeyEvent.KEYCODE_NUMPAD_4:
+                buffer.append("4");
+                if (buffer.length() == 6) {
+                    onLogin(buffer.toString());
+                }
+                return true;
+
+            case KeyEvent.KEYCODE_6:
+            case KeyEvent.KEYCODE_NUMPAD_6:
+                buffer.append("6");
+                if (buffer.length() == 6) {
+                    onLogin(buffer.toString());
+                }
+                return true;
+
+            case KeyEvent.KEYCODE_7:
+            case KeyEvent.KEYCODE_NUMPAD_7:
+                buffer.append("7");
+                if (buffer.length() == 6) {
+                    onLogin(buffer.toString());
+                }
+                return true;
+
+            case KeyEvent.KEYCODE_8:
+            case KeyEvent.KEYCODE_NUMPAD_8:
+                buffer.append("8");
+                if (buffer.length() == 6) {
+                    onLogin(buffer.toString());
+                }
+                return true;
+
+            case KeyEvent.KEYCODE_9:
+            case KeyEvent.KEYCODE_NUMPAD_9:
+                buffer.append("9");
+                if (buffer.length() == 6) {
+                    onLogin(buffer.toString());
+                }
+                return true;
+
+            default:
+                return false;
+        }
     }
 
     View.OnClickListener numClickListener = new View.OnClickListener() {
@@ -76,9 +172,12 @@ public class MainActivity extends BaseActivity {
             new IpDialog(this).show();
             return;
         }
-        if (passwd.length() == 6)
-            onLogin(passwd);
+        if (passwd.length() >= "*#06#".length())
+            passwd = "";
+//        if (passwd.length() == 6)
+//            onLogin(passwd);
     }
+
 
     void onLogin(String passwd) {
         if (TextUtils.isEmpty(passwd)) {
@@ -87,7 +186,7 @@ public class MainActivity extends BaseActivity {
         }
         showProgess();
         RuiBoApplication.getApplication().runVolleyRequest(new AdminLoginRequest(passwd, responseListener, errorListener));
-        this.passwd = "";
+        buffer = new StringBuffer();
     }
 
     Response.Listener<String> responseListener = new Response.Listener<String>() {

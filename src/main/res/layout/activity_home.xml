@@ -31,7 +31,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/btn_home"
                     android:button="@null"
-                    android:checked="true" />
+                    />
 
                 <RadioButton
                     android:id="@+id/collection"
@@ -144,19 +144,11 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:paddingTop="10dp"
-            android:background="@drawable/bg_big">
+            android:id="@+id/rootFragment"
+            android:background="@drawable/bg_big"
+            android:paddingTop="10dp">
 
-            <com.msx7.josn.ruibo_mediacenter.activity.ui.SearchView
-                android:id="@+id/SearchView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
 
-            <com.msx7.josn.ruibo_mediacenter.activity.ui.CollectionView
-                android:id="@+id/CollectionView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:visibility="gone" />
 
         </FrameLayout>
 

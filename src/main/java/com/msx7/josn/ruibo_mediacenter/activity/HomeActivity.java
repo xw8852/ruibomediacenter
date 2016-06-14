@@ -2,6 +2,7 @@ package com.msx7.josn.ruibo_mediacenter.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.text.Html;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
@@ -18,11 +19,14 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.msx7.josn.ruibo_mediacenter.R;
 import com.msx7.josn.ruibo_mediacenter.RuiBoApplication;
+import com.msx7.josn.ruibo_mediacenter.activity.ui.CollectionFragment;
 import com.msx7.josn.ruibo_mediacenter.activity.ui.CollectionView;
+import com.msx7.josn.ruibo_mediacenter.activity.ui.SearchFragment;
 import com.msx7.josn.ruibo_mediacenter.activity.ui.SearchView;
 import com.msx7.josn.ruibo_mediacenter.bean.BaseBean;
 import com.msx7.josn.ruibo_mediacenter.bean.BeanUserInfo;
 import com.msx7.josn.ruibo_mediacenter.common.UrlStatic;
+import com.msx7.josn.ruibo_mediacenter.dialog.Keyboard1;
 import com.msx7.josn.ruibo_mediacenter.dialog.LoginDialog;
 import com.msx7.josn.ruibo_mediacenter.dialog.ResetPasswdDialog;
 import com.msx7.josn.ruibo_mediacenter.net.BaseJsonRequest;
@@ -61,11 +65,15 @@ public class HomeActivity extends BaseActivity {
 
     LoginDialog mLoginDialog;
 
-    @InjectView(R.id.SearchView)
-    public  SearchView mSearchView;
+//    @InjectView(R.id.SearchView)
+//    public SearchView mSearchView;
+//
+//    @InjectView(R.id.CollectionView)
+//    public CollectionView mCollectionView;
 
-    @InjectView(R.id.CollectionView)
-   public CollectionView mCollectionView;
+    public SearchFragment searchFragment;
+    public CollectionFragment collectionFragment;
+
 
     void click(View v) {
 
@@ -82,7 +90,6 @@ public class HomeActivity extends BaseActivity {
                 startActivity(intent);
             }
         });
-        mSearchView.showEnable(false);
         SharedPreferencesUtil.saveUserInfo(null);
         SharedPreferencesUtil.clearCollection();
 
@@ -90,16 +97,27 @@ public class HomeActivity extends BaseActivity {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 if (checkedId == R.id.home) {
-                    mSearchView.setVisibility(View.VISIBLE);
-                    mCollectionView.setVisibility(View.GONE);
+                    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                    if (searchFragment == null) {
+                        searchFragment = new SearchFragment();
+                        ft.add(R.id.rootFragment, searchFragment);
+                    } else
+                        ft.show(searchFragment);
+                    if (collectionFragment != null) ft.hide(collectionFragment);
+                    ft.commitAllowingStateLoss();
                 } else if (checkedId == R.id.collection) {
-                    mSearchView.clear();
-                    mSearchView.setVisibility(View.GONE);
-                    mCollectionView.setVisibility(View.VISIBLE);
-                    mCollectionView.showData();
+                    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                    if (collectionFragment == null) {
+                        collectionFragment = new CollectionFragment();
+                        ft.add(R.id.rootFragment, collectionFragment);
+                    } else
+                        ft.show(collectionFragment);
+                    if (searchFragment != null) ft.hide(searchFragment);
+                    ft.commitAllowingStateLoss();
                 }
             }
         });
+        group.check(R.id.home);
         //登录按钮
         toLogin.setOnClickListener(loginClick);
     }
@@ -108,7 +126,8 @@ public class HomeActivity extends BaseActivity {
     View.OnClickListener loginClick = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            mSearchView.showEnable(false);
+            if (searchFragment != null && searchFragment.mSearchView != null)
+                searchFragment.mSearchView.showEnable(false);
             getLoginDialog().show();
         }
     };
@@ -116,6 +135,7 @@ public class HomeActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        Keyboard1.DIVIDER_TIME = 100;
         if (SharedPreferencesUtil.getUserInfo() != null) {
             showLogin();
             collection.setEnabled(true);
@@ -133,12 +153,14 @@ public class HomeActivity extends BaseActivity {
             RuiBoApplication.getApplication().runVolleyRequest(request);
         } else {
             logOut();
-            mSearchView.clear();
+            if (searchFragment != null && searchFragment.mSearchView != null)
+                searchFragment.mSearchView.clear();
             collection.setEnabled(false);
             if (group.getCheckedRadioButtonId() == R.id.collection) {
                 ((RadioButton) group.findViewById(R.id.home)).setChecked(true);
             }
-            mSearchView.showEnable(false);
+            if (searchFragment != null && searchFragment.mSearchView != null)
+                searchFragment.mSearchView.showEnable(false);
         }
     }
 
@@ -239,19 +261,24 @@ public class HomeActivity extends BaseActivity {
 
 
     public void logOut() {
+        group.check(R.id.home);
         SharedPreferencesUtil.saveUserInfo(null);
         SharedPreferencesUtil.clearCollection();
         toLogin.setVisibility(View.VISIBLE);
         mUserView.setVisibility(View.INVISIBLE);
         collection.setEnabled(false);
-        mSearchView.showEnable(false);
-        mSearchView.setVisibility(View.VISIBLE);
-        mCollectionView.setVisibility(View.GONE);
+        if (searchFragment != null && searchFragment.mSearchView != null)
+            searchFragment.mSearchView.showEnable(false);
+        if (searchFragment != null && searchFragment.mSearchView != null)
+            searchFragment.mSearchView.setVisibility(View.VISIBLE);
+        if (collectionFragment != null && collectionFragment.mCollectionView != null)
+            collectionFragment.mCollectionView.setVisibility(View.GONE);
     }
 
     public void showLogin() {
         collection.setEnabled(true);
-        mSearchView.showEnable(true);
+        if (searchFragment != null && searchFragment.mSearchView != null)
+            searchFragment.mSearchView.showEnable(true);
         BeanUserInfo userInfo = SharedPreferencesUtil.getUserInfo();
         toLogin.setVisibility(View.GONE);
         mUserView.setVisibility(View.VISIBLE);

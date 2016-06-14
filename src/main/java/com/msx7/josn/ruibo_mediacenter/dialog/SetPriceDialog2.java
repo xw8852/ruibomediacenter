@@ -49,10 +49,23 @@ public class SetPriceDialog2 extends BaseCustomDialog {
 
     @InjectView(R.id.singlePrice)
     EditText mSinglePrice;
+
     @InjectView(R.id.maxPrice)
     EditText mMaxPrice;
+
     @InjectView(R.id.printPrice)
     EditText mPrintPrice;
+    /**
+     * 下载总容量
+     */
+    @InjectView(R.id.maxSize)
+    EditText mMaxSize;
+    /**
+     * 下载上限
+     */
+    @InjectView(R.id.maxCount)
+    EditText mMaxCount;
+
     @InjectView(R.id.submit)
     TextView mSubmitBtn;
 
@@ -62,20 +75,81 @@ public class SetPriceDialog2 extends BaseCustomDialog {
         activity = (BaseActivity) context;
         LayoutInflater.from(context).inflate(R.layout.layout_dialog_set_price2, (ViewGroup) findViewById(R.id.content));
         Inject.inject(this, findViewById(R.id.content));
-//        mSinglePrice.addTextChangedListener(new NumberTextWatcher(mSinglePrice));
-//        mMaxPrice.addTextChangedListener(new NumberTextWatcher(mMaxPrice));
-//        mPrintPrice.addTextChangedListener(new NumberTextWatcher(mPrintPrice));
-        mSinglePrice.setFilters(new InputFilter[]{new InputFilter.LengthFilter(6)});
+
+
+        mSinglePrice.setInputType(InputType.TYPE_CLASS_NUMBER);
+        mMaxPrice.setInputType(InputType.TYPE_CLASS_NUMBER);
+        mPrintPrice.setInputType(InputType.TYPE_CLASS_NUMBER);
+
         mSinglePrice.setInputType(InputType.TYPE_NULL);
-        mSinglePrice.addTextChangedListener(new com.msx7.josn.ruibo_mediacenter.ui.NumberTextWatcher(mSinglePrice));
+        mSinglePrice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mSinglePrice.setText("");
+                int right = findViewById(R.id.root).getRight();
+                keyboard1 = new Keyboard1(v, mSinglePrice).setState(Keyboard1.State.SignNumber);
+                keyboard1.getPopupWindow().showAtLocation(v, Gravity.CENTER, right, 0);
+            }
+        });
 
-        mMaxPrice.setFilters(new InputFilter[]{new InputFilter.LengthFilter(6)});
         mMaxPrice.setInputType(InputType.TYPE_NULL);
-        mMaxPrice.addTextChangedListener(new com.msx7.josn.ruibo_mediacenter.ui.NumberTextWatcher(mMaxPrice));
+        mMaxPrice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mMaxPrice.setText("");
+                int right = findViewById(R.id.root).getRight();
+                keyboard2 = new Keyboard1(v, mMaxPrice).setState(Keyboard1.State.SignNumber);
+                keyboard2.getPopupWindow().showAtLocation(v, Gravity.CENTER, right, 0);
+            }
+        });
 
-        mPrintPrice.setFilters(new InputFilter[]{new InputFilter.LengthFilter(6)});
         mPrintPrice.setInputType(InputType.TYPE_NULL);
-        mPrintPrice.addTextChangedListener(new com.msx7.josn.ruibo_mediacenter.ui.NumberTextWatcher(mPrintPrice));
+        mPrintPrice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPrintPrice.setText("");
+                int right = findViewById(R.id.root).getRight();
+                keyboard3 = new Keyboard1(v, mPrintPrice).setState(Keyboard1.State.SignNumber);
+                keyboard3.getPopupWindow().showAtLocation(v, Gravity.CENTER, right, 0);
+            }
+        });
+
+
+        mMaxCount.setInputType(InputType.TYPE_NULL);
+        mMaxCount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPrintPrice.setText("");
+                int right = findViewById(R.id.root).getRight();
+                keyboard4 = new Keyboard1(v, mPrintPrice).setState(Keyboard1.State.Number);
+                keyboard4.getPopupWindow().showAtLocation(v, Gravity.CENTER, right, 0);
+            }
+        });
+
+
+        mMaxSize.setInputType(InputType.TYPE_NULL);
+        mMaxSize.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPrintPrice.setText("");
+                int right = findViewById(R.id.root).getRight();
+                keyboard5 = new Keyboard1(v, mPrintPrice).setState(Keyboard1.State.Number);
+                keyboard5.getPopupWindow().showAtLocation(v, Gravity.CENTER, right, 0);
+            }
+        });
+
+
+//        mSinglePrice.setFilters(new InputFilter[]{new InputFilter.LengthFilter(6)});
+//        mSinglePrice.setInputType(InputType.TYPE_NULL);
+//        mSinglePrice.addTextChangedListener(new com.msx7.josn.ruibo_mediacenter.ui.NumberTextWatcher(mSinglePrice));
+//
+//        mMaxPrice.setFilters(new InputFilter[]{new InputFilter.LengthFilter(6)});
+//        mMaxPrice.setInputType(InputType.TYPE_NULL);
+//        mMaxPrice.addTextChangedListener(new com.msx7.josn.ruibo_mediacenter.ui.NumberTextWatcher(mMaxPrice));
+//
+//        mPrintPrice.setFilters(new InputFilter[]{new InputFilter.LengthFilter(6)});
+//        mPrintPrice.setInputType(InputType.TYPE_NULL);
+//        mPrintPrice.addTextChangedListener(new com.msx7.josn.ruibo_mediacenter.ui.NumberTextWatcher(mPrintPrice));
 
         mSubmitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,6 +158,12 @@ public class SetPriceDialog2 extends BaseCustomDialog {
             }
         });
     }
+
+    Keyboard1 keyboard1;
+    Keyboard1 keyboard2;
+    Keyboard1 keyboard3;
+    Keyboard1 keyboard4;
+    Keyboard1 keyboard5;
 
     void submit() {
         if (TextUtils.isEmpty(mSinglePrice.getText().toString())) {
@@ -96,6 +176,14 @@ public class SetPriceDialog2 extends BaseCustomDialog {
         }
         if (TextUtils.isEmpty(mPrintPrice.getText().toString())) {
             ToastUtil.show("请设置打印价格");
+            return;
+        }
+        if (TextUtils.isEmpty(mMaxCount.getText().toString())) {
+            ToastUtil.show("下载上限");
+            return;
+        }
+        if (TextUtils.isEmpty(mMaxSize.getText().toString())) {
+            ToastUtil.show("下载总容量");
             return;
         }
         showProgess();
@@ -118,11 +206,17 @@ public class SetPriceDialog2 extends BaseCustomDialog {
                 ToastUtil.show(R.string.error);
             }
         });
-        request.addRequestJson(new Gson().toJson(new Post(
-                Integer.parseInt(mSinglePrice.getText().toString()),
-                Integer.parseInt(mMaxPrice.getText().toString()),
-                Integer.parseInt(mPrintPrice.getText().toString())
-        )));
+        request.addRequestJson(
+                new Gson().toJson(
+                        new Post(
+                                Integer.parseInt(mSinglePrice.getText().toString()),
+                                Integer.parseInt(mMaxPrice.getText().toString()),
+                                Integer.parseInt(mPrintPrice.getText().toString()),
+                                Integer.parseInt(mMaxCount.getText().toString()),
+                                Integer.parseInt(mMaxSize.getText().toString())
+                        )
+                )
+        );
         RuiBoApplication.getApplication().runVolleyRequest(request);
     }
 
@@ -131,12 +225,18 @@ public class SetPriceDialog2 extends BaseCustomDialog {
         int DownloadOneMusicPrice;
         @SerializedName("DownloadAllMusicPrice")
         int DownloadAllMusicPrice;
+        @SerializedName("DownloadMusicAmount")
+        int DownloadMusicAmount;
+        @SerializedName("DownloadMusicSize")
+        int DownloadMusicSize;
         @SerializedName("PrintPrice")
         int PrintPrice;
 
-        public Post(int downloadOneMusicPrice, int downloadAllMusicPrice, int printPrice) {
+        public Post(int downloadOneMusicPrice, int downloadAllMusicPrice, int printPrice, int DownloadMusicAmount, int DownloadMusicSize) {
             DownloadAllMusicPrice = downloadAllMusicPrice;
             DownloadOneMusicPrice = downloadOneMusicPrice;
+            this.DownloadMusicAmount = DownloadMusicAmount;
+            this.DownloadMusicSize = DownloadMusicSize;
             PrintPrice = printPrice;
         }
     }

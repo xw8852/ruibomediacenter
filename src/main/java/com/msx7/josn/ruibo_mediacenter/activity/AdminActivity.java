@@ -18,7 +18,9 @@ import com.msx7.josn.ruibo_mediacenter.dialog.AdminDialog;
 import com.msx7.josn.ruibo_mediacenter.dialog.BaoYueDialog;
 import com.msx7.josn.ruibo_mediacenter.dialog.ChongZhiDialog;
 import com.msx7.josn.ruibo_mediacenter.dialog.ClosePcDialog;
+import com.msx7.josn.ruibo_mediacenter.dialog.Keyboard1;
 import com.msx7.josn.ruibo_mediacenter.dialog.OpenAccountDialog;
+import com.msx7.josn.ruibo_mediacenter.dialog.PrintDialog;
 import com.msx7.josn.ruibo_mediacenter.dialog.SyncSongDialog;
 import com.msx7.josn.ruibo_mediacenter.dialog.UserManagerDialog;
 import com.msx7.josn.ruibo_mediacenter.net.BaseJsonRequest;
@@ -60,6 +62,12 @@ public class AdminActivity extends BaseActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Keyboard1.DIVIDER_TIME = 0;
+    }
+
     /**
      * 开通账号
      *
@@ -86,6 +94,11 @@ public class AdminActivity extends BaseActivity {
     public void onUser(View v) {
         new UserManagerDialog(v.getContext()).show();
     }
+
+    public void onPrint(View v) {
+        new PrintDialog(v.getContext()).show();
+    }
+
 
     /**
      * 歌曲管理

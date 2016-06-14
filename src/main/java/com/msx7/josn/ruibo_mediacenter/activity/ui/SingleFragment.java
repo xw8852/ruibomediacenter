@@ -87,13 +87,14 @@ public class SingleFragment extends Fragment implements IMusicSelcted {
 
 
     public class SinglePage extends LinearLayout {
-        FullGridView gridView;
-        MusicAdapter adapter;
+        public FullGridView gridView;
+        public MusicAdapter adapter;
 
         public SinglePage(Context context) {
             super(context);
             inflate(context, R.layout.item_single_page_song, this);
             gridView = (FullGridView) getChildAt(0);
+            gridView.setNumColumns(SharedPreferencesUtil.getRow1());
         }
 
         public void notifyDataSetChanged() {
@@ -158,11 +159,27 @@ public class SingleFragment extends Fragment implements IMusicSelcted {
          */
         @Override
         public BeanMusic getItem(int position) {
-            int tmp = vertalPosition[position] - 1;
+//            int tmp = vertalPosition[position] - 1;
+//            if (tmp >= data.size()) {
+//                return null;
+//            }
+            //列数
+            int tmp = getRealPosition(position);
             if (tmp >= data.size()) {
                 return null;
             }
             return super.getItem(tmp);
+        }
+
+        public int getRealPosition(int position) {
+            int row = SharedPreferencesUtil.getRow1();
+            //行数
+            int line = SharedPreferencesUtil.getRow2();
+
+            int _row = position % row;
+
+            int _line = position / row;
+            return _row * line + _line;
         }
 
         public void onBindViewHolder(final MusicViewHolder holder, int position) {
@@ -176,10 +193,10 @@ public class SingleFragment extends Fragment implements IMusicSelcted {
                 holder.box.setVisibility(View.VISIBLE);
                 holder.name.setVisibility(View.VISIBLE);
             }
+            holder.box.setOnCheckedChangeListener(null);
             holder.box.setChecked(isSelected(music));
-
 //            holder.num.setText("歌曲编码:" + music.code);
-            holder.name.setText(String.valueOf(start + vertalPosition[position]) + "." + music.path);
+            holder.name.setText(String.valueOf(start + getRealPosition(position) + 1) + "." + music.path);
 //            holder.money.setText(music.money + "元");
             holder.box.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override

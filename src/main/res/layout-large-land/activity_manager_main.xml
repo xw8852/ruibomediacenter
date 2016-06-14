@@ -223,6 +223,31 @@
                 android:layout_width="30dp"
                 android:layout_height="1dp" />
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:onClick="onPrint"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/print" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/tranparent"
+                    android:drawablePadding="10dp"
+                    android:gravity="center"
+                    android:text="打印统计"
+                    android:textColor="@color/white"
+                    android:textSize="32dp" />
+            </LinearLayout>
+
 
         </LinearLayout>
 

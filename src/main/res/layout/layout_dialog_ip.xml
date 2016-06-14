@@ -36,6 +36,59 @@
     <View
         android:layout_width="1dp"
         android:layout_height="20dp"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:text="歌曲显示的列数"
+        android:layout_height="wrap_content" />
+    <com.msx7.lib.widget.shape.ShapeEditText
+        android:id="@+id/row1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:gravity="center"
+        android:hint="请设置歌曲显示的列数"
+        android:maxLines="1"
+        android:maxLength="2"
+        android:inputType="number"
+        android:padding="10dp"
+        android:textColor="@color/font_color_3"
+        android:singleLine="true"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        app:radius="10dp"
+        app:solide="@color/white"
+        app:strokeColor="#a6a6a6"
+        app:strokeWidth="1dp" />
+    <View
+        android:layout_width="1dp"
+        android:layout_height="20dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:text="歌曲每列显示的个数"
+        android:layout_height="wrap_content" />
+    <com.msx7.lib.widget.shape.ShapeEditText
+        android:id="@+id/row2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:gravity="center"
+        android:hint="请输入歌曲每列显示的个数"
+        android:maxLines="1"
+        android:maxLength="2"
+        android:inputType="number"
+        android:padding="10dp"
+        android:textColor="@color/font_color_3"
+        android:singleLine="true"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        app:radius="10dp"
+        app:solide="@color/white"
+        app:strokeColor="#a6a6a6"
+        app:strokeWidth="1dp" />
+    <View
+        android:layout_width="1dp"
+        android:layout_height="20dp"/>
     <com.msx7.lib.widget.shape.ShapeTextView
         android:id="@+id/login"
         android:layout_width="match_parent"

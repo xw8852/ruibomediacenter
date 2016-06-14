@@ -23,6 +23,7 @@ import com.msx7.josn.ruibo_mediacenter.bean.BaseBean;
 import com.msx7.josn.ruibo_mediacenter.bean.BeanMusic;
 import com.msx7.josn.ruibo_mediacenter.common.UrlStatic;
 import com.msx7.josn.ruibo_mediacenter.net.BaseJsonRequest;
+import com.msx7.josn.ruibo_mediacenter.util.L;
 import com.msx7.josn.ruibo_mediacenter.util.SharedPreferencesUtil;
 import com.msx7.josn.ruibo_mediacenter.util.ToastUtil;
 
@@ -100,8 +101,11 @@ public class DownProgressDialog extends Dialog {
                             public void run() {
                                 stopTimer();
                                 findViewById(R.id.downFinish).setVisibility(View.VISIBLE);
-                                ((HomeActivity) activity).mSearchView.clear();
-                                ((HomeActivity) activity).mCollectionView.clear();
+                                HomeActivity homeActivity = ((HomeActivity) activity);
+                                if (homeActivity.searchFragment != null && homeActivity.searchFragment.mSearchView != null)
+                                    homeActivity.searchFragment.mSearchView.clear();
+                                if (homeActivity.collectionFragment != null && homeActivity.collectionFragment.mCollectionView != null)
+                                    homeActivity.collectionFragment.mCollectionView.clear();
                             }
                         });
                         return;
@@ -138,8 +142,11 @@ public class DownProgressDialog extends Dialog {
                                 return;
                             }
                             stopTimer();
-                            ((HomeActivity) activity).mSearchView.clear();
-                            ((HomeActivity) activity).mCollectionView.clear();
+                            HomeActivity homeActivity = ((HomeActivity) activity);
+                            if (homeActivity.searchFragment != null && homeActivity.searchFragment.mSearchView != null)
+                                homeActivity.searchFragment.mSearchView.clear();
+                            if (homeActivity.collectionFragment != null && homeActivity.collectionFragment.mCollectionView != null)
+                                homeActivity.collectionFragment.mCollectionView.clear();
                             findViewById(R.id.downFinish).setVisibility(View.VISIBLE);
                         }
                     });

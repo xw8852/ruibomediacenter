@@ -59,14 +59,15 @@ public class SharedPreferencesUtil {
         return sharedPreferences.getInt("getFailCount", 0);
     }
 
-    public static final void setFailCount(int count){
+    public static final void setFailCount(int count) {
         sharedPreferences.edit().putInt("getFailCount", count).commit();
     }
+
     public static final long getFailTime() {
         return sharedPreferences.getLong("getFailTIME", 0);
     }
 
-    public static final void setFailTIME(long count){
+    public static final void setFailTIME(long count) {
         sharedPreferences.edit().putLong("getFailTIME", count).commit();
     }
 
@@ -109,4 +110,41 @@ public class SharedPreferencesUtil {
             return UrlStatic.BASE_UR;
         return sharedPreferences.getString("saveServerIp", "");
     }
+
+    /**
+     * 列数
+     *
+     * @param row1
+     */
+    public static final void saveRow1(int row1) {
+        sharedPreferences.edit().putInt("row1", row1).commit();
+    }
+
+    /**
+     * 列数
+     *
+     * @return
+     */
+    public static final int getRow1() {
+        return sharedPreferences.getInt("row1", 3);
+    }
+
+    /**
+     * 行数
+     *
+     * @param row2
+     */
+    public static final void saveRow2(int row2) {
+        sharedPreferences.edit().putInt("row2", row2).commit();
+    }
+
+    /**
+     * 行数
+     *
+     * @return
+     */
+    public static final int getRow2() {
+        return sharedPreferences.getInt("row2", 9);
+    }
+
 }

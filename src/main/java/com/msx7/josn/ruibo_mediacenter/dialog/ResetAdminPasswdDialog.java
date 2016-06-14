@@ -45,10 +45,13 @@ public class ResetAdminPasswdDialog extends BaseCustomDialog {
         mOldPassWd.setHint("请输入旧密码");
         getLoginNameView().setHint("请输入新密码");
         getLoginPassWdView().setHint("请再次确认新密码");
+        mLoginName.setFilters(new InputFilter[]{new InputFilter.LengthFilter(6)});
+        mOldPassWd.setFilters(new InputFilter[]{new InputFilter.LengthFilter(6)});
+        mLoginPassWd.setFilters(new InputFilter[]{new InputFilter.LengthFilter(6)});
 
-//        mOldPassWd.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
-//        getLoginNameView().setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
-//        getLoginPassWdView().setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
+        mOldPassWd.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
+        getLoginNameView().setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
+        getLoginPassWdView().setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
 
         getLoginBtn().setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,23 +62,39 @@ public class ResetAdminPasswdDialog extends BaseCustomDialog {
         setTitle(R.string.reset_admin_password);
 
 
-        mOldPassWd.setFilters(new InputFilter[]{new InputFilter.LengthFilter(6)});
-        mOldPassWd.setInputType(InputType.TYPE_NULL| InputType.TYPE_NUMBER_VARIATION_PASSWORD);
-        mOldPassWd.addTextChangedListener(new NumberTextWatcher(mOldPassWd));
+        mOldPassWd.setInputType(InputType.TYPE_NULL);
+        mOldPassWd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mOldPassWd.setText("");
+                int right = findViewById(R.id.root).getRight();
+                new Keyboard1(v, mOldPassWd).getPopupWindow().showAtLocation(v, Gravity.CENTER, right, 0);
+            }
+        });
 
 
-        mLoginName.setFilters(new InputFilter[]{new InputFilter.LengthFilter(6)});
-        mLoginName.setInputType(InputType.TYPE_NULL | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
-        mLoginName.addTextChangedListener(new NumberTextWatcher(mLoginName));
+        mLoginName.setInputType(InputType.TYPE_NULL);
+        mLoginName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mLoginName.setText("");
+                int right = findViewById(R.id.root).getRight();
+                keyboard1 = new Keyboard1(v, mLoginName).setState(Keyboard1.State.password);
+                keyboard1.getPopupWindow().showAtLocation(v, Gravity.CENTER, right, 0);
+            }
+        });
 
 
-        mLoginPassWd.setFilters(new InputFilter[]{new InputFilter.LengthFilter(6)});
-        mLoginPassWd.setInputType(InputType.TYPE_NULL | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
-        mLoginPassWd.addTextChangedListener(new NumberTextWatcher(mLoginPassWd));
-
-
-
-
+        mLoginPassWd.setInputType(InputType.TYPE_NULL);
+        mLoginPassWd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mLoginPassWd.setText("");
+                int right = findViewById(R.id.root).getRight();
+                keyboard2 = new Keyboard1(v, mLoginPassWd).setState(Keyboard1.State.password);
+                keyboard2.getPopupWindow().showAtLocation(v, Gravity.CENTER, right, 0);
+            }
+        });
 
     }
 
@@ -83,9 +102,9 @@ public class ResetAdminPasswdDialog extends BaseCustomDialog {
     Keyboard1 keyboard2;
 
     void goReset() {
-        String passwd =mLoginName.getText().toString();;
+        String passwd =keyboard1.getContent().substring(0, Math.min(6, keyboard1.getContent().length()));
 //        String oldPasswd = mOldPassWd.getText().toString();
-        String surePasswd = mLoginPassWd.getText().toString();;
+        String surePasswd = keyboard2.getContent().substring(0, Math.min(6, keyboard2.getContent().length()));
 //        if (TextUtils.isEmpty(oldPasswd)) {
 //            mTips.setText("请输入旧密码");
 //            return;
