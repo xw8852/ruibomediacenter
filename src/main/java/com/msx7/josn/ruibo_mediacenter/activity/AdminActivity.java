@@ -106,9 +106,9 @@ public class AdminActivity extends BaseActivity {
      * @param v
      */
     public void onSong(View v) {
-        showProgess();
-        RuiBoApplication.getApplication().runVolleyRequest(new SyncSongRequest(2, responseListener, errorListener));
-
+//        showProgess();
+//        RuiBoApplication.getApplication().runVolleyRequest(new SyncSongRequest(2, responseListener, errorListener));
+        new SyncSongDialog(v.getContext()).show();
     }
 
     Response.Listener<String> responseListener = new Response.Listener<String>() {

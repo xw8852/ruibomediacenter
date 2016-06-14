@@ -44,6 +44,9 @@ import java.util.List;
 public class PrintDialog extends BaseCustomDialog {
 
 
+    @InjectView(R.id.Tv0)
+    TextView Tv0;
+
     @InjectView(R.id.Tv1)
     TextView Tv1;
 
@@ -79,6 +82,7 @@ public class PrintDialog extends BaseCustomDialog {
                             ToastUtil.show(baseBean.msg);
                             return;
                         } else {
+                            Tv0.setText("机器编号:"+baseBean.data.ServerNumber);
                             Tv1.setText("上月打印统计"+baseBean.data.LastMonthPrintQty+"张");
                             Tv2.setText("本月打印统计"+baseBean.data.CurrentMonthPrintQty+"张");
                         }
@@ -99,6 +103,9 @@ public class PrintDialog extends BaseCustomDialog {
         long LastMonthPrintQty;
         @SerializedName("CurrentMonthPrintQty")
         long CurrentMonthPrintQty;
+        @SerializedName("ServerNumber")
+        String ServerNumber;
+
     }
 
 

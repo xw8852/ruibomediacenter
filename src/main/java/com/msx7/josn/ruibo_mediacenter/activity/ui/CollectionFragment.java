@@ -37,6 +37,10 @@ public class CollectionFragment extends Fragment {
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        mCollectionView.showData();
+        if (!hidden) {
+            mCollectionView.showData();
+            mCollectionView.setVisibility(View.VISIBLE);
+        } else
+            mCollectionView.setVisibility(View.GONE);
     }
 }

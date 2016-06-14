@@ -69,7 +69,7 @@ public class SearchView extends BeanView {
 
 
     @InjectView(R.id.SongPageView)
-   public SongPageView mSongPageView;
+    public SongPageView mSongPageView;
 
 
     @InjectView(R.id.down1)
@@ -89,7 +89,7 @@ public class SearchView extends BeanView {
         mDownBtn.setEnabled(enable);
         mCollection.setEnabled(enable);
         mSelectAll.setEnabled(enable);
-        if(!enable){
+        if (!enable) {
             mSongPageView.setSelectedAll(false);
         }
         if (enable && mSongPageView.getSelectedMusics().size() > 0) {
@@ -140,12 +140,12 @@ public class SearchView extends BeanView {
             @Override
             public void doSelect(List<BeanMusic> musics) {
                 if (musics.size() == mSongPageView.getMusics().size()) {
-                    if (!mSelectAll.isSelected()) {
-                        mSelectAll.setSelected(true);
+                    if (!mSelectAll.isChecked()) {
+                        mSelectAll.setChecked(true);
                     }
-                } else {
-                    if (mSelectAll.isSelected()) {
-                        mSelectAll.setSelected(false);
+                } else if (musics.size() == 0) {
+                    if (mSelectAll.isChecked()) {
+                        mSelectAll.setChecked(false);
                     }
                 }
                 doSelected(musics);
@@ -186,7 +186,7 @@ public class SearchView extends BeanView {
                 Collections.sort(_musics, new Comparator<BeanMusic>() {
                     @Override
                     public int compare(BeanMusic lhs, BeanMusic rhs) {
-                        return (int) (lhs.code - rhs.code);
+                        return (int) (lhs.id - rhs.id);
                     }
                 });
                 SharedPreferencesUtil.saveCollection(_musics);
@@ -209,7 +209,7 @@ public class SearchView extends BeanView {
 
 
     void doSelected(List<BeanMusic> musics) {
-        if(musics==null||musics.isEmpty()){
+        if (musics == null || musics.isEmpty()) {
             mDownBtn.setEnabled(false);
             return;
         }
@@ -237,20 +237,19 @@ public class SearchView extends BeanView {
     }
 
 
-
     void doSearch() {
         if (TextUtils.isEmpty(mSearchContent.getText().toString().trim())) {
             clear();
             return;
         }
         SyncUserInfo.SyncUserInfo();
-        ((BaseActivity)getContext()).showProgess();
+        ((BaseActivity) getContext()).showProgess();
         BaseJsonRequest request = new BaseJsonRequest(Request.Method.POST, UrlStatic.URL_GETMUSICLIST(),
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         L.d(response);
-                        ((BaseActivity)getContext()).dismisProgess();
+                        ((BaseActivity) getContext()).dismisProgess();
                         BaseBean<List<BeanMusic>> baseBean = new Gson().fromJson(response, new TypeToken<BaseBean<List<BeanMusic>>>() {
                         }.getType());
                         if ("200".equals(baseBean.code)) {
@@ -272,7 +271,7 @@ public class SearchView extends BeanView {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                ((BaseActivity)getContext()).dismisProgess();
+                ((BaseActivity) getContext()).dismisProgess();
                 ToastUtil.show(VolleyErrorUtils.getError(error));
             }
         });

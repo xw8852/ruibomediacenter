@@ -26,7 +26,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/btn_select"
                 android:button="@null"
-                android:checked="true"
+                android:checked="false"
                 android:gravity="center"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@color/white" />

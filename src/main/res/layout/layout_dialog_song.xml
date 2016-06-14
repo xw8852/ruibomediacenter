@@ -13,22 +13,48 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="10dp"
-        android:text="更新之后，会在服务器生成execl文件"
+        android:text="是否要更新歌曲"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/font_color_6" />
 
-
-    <com.msx7.lib.widget.shape.ShapeTextView
-        android:id="@+id/sync"
+    <View
+        android:layout_width="1dp"
+        android:layout_height="20dp"/>
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:minWidth="400dp"
-        android:gravity="center"
-        android:padding="10dp"
-        android:text="更新"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="@color/white"
-        app:radius="10dp"
-        app:solide="#ff791e" />
+        android:layout_height="wrap_content">
+        <com.msx7.lib.widget.shape.ShapeTextView
+            android:id="@+id/sure"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:minWidth="200dp"
+            android:padding="10dp"
+            android:text="是"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/white"
+            app:radius="10dp"
+            app:solide="#ff791e" />
+
+        <com.msx7.lib.widget.shape.ShapeTextView
+            android:id="@+id/cancel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:minWidth="200dp"
+            android:padding="10dp"
+            android:text="取消"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/white"
+            app:radius="10dp"
+            app:solide="#ff791e" />
+
+    </LinearLayout>
+
+
+
 </LinearLayout>

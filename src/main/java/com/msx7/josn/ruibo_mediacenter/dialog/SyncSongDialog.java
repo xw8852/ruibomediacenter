@@ -30,8 +30,12 @@ import com.msx7.lib.annotations.InjectView;
  */
 public class SyncSongDialog extends BaseCustomDialog {
 
-    @InjectView(R.id.sync)
-    TextView mBtn;
+    @InjectView(R.id.sure)
+    TextView mSure;
+
+
+    @InjectView(R.id.cancel)
+    TextView mCancel;
 
     BaseActivity activity;
 
@@ -41,10 +45,17 @@ public class SyncSongDialog extends BaseCustomDialog {
         Inject.inject(this, findViewById(R.id.content));
         activity = (BaseActivity) context;
         setTitle("歌曲库");
-        mBtn.setOnClickListener(new View.OnClickListener() {
+        mSure.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                activity.showProgess();
                 RuiBoApplication.getApplication().runVolleyRequest(new SyncSongRequest(2, responseListener, errorListener));
+            }
+        });
+        mCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
             }
         });
     }
@@ -65,6 +76,7 @@ public class SyncSongDialog extends BaseCustomDialog {
     Response.ErrorListener errorListener = new Response.ErrorListener() {
         @Override
         public void onErrorResponse(VolleyError error) {
+            error.printStackTrace();
             activity.dismisProgess();
             ToastUtil.show(VolleyErrorUtils.getError(error));
         }

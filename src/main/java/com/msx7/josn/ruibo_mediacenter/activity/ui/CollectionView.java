@@ -104,6 +104,15 @@ public class CollectionView extends BeanView {
         mSongPageView.setDoSelect(new SingleFragment.IDoSelect() {
             @Override
             public void doSelect(List<BeanMusic> musics) {
+                if (musics.size() == mSongPageView.getMusics().size()) {
+                    if (!mSelectAll.isChecked()) {
+                        mSelectAll.setChecked(true);
+                    }
+                } else if (musics.size() == 0) {
+                    if (mSelectAll.isChecked()) {
+                        mSelectAll.setChecked(false);
+                    }
+                }
                 doALlSelect(musics);
             }
         });

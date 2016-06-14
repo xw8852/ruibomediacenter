@@ -3,6 +3,7 @@ package com.msx7.josn.ruibo_mediacenter.dialog;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.os.RemoteException;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
@@ -27,7 +28,10 @@ import com.msx7.josn.ruibo_mediacenter.util.L;
 import com.msx7.josn.ruibo_mediacenter.util.SharedPreferencesUtil;
 import com.msx7.josn.ruibo_mediacenter.util.ToastUtil;
 
+import org.apache.http.conn.ConnectTimeoutException;
+
 import java.io.IOException;
+import java.net.ConnectException;
 import java.net.SocketTimeoutException;
 import java.util.List;
 import java.util.Random;
@@ -95,17 +99,25 @@ public class DownProgressDialog extends Dialog {
                 @Override
                 public void onFailure(Call call, IOException e) {
                     e.printStackTrace();
-                    if (e instanceof SocketTimeoutException) {
+
+                    if (e instanceof SocketTimeoutException
+                            ) {
                         RuiBoApplication.getApplication().getHandler().post(new Runnable() {
                             @Override
                             public void run() {
-                                stopTimer();
-                                findViewById(R.id.downFinish).setVisibility(View.VISIBLE);
-                                HomeActivity homeActivity = ((HomeActivity) activity);
-                                if (homeActivity.searchFragment != null && homeActivity.searchFragment.mSearchView != null)
-                                    homeActivity.searchFragment.mSearchView.clear();
-                                if (homeActivity.collectionFragment != null && homeActivity.collectionFragment.mCollectionView != null)
-                                    homeActivity.collectionFragment.mCollectionView.clear();
+                                ToastUtil.show("服务器响应超时，请稍后重新尝试");
+                                dismiss();
+                            }
+                        });
+                        return;
+                    }
+                    if (e instanceof ConnectTimeoutException
+                            || e instanceof ConnectException) {
+                        RuiBoApplication.getApplication().getHandler().post(new Runnable() {
+                            @Override
+                            public void run() {
+                                ToastUtil.show("连接服务器超时，请稍后重新尝试");
+                                dismiss();
                             }
                         });
                         return;

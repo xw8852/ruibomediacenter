@@ -129,7 +129,15 @@ public class Keyboard1 {
             return;
         }
         String text = editText.getText().toString();
-        editText.setText(text + ((TextView) v).getText().toString());
+        String _append = ((TextView) v).getText().toString();
+        if (state == State.SignNumber) {
+            if (text.contains(".") && _append.contains("."))
+                return;
+            String _end = text + _append;
+            if (_end.indexOf(".") > -1 && _end.length() - _end.indexOf(".") > 2)
+                return;
+        }
+        editText.setText(text + _append);
     }
 
     public final Context getContext() {

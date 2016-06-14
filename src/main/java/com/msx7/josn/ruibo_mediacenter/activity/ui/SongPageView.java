@@ -114,9 +114,10 @@ public class SongPageView extends LinearLayout implements IMusicSelcted {
         setTip(mViewPager.getCurrentItem());
     }
 
-    public void setTips(){
+    public void setTips() {
         setTip(mViewPager.getCurrentItem());
     }
+
     void setTip(int position) {
         if (musics.size() <= 0) {
             mTips.setText("");
@@ -188,7 +189,7 @@ public class SongPageView extends LinearLayout implements IMusicSelcted {
         if (pageCount * EVG_PAGE_SONG < size) pageCount++;
 
         SingleFragmentPagerAdapter singleFragmentPagerAdapter = new SingleFragmentPagerAdapter(
-                ((HomeActivity) getContext()).getSupportFragmentManager()
+                fm
         );
         mViewPager.setAdapter(singleFragmentPagerAdapter);
         position = Math.min(position, pageCount);

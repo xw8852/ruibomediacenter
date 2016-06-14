@@ -36,4 +36,12 @@ public class SearchFragment extends Fragment {
         if (SharedPreferencesUtil.getUserInfo() != null)
             mSearchView.setEnabled(true);
     }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (hidden)
+            mSearchView.setVisibility(View.GONE);
+        else mSearchView.setVisibility(View.VISIBLE);
+    }
 }

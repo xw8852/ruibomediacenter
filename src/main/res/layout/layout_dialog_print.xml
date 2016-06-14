@@ -21,7 +21,27 @@
             android:text=""
             android:textColor="@color/font_red_0"
             android:visibility="visible" />
+        <com.msx7.lib.widget.shape.ShapeTextView
+            android:id="@+id/Tv0"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:gravity="center"
+            android:hint="机器编号:"
+            android:maxLines="1"
+            android:padding="10dp"
+            android:inputType="number"
+            android:singleLine="true"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/font_color_3"
+            app:radius="10dp"
+            app:solide="@color/white"
+            app:strokeColor="#a6a6a6"
+            app:strokeWidth="1dp" />
 
+        <View
+            android:layout_width="1dp"
+            android:layout_height="20dp"/>
 
         <com.msx7.lib.widget.shape.ShapeTextView
             android:id="@+id/Tv1"

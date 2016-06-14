@@ -4,8 +4,10 @@ import android.content.Context;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.text.method.DialerKeyListener;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +26,7 @@ import com.msx7.josn.ruibo_mediacenter.R;
 import com.msx7.josn.ruibo_mediacenter.RuiBoApplication;
 import com.msx7.josn.ruibo_mediacenter.activity.BaseActivity;
 import com.msx7.josn.ruibo_mediacenter.bean.BaseBean;
+import com.msx7.josn.ruibo_mediacenter.bean.BeanAdminInfo;
 import com.msx7.josn.ruibo_mediacenter.common.UrlStatic;
 import com.msx7.josn.ruibo_mediacenter.net.BaseJsonRequest;
 import com.msx7.josn.ruibo_mediacenter.ui.NumberTextWatcher;
@@ -82,6 +85,7 @@ public class SetPriceDialog2 extends BaseCustomDialog {
         mPrintPrice.setInputType(InputType.TYPE_CLASS_NUMBER);
 
         mSinglePrice.setInputType(InputType.TYPE_NULL);
+        mPrintPrice.setFilters(new InputFilter[]{new DialerKeyListener()});
         mSinglePrice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,6 +97,7 @@ public class SetPriceDialog2 extends BaseCustomDialog {
         });
 
         mMaxPrice.setInputType(InputType.TYPE_NULL);
+        mPrintPrice.setFilters(new InputFilter[]{new DialerKeyListener()});
         mMaxPrice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -104,6 +109,7 @@ public class SetPriceDialog2 extends BaseCustomDialog {
         });
 
         mPrintPrice.setInputType(InputType.TYPE_NULL);
+        mPrintPrice.setFilters(new InputFilter[]{new DialerKeyListener()});
         mPrintPrice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -119,9 +125,9 @@ public class SetPriceDialog2 extends BaseCustomDialog {
         mMaxCount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mPrintPrice.setText("");
+                mMaxCount.setText("");
                 int right = findViewById(R.id.root).getRight();
-                keyboard4 = new Keyboard1(v, mPrintPrice).setState(Keyboard1.State.Number);
+                keyboard4 = new Keyboard1(v, mMaxCount).setState(Keyboard1.State.Number);
                 keyboard4.getPopupWindow().showAtLocation(v, Gravity.CENTER, right, 0);
             }
         });
@@ -131,9 +137,9 @@ public class SetPriceDialog2 extends BaseCustomDialog {
         mMaxSize.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mPrintPrice.setText("");
+                mMaxSize.setText("");
                 int right = findViewById(R.id.root).getRight();
-                keyboard5 = new Keyboard1(v, mPrintPrice).setState(Keyboard1.State.Number);
+                keyboard5 = new Keyboard1(v, mMaxSize).setState(Keyboard1.State.Number);
                 keyboard5.getPopupWindow().showAtLocation(v, Gravity.CENTER, right, 0);
             }
         });
@@ -187,6 +193,13 @@ public class SetPriceDialog2 extends BaseCustomDialog {
             return;
         }
         showProgess();
+        final Post post = new Post(
+                Double.parseDouble(mSinglePrice.getText().toString()),
+                Double.parseDouble(mMaxPrice.getText().toString()),
+                Double.parseDouble(mPrintPrice.getText().toString()),
+                Double.parseDouble(mMaxCount.getText().toString()),
+                Double.parseDouble(mMaxSize.getText().toString())
+        );
         BaseJsonRequest request = new BaseJsonRequest(Request.Method.POST, UrlStatic.URL_SETTINGMUSIC(),
                 new Response.Listener<String>() {
                     @Override
@@ -194,6 +207,13 @@ public class SetPriceDialog2 extends BaseCustomDialog {
                         dismisProgess();
                         BaseBean baseBean = new Gson().fromJson(response, BaseBean.class);
                         if ("200".equals(baseBean.code)) {
+                            BeanAdminInfo info = SharedPreferencesUtil.getAdminUserInfo();
+                            info.entity.DownloadAllMusicPrice = post.DownloadAllMusicPrice;
+                            info.entity.DownloadOneMusicPrice = post.DownloadOneMusicPrice;
+                            info.entity.DownloadMusicAmount = post.DownloadMusicAmount;
+                            info.entity.DownloadMusicSize = post.DownloadMusicSize;
+                            info.entity.PrintPrice = post.PrintPrice;
+                            SharedPreferencesUtil.saveAdminUserInfo(info);
                             dismiss();
                         }
                         ToastUtil.show(baseBean.msg);
@@ -206,33 +226,26 @@ public class SetPriceDialog2 extends BaseCustomDialog {
                 ToastUtil.show(R.string.error);
             }
         });
+
         request.addRequestJson(
-                new Gson().toJson(
-                        new Post(
-                                Integer.parseInt(mSinglePrice.getText().toString()),
-                                Integer.parseInt(mMaxPrice.getText().toString()),
-                                Integer.parseInt(mPrintPrice.getText().toString()),
-                                Integer.parseInt(mMaxCount.getText().toString()),
-                                Integer.parseInt(mMaxSize.getText().toString())
-                        )
-                )
+                new Gson().toJson(post)
         );
         RuiBoApplication.getApplication().runVolleyRequest(request);
     }
 
     class Post {
         @SerializedName("DownloadOneMusicPrice")
-        int DownloadOneMusicPrice;
+        double DownloadOneMusicPrice;
         @SerializedName("DownloadAllMusicPrice")
-        int DownloadAllMusicPrice;
+        double DownloadAllMusicPrice;
         @SerializedName("DownloadMusicAmount")
-        int DownloadMusicAmount;
+        double DownloadMusicAmount;
         @SerializedName("DownloadMusicSize")
-        int DownloadMusicSize;
+        double DownloadMusicSize;
         @SerializedName("PrintPrice")
-        int PrintPrice;
+        double PrintPrice;
 
-        public Post(int downloadOneMusicPrice, int downloadAllMusicPrice, int printPrice, int DownloadMusicAmount, int DownloadMusicSize) {
+        public Post(double downloadOneMusicPrice, double downloadAllMusicPrice, double printPrice, double DownloadMusicAmount, double DownloadMusicSize) {
             DownloadAllMusicPrice = downloadAllMusicPrice;
             DownloadOneMusicPrice = downloadOneMusicPrice;
             this.DownloadMusicAmount = DownloadMusicAmount;

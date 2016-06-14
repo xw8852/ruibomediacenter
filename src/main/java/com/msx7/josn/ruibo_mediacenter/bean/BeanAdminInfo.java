@@ -47,22 +47,22 @@ public class BeanAdminInfo {
 
     public static class EntityEntity {
         @SerializedName("DownloadAllMusicPrice")
-        public int DownloadAllMusicPrice;
+        public double DownloadAllMusicPrice;
         @SerializedName("DownloadMusicAmount")
-        public int DownloadMusicAmount;
+        public double DownloadMusicAmount;
         @SerializedName("DownloadMusicRemainDiskSpace")
-        public int DownloadMusicRemainDiskSpace;
+        public double DownloadMusicRemainDiskSpace;
         @SerializedName("DownloadMusicSize")
-        public int DownloadMusicSize;
+        public double DownloadMusicSize;
         @SerializedName("DownloadMusicTotalDiskSpace")
-        public int DownloadMusicTotalDiskSpace;
+        public double DownloadMusicTotalDiskSpace;
         @SerializedName("DownloadOneMusicPrice")
-        public int DownloadOneMusicPrice;
+        public double DownloadOneMusicPrice;
         @SerializedName("PrintPrice")
-        public int PrintPrice;
+        public double PrintPrice;
         @SerializedName("StoreMusicRemainDiskSpace")
-        public int StoreMusicRemainDiskSpace;
+        public double StoreMusicRemainDiskSpace;
         @SerializedName("StoreMusicTotalDiskSpace")
-        public int StoreMusicTotalDiskSpace;
+        public double StoreMusicTotalDiskSpace;
     }
 }

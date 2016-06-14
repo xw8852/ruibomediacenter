@@ -4,6 +4,7 @@ import android.content.Context;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.text.method.DialerKeyListener;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -84,7 +85,7 @@ public class ChongZhiDialog extends BaseCustomDialog {
             }
         });
         price.setInputType(InputType.TYPE_NULL);
-//        price.addTextChangedListener(new NumberTextWatcher(price));
+        price.setFilters(new InputFilter[]{new DialerKeyListener()});
         price.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
