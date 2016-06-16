@@ -2,6 +2,7 @@ package com.msx7.josn.ruibo_mediacenter.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.text.Html;
 import android.text.TextUtils;
@@ -75,14 +76,25 @@ public class HomeActivity extends BaseActivity {
     public CollectionFragment collectionFragment;
 
 
-    void click(View v) {
+    void onClick(View v) {
 
     }
+
+    public static Fragment curFragment;
+    public static boolean clear;
+    static HomeActivity homeActivity;
+
+    @InjectView(R.id.rootFragment)
+    View rootFragment;
+
+    @InjectView(R.id.rootFragment2)
+    View rootFragment2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Inject.inject(this);
+        homeActivity = this;
         toAdmin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -103,17 +115,26 @@ public class HomeActivity extends BaseActivity {
                         ft.add(R.id.rootFragment, searchFragment);
                     } else
                         ft.show(searchFragment);
-                    if (collectionFragment != null) ft.hide(collectionFragment);
-                    ft.commitAllowingStateLoss();
+                    curFragment = searchFragment;
+                    if (collectionFragment != null) {
+                        ft.remove(collectionFragment);
+                        collectionFragment = null;
+                    }
+                    ft.commit();
+                    rootFragment.setVisibility(View.VISIBLE);
+                    rootFragment2.setVisibility(View.GONE);
                 } else if (checkedId == R.id.collection) {
                     FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                     if (collectionFragment == null) {
                         collectionFragment = new CollectionFragment();
-                        ft.add(R.id.rootFragment, collectionFragment);
+                        ft.add(R.id.rootFragment2, collectionFragment);
                     } else
                         ft.show(collectionFragment);
+                    curFragment = collectionFragment;
                     if (searchFragment != null) ft.hide(searchFragment);
-                    ft.commitAllowingStateLoss();
+                    rootFragment.setVisibility(View.GONE);
+                    rootFragment2.setVisibility(View.VISIBLE);
+                    ft.commit();
                 }
             }
         });
@@ -239,11 +260,26 @@ public class HomeActivity extends BaseActivity {
     }
 
 
+    public static final void refreshUser() {
+        homeActivity.refreshUserInfo();
+    }
+
     /**
      * 更新用户信息
      */
     public void refreshUserInfo() {
         BeanUserInfo userInfo = SharedPreferencesUtil.getUserInfo();
+        StringBuffer html = new StringBuffer("会员:");
+        html.append("<font color=\"#ff971e\">");
+        html.append(userInfo.loginname);
+        html.append("</font>");
+        mAccount.setText(Html.fromHtml(html.toString()));
+
+        html = new StringBuffer("余额:");
+        html.append("<font color=\"#ff971e\">");
+        html.append(userInfo.remainmoney + "");
+        html.append("</font>");
+        mMoney.setText(Html.fromHtml(html.toString()));
         RuiBoApplication.getApplication().runVolleyRequest(new LoginRequest(userInfo.loginname, userInfo.password, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -252,8 +288,18 @@ public class HomeActivity extends BaseActivity {
                 }.getType());
                 if ("200".equals(baseBean.code)) {
                     SharedPreferencesUtil.saveUserInfo(baseBean.data);
-                    collection.setEnabled(true);
-                    showLogin();
+                    BeanUserInfo userInfo = SharedPreferencesUtil.getUserInfo();
+                    StringBuffer html = new StringBuffer("会员:");
+                    html.append("<font color=\"#ff971e\">");
+                    html.append(userInfo.loginname);
+                    html.append("</font>");
+                    mAccount.setText(Html.fromHtml(html.toString()));
+
+                    html = new StringBuffer("余额:");
+                    html.append("<font color=\"#ff971e\">");
+                    html.append(userInfo.remainmoney + "");
+                    html.append("</font>");
+                    mMoney.setText(Html.fromHtml(html.toString()));
                 }
             }
         }, null));
@@ -267,8 +313,10 @@ public class HomeActivity extends BaseActivity {
         toLogin.setVisibility(View.VISIBLE);
         mUserView.setVisibility(View.INVISIBLE);
         collection.setEnabled(false);
-        if (searchFragment != null && searchFragment.mSearchView != null)
+        if (searchFragment != null && searchFragment.mSearchView != null) {
             searchFragment.mSearchView.showEnable(false);
+            searchFragment.mSearchView.clear();
+        }
         if (searchFragment != null && searchFragment.mSearchView != null)
             searchFragment.mSearchView.setVisibility(View.VISIBLE);
         if (collectionFragment != null && collectionFragment.mCollectionView != null)

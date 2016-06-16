@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.msx7.josn.ruibo_mediacenter.RuiBoApplication;
+import com.msx7.josn.ruibo_mediacenter.activity.HomeActivity;
 import com.msx7.josn.ruibo_mediacenter.util.SharedPreferencesUtil;
 
 /**
@@ -40,8 +41,14 @@ public class SearchFragment extends Fragment {
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        if (hidden)
+        if (hidden) {
             mSearchView.setVisibility(View.GONE);
-        else mSearchView.setVisibility(View.VISIBLE);
+        } else {
+            if(HomeActivity.clear){
+                HomeActivity.clear=false;
+                mSearchView.clear();
+            }
+            mSearchView.setVisibility(View.VISIBLE);
+        }
     }
 }

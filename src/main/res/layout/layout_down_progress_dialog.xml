@@ -12,7 +12,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_alpha_black"
-        android:onClick="click"
         android:orientation="vertical"
         android:padding="20dp">
 

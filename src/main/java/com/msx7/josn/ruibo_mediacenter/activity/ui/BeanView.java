@@ -45,11 +45,9 @@ public class BeanView extends LinearLayout {
         super(context, attrs);
     }
 
-    private SongPageView songPageView;
 
-    protected void download(final SongPageView sPageView) {
-        this.songPageView = sPageView;
-        int songs = songPageView.getSelectedMusics().size();
+    protected void download(final SongPageView songPageView) {
+        int songs = songPageView.getAllSelectedMusic().size();
         double money = SharedPreferencesUtil.getUserInfo().entity.DownloadOneMusicPrice * songs;
         money = Math.min(money, SharedPreferencesUtil.getUserInfo().entity.DownloadAllMusicPrice);
 
@@ -57,7 +55,7 @@ public class BeanView extends LinearLayout {
         activity.showProgess();
 
         String url = UrlStatic.URL_DOWNLOADMUSICCHECK();
-        final CheckPost post = new CheckPost(SharedPreferencesUtil.getUserInfo().id, money, songPageView.getSelectedMusics());
+        final CheckPost post = new CheckPost(SharedPreferencesUtil.getUserInfo().id, money, songPageView.getAllSelectedMusic());
         BaseJsonRequest
                 jsonRequest = new BaseJsonRequest(POST, url
                 , new Response.Listener<String>() {
@@ -75,7 +73,7 @@ public class BeanView extends LinearLayout {
                 }
                 SyncUserInfo.SyncUserInfo();
                 double size = 0;
-                for (BeanMusic music : songPageView.getSelectedMusics()) {
+                for (BeanMusic music : songPageView.getAllSelectedMusic()) {
                     size += music.size;
                 }
                 DecimalFormat a = new DecimalFormat(".##");
@@ -87,7 +85,7 @@ public class BeanView extends LinearLayout {
                     ToastUtil.show("U盘空间不足，还需" + a.format(baseBean.data.DownloadMusicRemainDiskSpace - size) + "M");
                     return;
                 }
-                double money = baseBean.data.DownloadOneMusicPrice * songPageView.getSelectedMusics().size();
+                double money = baseBean.data.DownloadOneMusicPrice * songPageView.getAllSelectedMusic().size();
                 money = Math.min(money, SharedPreferencesUtil.getUserInfo().entity.DownloadAllMusicPrice);
                 post.money = money;
                 CheckDownDialog dialog = new CheckDownDialog(songPageView.getContext());
@@ -111,6 +109,8 @@ public class BeanView extends LinearLayout {
         jsonRequest.addRequestJson(new Gson().toJson(post));
         RuiBoApplication.getApplication().runVolleyRequest(jsonRequest);
     }
+
+
 
     public static class CheckPost {
         @SerializedName("musiclist")

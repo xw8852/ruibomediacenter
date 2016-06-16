@@ -24,6 +24,7 @@ import com.msx7.lib.annotations.Inject;
 import com.msx7.lib.annotations.InjectView;
 import com.msx7.lib.widget.BaseAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -75,7 +76,17 @@ public class SingleFragment extends Fragment implements IMusicSelcted {
         super.onViewCreated(view, savedInstanceState);
         int position = getArguments().getInt("num");
         start = position * SongPageView.EVG_PAGE_SONG;
-        singlePage.showData(getAllMusic().subList(position * SongPageView.EVG_PAGE_SONG, Math.min((position + 1) * SongPageView.EVG_PAGE_SONG, getAllMusic().size())));
+        int count = SongPageView.EVG_PAGE_SONG;
+        List<BeanMusic> data = new ArrayList<>();
+        int _pos = start;
+        while (count > 0) {
+            if (_pos >= getAllMusic().size()) break;
+            data.add(getAllMusic().get(_pos));
+            _pos++;
+            count--;
+        }
+        singlePage.showData(data);
+
         getView().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -138,18 +149,6 @@ public class SingleFragment extends Fragment implements IMusicSelcted {
             return SongPageView.EVG_PAGE_SONG;
         }
 
-        int vertalPosition[] = new int[]{
-                1, 10, 19,
-                2, 11, 20,
-                3, 12, 21,
-                4, 13, 22,
-                5, 14, 23,
-                6, 15, 24,
-                7, 16, 25,
-                8, 17, 26,
-                9, 18, 27
-
-        };
 
         /**
          * 实现从水平排序转换为垂直排序
@@ -183,7 +182,8 @@ public class SingleFragment extends Fragment implements IMusicSelcted {
         }
 
         public void onBindViewHolder(final MusicViewHolder holder, int position) {
-
+            holder.box.setOnCheckedChangeListener(null);
+            holder.box.setChecked(false);
             final BeanMusic music = getItem(position);
             if (music == null || TextUtils.isEmpty(music.path)) {
                 holder.box.setVisibility(View.INVISIBLE);
@@ -193,7 +193,6 @@ public class SingleFragment extends Fragment implements IMusicSelcted {
                 holder.box.setVisibility(View.VISIBLE);
                 holder.name.setVisibility(View.VISIBLE);
             }
-            holder.box.setOnCheckedChangeListener(null);
             holder.box.setChecked(isSelected(music));
 //            holder.num.setText("歌曲编码:" + music.code);
             holder.name.setText(String.valueOf(start + getRealPosition(position) + 1) + "." + music.path);
@@ -201,6 +200,7 @@ public class SingleFragment extends Fragment implements IMusicSelcted {
             holder.box.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (music == null || holder.box.getVisibility() != View.VISIBLE) return;
                     if (isChecked) {
                         if (SharedPreferencesUtil.getUserInfo() == null) {
                             holder.box.setChecked(false);
@@ -211,6 +211,7 @@ public class SingleFragment extends Fragment implements IMusicSelcted {
                         if (select != null) select.doSelect(getAllSelectedMusic());
                     } else {
                         removeSelected(music);
+                        if (select != null) select.doSelect(getAllSelectedMusic());
                     }
                     SyncUserInfo.SyncUserInfo();
                 }

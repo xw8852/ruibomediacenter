@@ -55,6 +55,13 @@ public class SearchView extends BeanView {
         inflate(context, R.layout.layout_search, this);
         Inject.inject(this, this);
         initSearch();
+        findViewById(R.id.tmp).setVisibility(GONE);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                doSearch();
+            }
+        }, 100);
     }
 
 
@@ -86,14 +93,11 @@ public class SearchView extends BeanView {
 
 
     public void showEnable(boolean enable) {
-        mDownBtn.setEnabled(enable);
-        mCollection.setEnabled(enable);
+        mDownBtn.setEnabled(false);
+        mCollection.setEnabled(false);
         mSelectAll.setEnabled(enable);
         if (!enable) {
             mSongPageView.setSelectedAll(false);
-        }
-        if (enable && mSongPageView.getSelectedMusics().size() > 0) {
-            doSelected(mSongPageView.getSelectedMusics());
         }
         if (enable)
             mSongPageView.notifyLoginStatusChange();
@@ -102,6 +106,8 @@ public class SearchView extends BeanView {
     public void clear() {
         mSearchContent.setText("");
         mSongPageView.showData(new ArrayList<BeanMusic>());
+        mDownBtn.setEnabled(false);
+        mCollection.setEnabled(false);
         mSearchContent.setInputType(InputType.TYPE_NULL);
         mSearchContent.setOnClickListener(new OnClickListener() {
             @Override
@@ -113,44 +119,32 @@ public class SearchView extends BeanView {
         });
         findViewById(R.id.tmp).setVisibility(GONE);
         mCodeBg.setVisibility(VISIBLE);
+
+        initSearch();
     }
 
-    void initSearch() {
-        mSearchContent.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
-        mSearchContent.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH ||
-                        actionId == EditorInfo.IME_ACTION_DONE ||
-                        event.getKeyCode() == KeyEvent.KEYCODE_SEARCH) {
-                    doSearch();
-                }
-                return false;
-            }
-        });
+    public void initSearch() {
+//        mSearchContent.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
+//        mSearchContent.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+//            @Override
+//            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+//                if (actionId == EditorInfo.IME_ACTION_SEARCH ||
+//                        actionId == EditorInfo.IME_ACTION_DONE ||
+//                        event.getKeyCode() == KeyEvent.KEYCODE_SEARCH) {
+//                    doSearch();
+//                }
+//                return false;
+//            }
+//        });
         mSelectAll.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 mSongPageView.setSelectedAll(isChecked);
-                doSelected(mSongPageView.getSelectedMusics());
+                doSelected(mSongPageView.getAllSelectedMusic());
                 mSongPageView.setTips();
             }
         });
-        mSongPageView.setDoSelect(new SingleFragment.IDoSelect() {
-            @Override
-            public void doSelect(List<BeanMusic> musics) {
-                if (musics.size() == mSongPageView.getMusics().size()) {
-                    if (!mSelectAll.isChecked()) {
-                        mSelectAll.setChecked(true);
-                    }
-                } else if (musics.size() == 0) {
-                    if (mSelectAll.isChecked()) {
-                        mSelectAll.setChecked(false);
-                    }
-                }
-                doSelected(musics);
-            }
-        });
+        mSongPageView.setDoSelect(doSelect);
         mSearchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -159,13 +153,6 @@ public class SearchView extends BeanView {
         });
 
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                doSearch();
-            }
-        }, 100);
-
         mCollection.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -173,13 +160,14 @@ public class SearchView extends BeanView {
                     ToastUtil.show("请先登录");
                     return;
                 }
-                List<BeanMusic> musics = mSongPageView.getSelectedMusics();
+                List<BeanMusic> musics = mSongPageView.getAllSelectedMusic();
                 if (musics.size() <= 0) return;
                 List<BeanMusic> _musics = SharedPreferencesUtil.getCollection();
                 BeanUserInfo userInfo = SharedPreferencesUtil.getUserInfo();
 
                 for (int i = 0; i < musics.size(); i++) {
                     BeanMusic music = musics.get(i);
+                    if (music == null || TextUtils.isEmpty(music.name)) continue;
                     music.loginid = userInfo.id;
                     if (!_musics.contains(music)) _musics.add(music);
                 }
@@ -190,6 +178,7 @@ public class SearchView extends BeanView {
                     }
                 });
                 SharedPreferencesUtil.saveCollection(_musics);
+                mSongPageView.clearSelected();
                 ToastUtil.show("歌曲收藏成功");
 //                clear();
             }
@@ -204,13 +193,32 @@ public class SearchView extends BeanView {
                 download(mSongPageView);
             }
         });
-        findViewById(R.id.tmp).setVisibility(GONE);
     }
 
+  public   SingleFragment.IDoSelect doSelect = new SingleFragment.IDoSelect() {
+        @Override
+        public void doSelect(List<BeanMusic> musics) {
+            if (musics.size() == mSongPageView.getAllMusic().size()) {
+                if (!mSelectAll.isChecked()) {
+                    mSelectAll.setChecked(true);
+                }
+            } else if (musics.size() == 0) {
+                if (mSelectAll.isChecked()) {
+                    mSelectAll.setChecked(false);
+                }
+            }
+            doSelected(musics);
+            mSongPageView.setTips();
+        }
+    };
 
     void doSelected(List<BeanMusic> musics) {
-        if (musics == null || musics.isEmpty()) {
+        if (musics != null && musics.size() > 0) {
+            mDownBtn.setEnabled(true);
+            mCollection.setEnabled(true);
+        } else {
             mDownBtn.setEnabled(false);
+            mCollection.setEnabled(false);
             return;
         }
         BeanUserInfo beanUserInfo = SharedPreferencesUtil.getUserInfo();
@@ -257,6 +265,7 @@ public class SearchView extends BeanView {
                             mDownBtn.setEnabled(false);
                             mSongPageView.setSelectedAll(false);
                             mSongPageView.showData(baseBean.data);
+                            mSongPageView.setDoSelect(doSelect);
                             if (baseBean.data == null || baseBean.data.isEmpty()) {
                                 mCodeBg.setVisibility(VISIBLE);
                                 findViewById(R.id.tmp).setVisibility(GONE);

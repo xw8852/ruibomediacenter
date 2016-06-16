@@ -48,6 +48,7 @@ public class SyncSongDialog extends BaseCustomDialog {
         mSure.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                dismiss();
                 activity.showProgess();
                 RuiBoApplication.getApplication().runVolleyRequest(new SyncSongRequest(2, responseListener, errorListener));
             }

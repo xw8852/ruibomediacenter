@@ -22,6 +22,7 @@ import com.msx7.josn.ruibo_mediacenter.activity.net.UserInfoNet;
 import com.msx7.josn.ruibo_mediacenter.activity.ui.BeanView;
 import com.msx7.josn.ruibo_mediacenter.bean.BaseBean;
 import com.msx7.josn.ruibo_mediacenter.bean.BeanMusic;
+import com.msx7.josn.ruibo_mediacenter.bean.BeanUserInfo;
 import com.msx7.josn.ruibo_mediacenter.common.UrlStatic;
 import com.msx7.josn.ruibo_mediacenter.net.BaseJsonRequest;
 import com.msx7.josn.ruibo_mediacenter.util.L;
@@ -37,6 +38,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -82,6 +84,11 @@ public class DownProgressDialog extends Dialog {
 
     BeanView.CheckPost post;
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+    Call cal;
+
+    public static final long CONNECT_TIMEOUT = 60;
+    public static final long READ_TIMEOUT = 60 * 10;
+    public static final long WRITE_TIMEOUT = 60 * 10;
 
     public void showDown(BeanView.CheckPost postData) {
         post = postData;
@@ -90,7 +97,12 @@ public class DownProgressDialog extends Dialog {
         mbar1.setProgress(0);
         startTimer();
         try {
-            Call cal = new OkHttpClient().newCall(
+            OkHttpClient client = new OkHttpClient.Builder()
+                    .readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)//设置读取超时时间
+                    .writeTimeout(WRITE_TIMEOUT, TimeUnit.SECONDS)//设置写的超时时间
+                    .connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)//设置连接超时时间
+                    .build();
+            cal = client.newCall(
                     new Request.Builder()
                             .url(UrlStatic.URL_DOWNLOADMUSIC())
                             .post(RequestBody.create(JSON, new Gson().toJson(postData)))
@@ -154,9 +166,20 @@ public class DownProgressDialog extends Dialog {
                                 return;
                             }
                             stopTimer();
+                            BeanUserInfo userInfo = SharedPreferencesUtil.getUserInfo();
+                            userInfo.remainmoney = userInfo.remainmoney - post.money;
+                            if (post.needprint == 1) {
+                                userInfo.remainmoney = userInfo.remainmoney - userInfo.entity.PrintPrice;
+                            }
+                            SharedPreferencesUtil.saveUserInfo(userInfo);
                             HomeActivity homeActivity = ((HomeActivity) activity);
-                            if (homeActivity.searchFragment != null && homeActivity.searchFragment.mSearchView != null)
-                                homeActivity.searchFragment.mSearchView.clear();
+                            homeActivity.refreshUserInfo();
+                            if (homeActivity.searchFragment != null && homeActivity.searchFragment.mSearchView != null) {
+                                if (HomeActivity.curFragment != homeActivity.searchFragment) {
+                                    HomeActivity.clear = true;
+                                } else
+                                    homeActivity.searchFragment.mSearchView.clear();
+                            }
                             if (homeActivity.collectionFragment != null && homeActivity.collectionFragment.mCollectionView != null)
                                 homeActivity.collectionFragment.mCollectionView.clear();
                             findViewById(R.id.downFinish).setVisibility(View.VISIBLE);
@@ -205,19 +228,35 @@ public class DownProgressDialog extends Dialog {
 
     Timer timer;
 
+    long startTime = 0;
+
+
+    void addPro() {
+        addProgess();
+        if (System.currentTimeMillis() - startTime >= 1000 * 60 * 10) {
+            ToastUtil.show("服务器响应超时，请稍后重新尝试");
+            dismiss();
+            if (cal != null) cal.cancel();
+            cal = null;
+        }
+    }
+
     void startTimer() {
         timer = new Timer();
-        timer.schedule(new TimerTask() {
+        startTime = System.currentTimeMillis();
+        TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
                 RuiBoApplication.getApplication().getHandler().post(new Runnable() {
-                    @Override
-                    public void run() {
-                        addProgess();
-                    }
-                });
+                                                                        @Override
+                                                                        public void run() {
+                                                                            addPro();
+                                                                        }
+                                                                    }
+                );
             }
-        }, 600, 600);
+        };
+        timer.schedule(timerTask, 600, 600);
     }
 
     void stopTimer() {

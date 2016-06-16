@@ -145,6 +145,13 @@ public class SetPriceDialog2 extends BaseCustomDialog {
         });
 
 
+        BeanAdminInfo info = SharedPreferencesUtil.getAdminUserInfo();
+        mSinglePrice.setText(String.valueOf(info.entity.DownloadOneMusicPrice));
+        mMaxPrice.setText(String.valueOf(info.entity.DownloadAllMusicPrice));
+        mPrintPrice.setText(String.valueOf(info.entity.PrintPrice));
+        mMaxCount.setText(String.valueOf(info.entity.DownloadMusicAmount));
+        mMaxSize.setText(String.valueOf(info.entity.DownloadMusicSize));
+
 //        mSinglePrice.setFilters(new InputFilter[]{new InputFilter.LengthFilter(6)});
 //        mSinglePrice.setInputType(InputType.TYPE_NULL);
 //        mSinglePrice.addTextChangedListener(new com.msx7.josn.ruibo_mediacenter.ui.NumberTextWatcher(mSinglePrice));

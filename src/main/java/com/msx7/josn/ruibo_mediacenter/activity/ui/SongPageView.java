@@ -52,8 +52,11 @@ public class SongPageView extends LinearLayout implements IMusicSelcted {
     @InjectView(R.id.down_tip)
     TextView mDownTips;
 
+    HomeActivity activity;
+
     public SongPageView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        activity = (HomeActivity) context;
         inflate(context, R.layout.layout_song_page_view, this);
         Inject.inject(this, this);
 
@@ -110,6 +113,13 @@ public class SongPageView extends LinearLayout implements IMusicSelcted {
         this.select = select;
     }
 
+    void doSelect2(List<BeanMusic> musics) {
+        if (HomeActivity.curFragment == activity.searchFragment) {
+            activity.searchFragment.mSearchView.doSelect.doSelect(musics);
+        } else
+        if (select != null) select.doSelect(musics);
+    }
+
     public void notifyLoginStatusChange() {
         setTip(mViewPager.getCurrentItem());
     }
@@ -132,16 +142,16 @@ public class SongPageView extends LinearLayout implements IMusicSelcted {
         mTips.setText(Html.fromHtml(tips));
         StringBuffer buffer = new StringBuffer();
         BeanUserInfo beanUserInfo = SharedPreferencesUtil.getUserInfo();
-        buffer.append("<big>" + getMusics().get(0).typename + "</big>  \t   ");
-        if (beanUserInfo != null && getMusics().size() > 0) {
+        buffer.append("<big>" + getAllMusic().get(0).typename + "</big>  \t   ");
+        if (beanUserInfo != null && getAllMusic().size() > 0) {
             buffer.append("已选歌曲");
             buffer.append("<font color=\"#ff971e\">");
-            buffer.append(getSelectedMusics().size() + "/" + beanUserInfo.entity.DownloadMusicAmount);
+            buffer.append(getAllSelectedMusic().size() + "/" + beanUserInfo.entity.DownloadMusicAmount);
             buffer.append("</font>");
             buffer.append(",下载需支付");
             buffer.append("<font color=\"#ff971e\">");
 
-            int size = getSelectedMusics().size();
+            int size = getAllSelectedMusic().size();
             double money = beanUserInfo.entity.DownloadOneMusicPrice * size;
             buffer.append("" + Math.min(money, beanUserInfo.entity.DownloadAllMusicPrice));
 
@@ -153,8 +163,8 @@ public class SongPageView extends LinearLayout implements IMusicSelcted {
             buffer.append("</font>");
         }
         mDownTips.setText(Html.fromHtml(buffer.toString()));
-
     }
+
 
     public String getFuhe() {
         BeanUserInfo beanUserInfo = SharedPreferencesUtil.getUserInfo();
@@ -211,13 +221,7 @@ public class SongPageView extends LinearLayout implements IMusicSelcted {
             bundle.putInt("num", position);
             fragment.setArguments(bundle);
             fragment.setMusic(SongPageView.this);
-            fragment.setDoSelect(new IDoSelect() {
-                @Override
-                public void doSelect(List<BeanMusic> musics) {
-                    setTip(mViewPager.getCurrentItem());
-                    if (select != null) select.doSelect(musics);
-                }
-            });
+            fragment.setDoSelect(doSelect);
             return fragment;
         }
 
@@ -227,15 +231,31 @@ public class SongPageView extends LinearLayout implements IMusicSelcted {
         }
     }
 
+    IDoSelect doSelect = new IDoSelect() {
+        @Override
+        public void doSelect(List<BeanMusic> musics) {
+            setTip(mViewPager.getCurrentItem());
+            doSelect2(musics);
+        }
+    };
 
-    public List<BeanMusic> getMusics() {
-        return musics;
+
+    public void clearSelected() {
+        selecters.clear();
+        notifyLoginStatusChange();
+        if (mViewPager.findViewWithTag(mViewPager.getCurrentItem()) != null) {
+            ((SingleFragment.SinglePage) mViewPager.findViewWithTag(mViewPager.getCurrentItem())).notifyDataSetChanged();
+        }
+        post(new Runnable() {
+            @Override
+            public void run() {
+                int count = mViewPager.getChildCount();
+                for (int i = 0; i < count; i++) {
+                    ((SingleFragment.SinglePage) mViewPager.getChildAt(i)).notifyDataSetChanged();
+                }
+            }
+        });
     }
-
-    public List<BeanMusic> getSelectedMusics() {
-        return selecters;
-    }
-
 
     public void setSelectedAll(boolean isChecked) {
         if (!isChecked && selecters.size() == musics.size()) {

@@ -84,7 +84,7 @@ public class CollectionView extends BeanView {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 mSongPageView.setSelectedAll(isChecked);
-                doALlSelect(SharedPreferencesUtil.getCollection());
+                doALlSelect(mSongPageView.getAllSelectedMusic());
                 mSongPageView.setTips();
             }
         });
@@ -92,7 +92,7 @@ public class CollectionView extends BeanView {
             @Override
             public void onClick(View v) {
                 List<BeanMusic> musics = SharedPreferencesUtil.getCollection();
-                List<BeanMusic> delMusics = mSongPageView.getSelectedMusics();
+                List<BeanMusic> delMusics = mSongPageView.getAllSelectedMusic();
                 if (delMusics != null) {
                     musics.removeAll(delMusics);
                 }
@@ -101,21 +101,7 @@ public class CollectionView extends BeanView {
             }
         });
         mDownBtn.setEnabled(false);
-        mSongPageView.setDoSelect(new SingleFragment.IDoSelect() {
-            @Override
-            public void doSelect(List<BeanMusic> musics) {
-                if (musics.size() == mSongPageView.getMusics().size()) {
-                    if (!mSelectAll.isChecked()) {
-                        mSelectAll.setChecked(true);
-                    }
-                } else if (musics.size() == 0) {
-                    if (mSelectAll.isChecked()) {
-                        mSelectAll.setChecked(false);
-                    }
-                }
-                doALlSelect(musics);
-            }
-        });
+        mSongPageView.setDoSelect(doSelect);
         mDownBtn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -123,6 +109,22 @@ public class CollectionView extends BeanView {
             }
         });
     }
+
+   public SingleFragment.IDoSelect doSelect=new SingleFragment.IDoSelect() {
+        @Override
+        public void doSelect(List<BeanMusic> musics) {
+            if (musics.size() == mSongPageView.getAllMusic().size()) {
+                if (!mSelectAll.isChecked()) {
+                    mSelectAll.setChecked(true);
+                }
+            } else if (musics.size() == 0) {
+                if (mSelectAll.isChecked()) {
+                    mSelectAll.setChecked(false);
+                }
+            }
+            doALlSelect(musics);
+        }
+    };
 
     void doALlSelect(List<BeanMusic> musics) {
         if (musics == null || musics.isEmpty()) {
