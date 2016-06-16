@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">博睿影音</string>
+    <string name="app_name">睿博影音</string>
     <string name="net_error">当前网络连接不可用,请开启网络后重新尝试!</string>
     <string name="net_time_out">网络请求失败,请稍后重新尝试!</string>
     <string name="error">网络异常,请稍后重新尝试!</string>
