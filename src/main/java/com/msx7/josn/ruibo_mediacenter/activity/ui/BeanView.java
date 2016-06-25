@@ -90,11 +90,14 @@ public class BeanView extends LinearLayout {
                 post.money = money;
                 CheckDownDialog dialog = new CheckDownDialog(songPageView.getContext());
                 dialog.show();
+                double maxSize = Math.max(size, baseBean.data.DownloadMusicRemainDiskSpace);
+
+
                 dialog.show(size,
-                        (int) (100 * size / baseBean.data.DownloadMusicSize),
+                        (int)Math.round(100 * size / maxSize),
                         baseBean.data.DownloadMusicRemainDiskSpace,
-                        (int) (100 * baseBean.data.DownloadMusicRemainDiskSpace / baseBean.data.DownloadMusicTotalDiskSpace
-                        ), baseBean.data.PrintPrice);
+                        (int)Math.round (100 * baseBean.data.DownloadMusicRemainDiskSpace / maxSize),
+                        baseBean.data.PrintPrice);
                 dialog.setPostData(post);
 
             }
@@ -111,7 +114,6 @@ public class BeanView extends LinearLayout {
     }
 
 
-
     public static class CheckPost {
         @SerializedName("musiclist")
         public List<BeanMusic> musiclist;
@@ -119,6 +121,8 @@ public class BeanView extends LinearLayout {
         public long loginId;
         @SerializedName("money")
         public double money;
+        @SerializedName("printnumber")
+        public int printnumber=1;
 
         @SerializedName("needprint")
         public int needprint;

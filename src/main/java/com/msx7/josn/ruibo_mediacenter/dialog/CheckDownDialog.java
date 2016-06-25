@@ -30,7 +30,11 @@ public class CheckDownDialog extends Dialog {
 
     ProgressBar mbar2;
     TextView tv2;
+    TextView printNum;
     TextView print;
+    View add;
+    View minus;
+    int _printNum = 1;
 
     public CheckDownDialog(Context context) {
         super(context, R.style.Translucent_Dialog);
@@ -41,12 +45,15 @@ public class CheckDownDialog extends Dialog {
         findViewById(R.id.root).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dismiss();
+//                dismiss();
             }
         });
         mbar1 = (ProgressBar) findViewById(R.id.progressBar1);
         mbar2 = (ProgressBar) findViewById(R.id.progressBar2);
         tv1 = (TextView) findViewById(R.id.text);
+        minus = findViewById(R.id.minus);
+        add = findViewById(R.id.add);
+        printNum = (TextView) findViewById(R.id.printNum);
         tv2 = (TextView) findViewById(R.id.text2);
         print = (TextView) findViewById(R.id.printPrice);
         findViewById(R.id.print).setOnClickListener(new View.OnClickListener() {
@@ -61,11 +68,32 @@ public class CheckDownDialog extends Dialog {
                 noPrint();
             }
         });
+        minus.setOnClickListener(minusClickListener);
+        add.setOnClickListener(addClickListener);
     }
 
+    View.OnClickListener minusClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            _printNum = Math.max(1, _printNum - 1);
+            if (_printNum == 1) minus.setEnabled(false);
+            else minus.setEnabled(true);
+            printNum.setText(String.valueOf(_printNum));
+        }
+    };
+    View.OnClickListener addClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            minus.setEnabled(true);
+            _printNum++;
+            printNum.setText(String.valueOf(_printNum));
+        }
+    };
 
     void print() {
         post.needprint = 1;
+        post.printnumber = _printNum;
+        post.money += _printNum * printPrice;
         new DownProgressDialog(activity).showDown(post);
         dismiss();
     }
@@ -77,6 +105,7 @@ public class CheckDownDialog extends Dialog {
     }
 
     CheckPost post;
+    double printPrice;
 
     public void setPostData(CheckPost postData) {
         post = postData;
@@ -84,6 +113,7 @@ public class CheckDownDialog extends Dialog {
 
     public void show(double need, int needB, double remain, int remianb, double printPrice) {
         DecimalFormat a = new DecimalFormat(".##");
+        this.printPrice = printPrice;
         tv1.setText("下载所需磁卡容量:" + a.format(need) + "M");
         tv2.setText("目前磁卡可用容量:" + a.format(remain) + "M");
         mbar1.setProgress(needB);

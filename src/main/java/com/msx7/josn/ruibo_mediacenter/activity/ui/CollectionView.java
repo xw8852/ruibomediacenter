@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.util.Size;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -80,14 +81,7 @@ public class CollectionView extends BeanView {
 
 
     void initSearch() {
-        mSelectAll.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                mSongPageView.setSelectedAll(isChecked);
-                doALlSelect(mSongPageView.getAllSelectedMusic());
-                mSongPageView.setTips();
-            }
-        });
+        mSelectAll.setOnCheckedChangeListener(onCheckedChangeListener);
         mdelete.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -96,7 +90,14 @@ public class CollectionView extends BeanView {
                 if (delMusics != null) {
                     musics.removeAll(delMusics);
                 }
+                mSelectAll.setOnCheckedChangeListener(null);
+                mSelectAll.setChecked(false);
+                mSelectAll.setOnCheckedChangeListener(onCheckedChangeListener);
                 SharedPreferencesUtil.saveCollection(musics);
+                if(musics.isEmpty()){
+                    mdelete.setEnabled(false);
+                    mDownBtn.setEnabled(false);
+                }
                 showData();
             }
         });
@@ -110,7 +111,15 @@ public class CollectionView extends BeanView {
         });
     }
 
-   public SingleFragment.IDoSelect doSelect=new SingleFragment.IDoSelect() {
+    CompoundButton.OnCheckedChangeListener onCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            mSongPageView.setSelectedAll(isChecked);
+            doALlSelect(mSongPageView.getAllSelectedMusic());
+            mSongPageView.setTips();
+        }
+    };
+    public SingleFragment.IDoSelect doSelect = new SingleFragment.IDoSelect() {
         @Override
         public void doSelect(List<BeanMusic> musics) {
             if (musics.size() == mSongPageView.getAllMusic().size()) {
@@ -132,23 +141,20 @@ public class CollectionView extends BeanView {
             mdelete.setEnabled(false);
             return;
         }
+        mDownBtn.setEnabled(true);
         mdelete.setEnabled(true);
         BeanUserInfo beanUserInfo = SharedPreferencesUtil.getUserInfo();
         if (beanUserInfo == null) {
             mDownBtn.setEnabled(false);
             return;
         }
-        if (musics.size() > beanUserInfo.entity.DownloadMusicAmount) {
-            mDownBtn.setEnabled(false);
-            return;
-        }
-        if (musics.size() > 0) {
-            mDownBtn.setEnabled(true);
-            return;
-        }
         double size = 0;
         for (BeanMusic music : mSongPageView.getAllSelectedMusic()) {
             size += music.size;
+        }
+        if (musics.size() > beanUserInfo.entity.DownloadMusicAmount) {
+            mDownBtn.setEnabled(false);
+            return;
         }
         if (size > beanUserInfo.entity.DownloadMusicSize) {
             mDownBtn.setEnabled(false);

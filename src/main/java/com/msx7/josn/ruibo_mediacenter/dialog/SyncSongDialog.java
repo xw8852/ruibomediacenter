@@ -17,6 +17,7 @@ import com.msx7.josn.ruibo_mediacenter.bean.BaseBean;
 import com.msx7.josn.ruibo_mediacenter.net.AdminLoginRequest;
 import com.msx7.josn.ruibo_mediacenter.net.SyncSongRequest;
 import com.msx7.josn.ruibo_mediacenter.util.L;
+import com.msx7.josn.ruibo_mediacenter.util.SharedPreferencesUtil;
 import com.msx7.josn.ruibo_mediacenter.util.ToastUtil;
 import com.msx7.josn.ruibo_mediacenter.util.VolleyErrorUtils;
 import com.msx7.lib.annotations.Inject;
@@ -50,7 +51,8 @@ public class SyncSongDialog extends BaseCustomDialog {
             public void onClick(View v) {
                 dismiss();
                 activity.showProgess();
-                RuiBoApplication.getApplication().runVolleyRequest(new SyncSongRequest(2, responseListener, errorListener));
+                RuiBoApplication.getApplication().runVolleyRequest(new SyncSongRequest(
+                        SharedPreferencesUtil.getAdminUserInfo().id, responseListener, errorListener));
             }
         });
         mCancel.setOnClickListener(new View.OnClickListener() {

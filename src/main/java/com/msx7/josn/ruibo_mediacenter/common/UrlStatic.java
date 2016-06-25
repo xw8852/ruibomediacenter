@@ -55,6 +55,9 @@ public class UrlStatic {
     public static String URL_GETUSERLIST() {
         return getServerIp() + "/adminapi/admin.getuserlist";
     }
+    public static String URL_UPDATEUSERPHONE() {
+        return getServerIp() + "/userapi/user.updateuserphone";
+    }
 
     public static String URL_USERINMONEY() {
         return getServerIp() + "/adminapi/admin.userinmoney";

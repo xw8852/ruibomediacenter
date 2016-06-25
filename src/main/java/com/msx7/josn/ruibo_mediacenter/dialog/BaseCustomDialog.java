@@ -26,6 +26,12 @@ public class BaseCustomDialog extends Dialog {
             activity = (BaseActivity) context;
         }
         setContentView(R.layout.dialog_layout);
+        findViewById(R.id.root).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
         findViewById(R.id.close).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

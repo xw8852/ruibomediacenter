@@ -76,6 +76,7 @@ public class LoginDialog extends BaseCustomDialog {
     Keyboard1 keyboard1;
 
     public String getPasswd() {
+        if(keyboard1==null)return null;
         return keyboard1.getContent().substring(0, Math.min(6, keyboard1.getContent().length()));
     }
 

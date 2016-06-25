@@ -136,14 +136,7 @@ public class SearchView extends BeanView {
 //                return false;
 //            }
 //        });
-        mSelectAll.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                mSongPageView.setSelectedAll(isChecked);
-                doSelected(mSongPageView.getAllSelectedMusic());
-                mSongPageView.setTips();
-            }
-        });
+        mSelectAll.setOnCheckedChangeListener(onCheckedChangeListener);
         mSongPageView.setDoSelect(doSelect);
         mSearchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -179,6 +172,11 @@ public class SearchView extends BeanView {
                 });
                 SharedPreferencesUtil.saveCollection(_musics);
                 mSongPageView.clearSelected();
+                mSelectAll.setOnCheckedChangeListener(null);
+                mSelectAll.setChecked(false);
+                mDownBtn.setEnabled(false);
+                mCollection.setEnabled(false);
+                mSelectAll.setOnCheckedChangeListener(onCheckedChangeListener);
                 ToastUtil.show("歌曲收藏成功");
 //                clear();
             }
@@ -195,7 +193,15 @@ public class SearchView extends BeanView {
         });
     }
 
-  public   SingleFragment.IDoSelect doSelect = new SingleFragment.IDoSelect() {
+    CompoundButton.OnCheckedChangeListener onCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            mSongPageView.setSelectedAll(isChecked);
+            doSelected(mSongPageView.getAllSelectedMusic());
+            mSongPageView.setTips();
+        }
+    };
+    public SingleFragment.IDoSelect doSelect = new SingleFragment.IDoSelect() {
         @Override
         public void doSelect(List<BeanMusic> musics) {
             if (musics.size() == mSongPageView.getAllMusic().size()) {
@@ -228,10 +234,6 @@ public class SearchView extends BeanView {
         }
         if (musics.size() > beanUserInfo.entity.DownloadMusicAmount) {
             mDownBtn.setEnabled(false);
-            return;
-        }
-        if (musics.size() > 0) {
-            mDownBtn.setEnabled(true);
             return;
         }
         long size = 0;

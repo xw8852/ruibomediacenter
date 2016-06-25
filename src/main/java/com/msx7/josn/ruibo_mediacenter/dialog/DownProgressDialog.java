@@ -61,6 +61,7 @@ public class DownProgressDialog extends Dialog {
     ProgressBar mbar1;
     TextView tv1;
 
+    public static boolean isDownFinish = true;
 
     public DownProgressDialog(Context context) {
         super(context, R.style.Translucent_Dialog);
@@ -73,7 +74,9 @@ public class DownProgressDialog extends Dialog {
         params.width = context.getResources().getDisplayMetrics().widthPixels * 2 / 5;
         root.setLayoutParams(params);
         mbar1 = (ProgressBar) findViewById(R.id.progressBar1);
+        mbar1.setVisibility(View.GONE);
         tv1 = (TextView) findViewById(R.id.text);
+        tv1.setText("开始下载，请等待目录打印完成");
         findViewById(R.id.downFinish).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,7 +96,7 @@ public class DownProgressDialog extends Dialog {
     public void showDown(BeanView.CheckPost postData) {
         post = postData;
         show();
-        setCancelable(false);
+        isDownFinish = false;
         mbar1.setProgress(0);
         startTimer();
         try {
@@ -102,6 +105,8 @@ public class DownProgressDialog extends Dialog {
                     .writeTimeout(WRITE_TIMEOUT, TimeUnit.SECONDS)//设置写的超时时间
                     .connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)//设置连接超时时间
                     .build();
+            L.d(UrlStatic.URL_DOWNLOADMUSIC());
+            L.d(new Gson().toJson(postData));
             cal = client.newCall(
                     new Request.Builder()
                             .url(UrlStatic.URL_DOWNLOADMUSIC())
@@ -111,14 +116,14 @@ public class DownProgressDialog extends Dialog {
                 @Override
                 public void onFailure(Call call, IOException e) {
                     e.printStackTrace();
-
+                    isDownFinish = true;
                     if (e instanceof SocketTimeoutException
                             ) {
                         RuiBoApplication.getApplication().getHandler().post(new Runnable() {
                             @Override
                             public void run() {
                                 ToastUtil.show("服务器响应超时，请稍后重新尝试");
-                                dismiss();
+//                                dismiss();
                             }
                         });
                         return;
@@ -129,7 +134,7 @@ public class DownProgressDialog extends Dialog {
                             @Override
                             public void run() {
                                 ToastUtil.show("连接服务器超时，请稍后重新尝试");
-                                dismiss();
+//                                dismiss();
                             }
                         });
                         return;
@@ -138,30 +143,32 @@ public class DownProgressDialog extends Dialog {
                         @Override
                         public void run() {
                             ToastUtil.show(R.string.error);
-                            dismiss();
+//                            dismiss();
                         }
                     });
                 }
 
                 @Override
                 public void onResponse(Call call, okhttp3.Response response) throws IOException {
+                    isDownFinish = true;
                     if (response.code() != 200) {
                         RuiBoApplication.getApplication().getHandler().post(new Runnable() {
                             @Override
                             public void run() {
                                 ToastUtil.show(R.string.error);
-                                dismiss();
+//                                dismiss();
                             }
                         });
                         return;
                     }
                     final String body = response.body().string();
+                    L.d(body);
                     RuiBoApplication.getApplication().getHandler().post(new Runnable() {
                         @Override
                         public void run() {
                             BaseBean baseBean = new Gson().fromJson(body, BaseBean.class);
                             if (!"200".equals(baseBean.code)) {
-                                dismiss();
+//                                dismiss();
                                 ToastUtil.show(baseBean.msg);
                                 return;
                             }
@@ -182,48 +189,24 @@ public class DownProgressDialog extends Dialog {
                             }
                             if (homeActivity.collectionFragment != null && homeActivity.collectionFragment.mCollectionView != null)
                                 homeActivity.collectionFragment.mCollectionView.clear();
-                            findViewById(R.id.downFinish).setVisibility(View.VISIBLE);
+//                            findViewById(R.id.downFinish).setVisibility(View.VISIBLE);
                         }
                     });
 
                 }
             });
         } catch (Exception e) {
+            isDownFinish = true;
             e.printStackTrace();
             RuiBoApplication.getApplication().getHandler().post(new Runnable() {
                 @Override
                 public void run() {
                     ToastUtil.show(R.string.error);
-                    dismiss();
+//                    dismiss();
                 }
             });
         } finally {
         }
-
-//        BaseJsonRequest
-//                jsonRequest = new BaseJsonRequest(POST, UrlStatic.URL_DOWNLOADMUSIC()
-//                , new Response.Listener<String>() {
-//            @Override
-//            public void onResponse(String response) {
-//                BaseBean baseBean = new Gson().fromJson(response, BaseBean.class);
-//                if (!"200".equals(baseBean.code)) {
-//                    dismiss();
-//                    ToastUtil.show(baseBean.msg);
-//                    return;
-//                }
-//                stopTimer();
-//                findViewById(R.id.downFinish).setVisibility(View.VISIBLE);
-//            }
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                ToastUtil.show(R.string.error);
-//                dismiss();
-//            }
-//        }
-//        );
-//        jsonRequest.addRequestJson(new Gson().toJson(post));
-//        RuiBoApplication.getApplication().runVolleyRequest(jsonRequest);
     }
 
     Timer timer;
@@ -242,42 +225,42 @@ public class DownProgressDialog extends Dialog {
     }
 
     void startTimer() {
-        timer = new Timer();
-        startTime = System.currentTimeMillis();
-        TimerTask timerTask = new TimerTask() {
-            @Override
-            public void run() {
-                RuiBoApplication.getApplication().getHandler().post(new Runnable() {
-                                                                        @Override
-                                                                        public void run() {
-                                                                            addPro();
-                                                                        }
-                                                                    }
-                );
-            }
-        };
-        timer.schedule(timerTask, 600, 600);
+//        timer = new Timer();
+//        startTime = System.currentTimeMillis();
+//        TimerTask timerTask = new TimerTask() {
+//            @Override
+//            public void run() {
+//                RuiBoApplication.getApplication().getHandler().post(new Runnable() {
+//                                                                        @Override
+//                                                                        public void run() {
+//                                                                            addPro();
+//                                                                        }
+//                                                                    }
+//                );
+//            }
+//        };
+//        timer.schedule(timerTask, 600, 600);
     }
 
     void stopTimer() {
-        tv1.setText("下载进度:100");
-        if (timer != null)
-            timer.cancel();
-        timer = null;
-        mbar1.setProgress(100);
+//        tv1.setText("下载进度:100");
+//        if (timer != null)
+//            timer.cancel();
+//        timer = null;
+//        mbar1.setProgress(100);
     }
 
     void addProgess() {
-        int progress = mbar1.getProgress();
-        progress += new Random().nextInt(15);
-        progress = Math.min(99, progress);
-        mbar1.setProgress(progress);
-        tv1.setText("下载进度:" + progress);
-        if (progress == 99) {
-            if (timer != null)
-                timer.cancel();
-            timer = null;
-        }
+//        int progress = mbar1.getProgress();
+//        progress += new Random().nextInt(15);
+//        progress = Math.min(99, progress);
+//        mbar1.setProgress(progress);
+//        tv1.setText("下载进度:" + progress);
+//        if (progress == 99) {
+//            if (timer != null)
+//                timer.cancel();
+//            timer = null;
+//        }
     }
 
 

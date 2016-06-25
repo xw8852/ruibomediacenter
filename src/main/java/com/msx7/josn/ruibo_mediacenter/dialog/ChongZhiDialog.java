@@ -15,6 +15,7 @@ import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.reflect.TypeToken;
+import com.msx7.josn.ruibo_mediacenter.Config;
 import com.msx7.josn.ruibo_mediacenter.R;
 import com.msx7.josn.ruibo_mediacenter.RuiBoApplication;
 import com.msx7.josn.ruibo_mediacenter.activity.BaseActivity;
@@ -72,7 +73,7 @@ public class ChongZhiDialog extends BaseCustomDialog {
             }
         });
 
-        mLoginName.setFilters(new InputFilter[]{new InputFilter.LengthFilter(8)});
+        mLoginName.setFilters(new InputFilter[]{new InputFilter.LengthFilter(Config.MAX_LOGIN_NAME_LENGTH)});
         mLoginName.setInputType(InputType.TYPE_NULL);
 //        mLoginName.addTextChangedListener(new NumberTextWatcher(mLoginName));
         mLoginName.setOnClickListener(new View.OnClickListener() {

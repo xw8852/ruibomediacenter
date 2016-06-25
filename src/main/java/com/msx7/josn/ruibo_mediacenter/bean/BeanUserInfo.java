@@ -32,6 +32,8 @@ public class BeanUserInfo {
     public String loginname;
     @SerializedName("password")
     public String password;
+    @SerializedName("phone")
+    public String phone;
     /**
      * 剩余金额
      */

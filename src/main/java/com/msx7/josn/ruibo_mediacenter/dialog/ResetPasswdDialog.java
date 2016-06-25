@@ -1,6 +1,7 @@
 package com.msx7.josn.ruibo_mediacenter.dialog;
 
 import android.content.Context;
+import android.support.v4.app.NavUtils;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -80,6 +81,7 @@ public class ResetPasswdDialog extends BaseCustomDialog {
     Keyboard1 keyboard1;
     Keyboard1 keyboard2;
     void goReset() {
+        if(keyboard1== null||keyboard2==null)return;
         String passwd = keyboard1.getContent().substring(0, Math.min(6, keyboard1.getContent().length()));
         String surePasswd = keyboard2.getContent().substring(0, Math.min(6, keyboard2.getContent().length()));
         if (TextUtils.isEmpty(passwd)) {

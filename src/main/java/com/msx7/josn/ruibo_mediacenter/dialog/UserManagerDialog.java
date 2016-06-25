@@ -1,6 +1,7 @@
 package com.msx7.josn.ruibo_mediacenter.dialog;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -15,6 +16,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.msx7.josn.ruibo_mediacenter.Config;
 import com.msx7.josn.ruibo_mediacenter.R;
 import com.msx7.josn.ruibo_mediacenter.RuiBoApplication;
 import com.msx7.josn.ruibo_mediacenter.activity.BaseActivity;
@@ -72,7 +74,7 @@ public class UserManagerDialog extends BaseCustomDialog {
             }
         });
 
-        mLoginName.setFilters(new InputFilter[]{new InputFilter.LengthFilter(8)});
+        mLoginName.setFilters(new InputFilter[]{new InputFilter.LengthFilter(Config.MAX_LOGIN_NAME_LENGTH)});
         mLoginName.setInputType(InputType.TYPE_NULL);
         mLoginName.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -161,7 +163,7 @@ public class UserManagerDialog extends BaseCustomDialog {
             mEt2.setText("会员类型:包月用户");
         } else
             mEt2.setText("账户余额:¥" + beanUserInfo.remainmoney);
-        mEt3.setText("手机号码:");
+        mEt3.setText("手机号码:" + (TextUtils.isEmpty(beanUserInfo.phone) ? "" : beanUserInfo.phone));
         mbtn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -171,7 +173,7 @@ public class UserManagerDialog extends BaseCustomDialog {
         mbtn2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onInMoney();
+                setPhone();
             }
         });
         mbtn3.setOnClickListener(new View.OnClickListener() {
@@ -200,6 +202,29 @@ public class UserManagerDialog extends BaseCustomDialog {
 //                new Keyboard1(v, mEt2).getPopupWindow().showAtLocation(v, Gravity.CENTER, right, 0);
 //            }
 //        });
+    }
+
+    SetPhoneDialog phoneDialog;
+
+    void setPhone() {
+        dismiss();
+        phoneDialog = new SetPhoneDialog(activity, beanUserInfo.id);
+        phoneDialog.setPhone(beanUserInfo.phone);
+        phoneDialog.setListener(new SetPhoneDialog.IFinish() {
+            @Override
+            public void finish(String phone) {
+                beanUserInfo.phone = phone;
+                initUser();
+                if(!isShowing())show();
+            }
+        });
+        phoneDialog.setOnDismissListener(new OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                if(!isShowing()) show();
+            }
+        });
+        phoneDialog.show();
     }
 
     void onCloseAccount() {

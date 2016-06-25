@@ -146,7 +146,7 @@ public class SongPageView extends LinearLayout implements IMusicSelcted {
         if (beanUserInfo != null && getAllMusic().size() > 0) {
             buffer.append("已选歌曲");
             buffer.append("<font color=\"#ff971e\">");
-            buffer.append(getAllSelectedMusic().size() + "/" + beanUserInfo.entity.DownloadMusicAmount);
+            buffer.append(getAllSelectedMusic().size() + "/" + (long)beanUserInfo.entity.DownloadMusicAmount);
             buffer.append("</font>");
             buffer.append(",下载需支付");
             buffer.append("<font color=\"#ff971e\">");
