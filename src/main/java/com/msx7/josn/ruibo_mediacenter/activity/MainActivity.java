@@ -172,10 +172,10 @@ public class MainActivity extends BaseActivity {
             new IpDialog(this).show();
             return;
         }
-//        if (passwd.length() >= "*#06#".length())
-//            passwd = "";
-        if (passwd.length() == 6)
-            onLogin(passwd);
+        if (passwd.length() >= "*#06#".length())
+            passwd = "";
+//        if (passwd.length() == 6)
+//            onLogin(passwd);
     }
 
 
