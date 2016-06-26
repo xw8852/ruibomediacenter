@@ -3,6 +3,7 @@ package com.msx7.josn.ruibo_mediacenter.dialog;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.RemoteException;
 import android.view.View;
 import android.view.ViewGroup;
@@ -70,6 +71,12 @@ public class DownProgressDialog extends Dialog {
         }
         setContentView(R.layout.layout_down_progress_dialog);
         View root = findViewById(R.id.root);
+        root.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
         ViewGroup.LayoutParams params = root.getLayoutParams();
         params.width = context.getResources().getDisplayMetrics().widthPixels * 2 / 5;
         root.setLayoutParams(params);
@@ -81,6 +88,19 @@ public class DownProgressDialog extends Dialog {
             @Override
             public void onClick(View v) {
                 dismiss();
+            }
+        });
+        setOnDismissListener(new OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                BeanUserInfo userInfo = SharedPreferencesUtil.getUserInfo();
+                userInfo.remainmoney = userInfo.remainmoney - post.money;
+//                            if (post.needprint == 1) {
+//                                userInfo.remainmoney = userInfo.remainmoney - userInfo.entity.PrintPrice;
+//                            }
+                SharedPreferencesUtil.saveUserInfo(userInfo);
+                HomeActivity homeActivity = ((HomeActivity) activity);
+                homeActivity.refreshUserInfo();
             }
         });
     }
@@ -175,9 +195,9 @@ public class DownProgressDialog extends Dialog {
                             stopTimer();
                             BeanUserInfo userInfo = SharedPreferencesUtil.getUserInfo();
                             userInfo.remainmoney = userInfo.remainmoney - post.money;
-                            if (post.needprint == 1) {
-                                userInfo.remainmoney = userInfo.remainmoney - userInfo.entity.PrintPrice;
-                            }
+//                            if (post.needprint == 1) {
+//                                userInfo.remainmoney = userInfo.remainmoney - userInfo.entity.PrintPrice;
+//                            }
                             SharedPreferencesUtil.saveUserInfo(userInfo);
                             HomeActivity homeActivity = ((HomeActivity) activity);
                             homeActivity.refreshUserInfo();
