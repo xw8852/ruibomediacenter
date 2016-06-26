@@ -176,6 +176,8 @@ public class MainActivity extends BaseActivity {
             passwd = "";
 //        if (passwd.length() == 6)
 //            onLogin(passwd);
+//        else if (passwd.length() > 6)
+//            passwd = "";
     }
 
 

@@ -21,6 +21,7 @@ import com.google.gson.reflect.TypeToken;
 import com.msx7.josn.ruibo_mediacenter.R;
 import com.msx7.josn.ruibo_mediacenter.RuiBoApplication;
 import com.msx7.josn.ruibo_mediacenter.activity.BaseActivity;
+import com.msx7.josn.ruibo_mediacenter.activity.HomeActivity;
 import com.msx7.josn.ruibo_mediacenter.bean.BaseBean;
 import com.msx7.josn.ruibo_mediacenter.bean.BeanMusic;
 import com.msx7.josn.ruibo_mediacenter.bean.BeanUserInfo;
@@ -118,9 +119,17 @@ public class SearchView extends BeanView {
             }
         });
         findViewById(R.id.tmp).setVisibility(GONE);
-        mCodeBg.setVisibility(VISIBLE);
+       showDefaultBG();
 
         initSearch();
+    }
+    void hideDefaultBG(){
+        mCodeBg.setVisibility(GONE);
+        new Exception("hideDefaultBG").printStackTrace();
+    }
+    void showDefaultBG(){
+        mCodeBg.setVisibility(VISIBLE);
+        new Exception("showDefaultBG").printStackTrace();
     }
 
     public void initSearch() {
@@ -252,6 +261,7 @@ public class SearchView extends BeanView {
             clear();
             return;
         }
+        HomeActivity.refreshUser();
         SyncUserInfo.SyncUserInfo();
         ((BaseActivity) getContext()).showProgess();
         BaseJsonRequest request = new BaseJsonRequest(Request.Method.POST, UrlStatic.URL_GETMUSICLIST(),
@@ -269,11 +279,11 @@ public class SearchView extends BeanView {
                             mSongPageView.showData(baseBean.data);
                             mSongPageView.setDoSelect(doSelect);
                             if (baseBean.data == null || baseBean.data.isEmpty()) {
-                                mCodeBg.setVisibility(VISIBLE);
+                               showDefaultBG();
                                 findViewById(R.id.tmp).setVisibility(GONE);
                             } else {
                                 findViewById(R.id.tmp).setVisibility(VISIBLE);
-                                mCodeBg.setVisibility(GONE);
+                                hideDefaultBG();
                             }
                         } else {
                             ToastUtil.show(baseBean.msg);

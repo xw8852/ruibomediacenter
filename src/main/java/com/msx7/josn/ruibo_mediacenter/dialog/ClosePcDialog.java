@@ -57,6 +57,7 @@ public class ClosePcDialog extends BaseCustomDialog {
                     ToastUtil.show("关机成功");
                 }
             }));
+            dismiss();
         }
     };
 

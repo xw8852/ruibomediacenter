@@ -136,6 +136,7 @@ public class HomeActivity extends BaseActivity {
                     rootFragment2.setVisibility(View.VISIBLE);
                     ft.commit();
                 }
+                refreshUserInfo();
             }
         });
         group.check(R.id.home);
@@ -269,6 +270,7 @@ public class HomeActivity extends BaseActivity {
      */
     public void refreshUserInfo() {
         BeanUserInfo userInfo = SharedPreferencesUtil.getUserInfo();
+        if(userInfo==null)return;
         StringBuffer html = new StringBuffer("会员:");
         html.append("<font color=\"#ff971e\">");
         html.append(userInfo.loginname);

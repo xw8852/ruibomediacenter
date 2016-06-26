@@ -92,8 +92,8 @@ public class CheckDownDialog extends Dialog {
 
     void print() {
         post.needprint = 1;
-        post.printnumber = _printNum;
-        post.money += _printNum * printPrice;
+//        post.printnumber = _printNum;
+//        post.money += _printNum * printPrice;
         new DownProgressDialog(activity).showDown(post);
         dismiss();
     }

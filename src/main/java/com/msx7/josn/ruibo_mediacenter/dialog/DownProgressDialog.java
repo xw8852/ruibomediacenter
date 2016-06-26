@@ -82,6 +82,7 @@ public class DownProgressDialog extends Dialog {
         root.setLayoutParams(params);
         mbar1 = (ProgressBar) findViewById(R.id.progressBar1);
         mbar1.setVisibility(View.GONE);
+        setCancelable(true);
         tv1 = (TextView) findViewById(R.id.text);
         tv1.setText("开始下载，请等待目录打印完成");
         findViewById(R.id.downFinish).setOnClickListener(new View.OnClickListener() {
@@ -93,18 +94,21 @@ public class DownProgressDialog extends Dialog {
         setOnDismissListener(new OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-                BeanUserInfo userInfo = SharedPreferencesUtil.getUserInfo();
-                userInfo.remainmoney = userInfo.remainmoney - post.money;
-//                            if (post.needprint == 1) {
-//                                userInfo.remainmoney = userInfo.remainmoney - userInfo.entity.PrintPrice;
-//                            }
-                SharedPreferencesUtil.saveUserInfo(userInfo);
-                HomeActivity homeActivity = ((HomeActivity) activity);
-                homeActivity.refreshUserInfo();
+               refreshUserInfo();
             }
         });
     }
 
+    void refreshUserInfo(){
+        BeanUserInfo userInfo = SharedPreferencesUtil.getUserInfo();
+        userInfo.remainmoney = userInfo.remainmoney - post.money;
+//                            if (post.needprint == 1) {
+//                                userInfo.remainmoney = userInfo.remainmoney - userInfo.entity.PrintPrice;
+//                            }
+        SharedPreferencesUtil.saveUserInfo(userInfo);
+        HomeActivity homeActivity = ((HomeActivity) activity);
+        homeActivity.refreshUserInfo();
+    }
     BeanView.CheckPost post;
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     Call cal;
@@ -144,6 +148,7 @@ public class DownProgressDialog extends Dialog {
                             public void run() {
                                 ToastUtil.show("服务器响应超时，请稍后重新尝试");
 //                                dismiss();
+                                refreshUserInfo();
                             }
                         });
                         return;
@@ -155,6 +160,7 @@ public class DownProgressDialog extends Dialog {
                             public void run() {
                                 ToastUtil.show("连接服务器超时，请稍后重新尝试");
 //                                dismiss();
+                                refreshUserInfo();
                             }
                         });
                         return;
@@ -164,6 +170,7 @@ public class DownProgressDialog extends Dialog {
                         public void run() {
                             ToastUtil.show(R.string.error);
 //                            dismiss();
+                            refreshUserInfo();
                         }
                     });
                 }
@@ -177,6 +184,7 @@ public class DownProgressDialog extends Dialog {
                             public void run() {
                                 ToastUtil.show(R.string.error);
 //                                dismiss();
+                                refreshUserInfo();
                             }
                         });
                         return;
@@ -189,6 +197,7 @@ public class DownProgressDialog extends Dialog {
                             BaseBean baseBean = new Gson().fromJson(body, BaseBean.class);
                             if (!"200".equals(baseBean.code)) {
 //                                dismiss();
+                                refreshUserInfo();
                                 ToastUtil.show(baseBean.msg);
                                 return;
                             }
@@ -226,6 +235,7 @@ public class DownProgressDialog extends Dialog {
                 }
             });
         } finally {
+            refreshUserInfo();
         }
     }
 
