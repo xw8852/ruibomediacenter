@@ -94,12 +94,12 @@ public class DownProgressDialog extends Dialog {
         setOnDismissListener(new OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-               refreshUserInfo();
+                refreshUserInfo();
             }
         });
     }
 
-    void refreshUserInfo(){
+    void refreshUserInfo() {
 //        BeanUserInfo userInfo = SharedPreferencesUtil.getUserInfo();
 //        userInfo.remainmoney = userInfo.remainmoney - post.money;
 //                            if (post.needprint == 1) {
@@ -108,7 +108,17 @@ public class DownProgressDialog extends Dialog {
 //        SharedPreferencesUtil.saveUserInfo(userInfo);
         HomeActivity homeActivity = ((HomeActivity) activity);
         homeActivity.refreshUserInfo();
+        if (!isShowing()) return;
+        if (homeActivity.searchFragment != null && homeActivity.searchFragment.mSearchView != null) {
+            if (HomeActivity.curFragment != homeActivity.searchFragment) {
+                HomeActivity.clear = true;
+            } else
+                homeActivity.searchFragment.mSearchView.clear();
+        }
+        if (homeActivity.collectionFragment != null && homeActivity.collectionFragment.mCollectionView != null)
+            homeActivity.collectionFragment.mCollectionView.clear();
     }
+
     BeanView.CheckPost post;
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     Call cal;
@@ -208,16 +218,8 @@ public class DownProgressDialog extends Dialog {
 //                                userInfo.remainmoney = userInfo.remainmoney - userInfo.entity.PrintPrice;
 //                            }
 //                            SharedPreferencesUtil.saveUserInfo(userInfo);
-                            HomeActivity homeActivity = ((HomeActivity) activity);
-                            homeActivity.refreshUserInfo();
-                            if (homeActivity.searchFragment != null && homeActivity.searchFragment.mSearchView != null) {
-                                if (HomeActivity.curFragment != homeActivity.searchFragment) {
-                                    HomeActivity.clear = true;
-                                } else
-                                    homeActivity.searchFragment.mSearchView.clear();
-                            }
-                            if (homeActivity.collectionFragment != null && homeActivity.collectionFragment.mCollectionView != null)
-                                homeActivity.collectionFragment.mCollectionView.clear();
+                            refreshUserInfo();
+
 //                            findViewById(R.id.downFinish).setVisibility(View.VISIBLE);
                         }
                     });

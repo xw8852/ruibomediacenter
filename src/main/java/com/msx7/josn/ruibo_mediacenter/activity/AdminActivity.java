@@ -55,7 +55,7 @@ public class AdminActivity extends BaseActivity {
         SharedPreferencesUtil.clearUserInfo();
         mTipDir = (TextView) findViewById(R.id.tipDir);
         BeanAdminInfo adminInfo = SharedPreferencesUtil.getAdminUserInfo();
-        DecimalFormat a = new DecimalFormat("##############.##");
+        DecimalFormat a = new DecimalFormat("0.##");
         mTipDir.setText("磁盘空间总共" + a.format(adminInfo.entity.StoreMusicTotalDiskSpace / 1024.0) + "G，可用空间" +
                 a.format(adminInfo.entity.StoreMusicRemainDiskSpace / 1024.0) + "G");
 

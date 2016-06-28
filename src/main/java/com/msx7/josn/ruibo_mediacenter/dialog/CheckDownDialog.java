@@ -92,7 +92,7 @@ public class CheckDownDialog extends Dialog {
 
     void print() {
         post.needprint = 1;
-//        post.printnumber = _printNum;
+        post.printnumber = _printNum;
 //        post.money += _printNum * printPrice;
         new DownProgressDialog(activity).showDown(post);
         dismiss();
@@ -112,7 +112,7 @@ public class CheckDownDialog extends Dialog {
     }
 
     public void show(double need, int needB, double remain, int remianb, double printPrice) {
-        DecimalFormat a = new DecimalFormat(".##");
+        DecimalFormat a = new DecimalFormat("0.##");
         this.printPrice = printPrice;
         tv1.setText("下载所需磁卡容量:" + a.format(need) + "M");
         tv2.setText("目前磁卡可用容量:" + a.format(remain) + "M");

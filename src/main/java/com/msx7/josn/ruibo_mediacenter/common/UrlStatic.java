@@ -9,7 +9,7 @@ import com.msx7.josn.ruibo_mediacenter.util.SharedPreferencesUtil;
  * 时  间：2016/2/27
  */
 public class UrlStatic {
-    public static String BASE_UR = "http://xw8852.xicp.net";
+    public static String BASE_UR = "http://192.168.1.16:88";
 
     public static String URL_LOGIN() {
         return getServerIp() + "/passportapi/passport.userlogin";
@@ -146,10 +146,10 @@ public class UrlStatic {
     }
 
     private static final String getServerIp() {
-        String ip = SharedPreferencesUtil.getServerIp();
-        if (ip.matches("http://((?:(?:25[0-5]|2[0-4]\\d|((1\\d{2})|([1-9]?\\d)))\\.){3}(?:25[0-5]|2[0-4]\\d|((1\\d{2})|([1-9]?\\d))))"))
-            return ip + ":88";
-        else return ip;
+        return SharedPreferencesUtil.getServerIp();
+//        if (ip.matches("http://((?:(?:25[0-5]|2[0-4]\\d|((1\\d{2})|([1-9]?\\d)))\\.){3}(?:25[0-5]|2[0-4]\\d|((1\\d{2})|([1-9]?\\d))))"))
+//            return ip + ":88";
+//        else return ip;
     }
 
 }

@@ -80,7 +80,7 @@ public class BeanView extends LinearLayout {
                 for (BeanMusic music : songPageView.getAllSelectedMusic()) {
                     size += music.size;
                 }
-                DecimalFormat a = new DecimalFormat(".##");
+                DecimalFormat a = new DecimalFormat("0.##");
                 if (baseBean.data.DownloadMusicRemainDiskSpace <= 0) {
                     ToastUtil.show("您还没有插入U盘");
                     return;
