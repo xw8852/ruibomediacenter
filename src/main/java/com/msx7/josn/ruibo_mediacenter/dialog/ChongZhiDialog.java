@@ -125,19 +125,19 @@ public class ChongZhiDialog extends BaseCustomDialog {
                 activity.dismisProgess();
                 BaseBean baseBean = new Gson().fromJson(response, BaseBean.class);
                 if ("200".equals(baseBean.code)) {
-                    dismiss();
                     ToastUtil.show("充值成功");
                 } else {
-                    mTips.setText(baseBean.msg);
+                    ToastUtil.show(baseBean.msg);
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 activity.dismisProgess();
-                mTips.setText(VolleyErrorUtils.getError(error));
+                ToastUtil.show(VolleyErrorUtils.getError(error));
             }
         }));
+        dismiss();
     }
 
 

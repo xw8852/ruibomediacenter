@@ -59,6 +59,7 @@ public class SetPhoneDialog extends BaseCustomDialog {
         mTips.setText("");
         activity = (BaseActivity) context;
         setTitle("设置手机号码");
+        mLoginBtn.setText("提交");
         mLoginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

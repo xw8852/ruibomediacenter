@@ -149,8 +149,8 @@ public class SetPriceDialog2 extends BaseCustomDialog {
         mSinglePrice.setText(String.valueOf(info.entity.DownloadOneMusicPrice));
         mMaxPrice.setText(String.valueOf(info.entity.DownloadAllMusicPrice));
         mPrintPrice.setText(String.valueOf(info.entity.PrintPrice));
-        mMaxCount.setText(String.valueOf(info.entity.DownloadMusicAmount));
-        mMaxSize.setText(String.valueOf(info.entity.DownloadMusicSize));
+        mMaxCount.setText(String.valueOf((int)info.entity.DownloadMusicAmount));
+        mMaxSize.setText(String.valueOf((int)info.entity.DownloadMusicSize));
 
 //        mSinglePrice.setFilters(new InputFilter[]{new InputFilter.LengthFilter(6)});
 //        mSinglePrice.setInputType(InputType.TYPE_NULL);
@@ -192,11 +192,11 @@ public class SetPriceDialog2 extends BaseCustomDialog {
             return;
         }
         if (TextUtils.isEmpty(mMaxCount.getText().toString())) {
-            ToastUtil.show("下载上限");
+            ToastUtil.show("请设置下载上限");
             return;
         }
         if (TextUtils.isEmpty(mMaxSize.getText().toString())) {
-            ToastUtil.show("下载总容量");
+            ToastUtil.show("请设置下载总容量");
             return;
         }
         showProgess();
@@ -204,8 +204,8 @@ public class SetPriceDialog2 extends BaseCustomDialog {
                 Double.parseDouble(mSinglePrice.getText().toString()),
                 Double.parseDouble(mMaxPrice.getText().toString()),
                 Double.parseDouble(mPrintPrice.getText().toString()),
-                Double.parseDouble(mMaxCount.getText().toString()),
-                Double.parseDouble(mMaxSize.getText().toString())
+                Long.parseLong(mMaxCount.getText().toString()),
+                Long.parseLong(mMaxSize.getText().toString())
         );
         BaseJsonRequest request = new BaseJsonRequest(Request.Method.POST, UrlStatic.URL_SETTINGMUSIC(),
                 new Response.Listener<String>() {
@@ -229,7 +229,6 @@ public class SetPriceDialog2 extends BaseCustomDialog {
             @Override
             public void onErrorResponse(VolleyError error) {
                 dismisProgess();
-
                 ToastUtil.show(R.string.error);
             }
         });
@@ -246,13 +245,13 @@ public class SetPriceDialog2 extends BaseCustomDialog {
         @SerializedName("DownloadAllMusicPrice")
         double DownloadAllMusicPrice;
         @SerializedName("DownloadMusicAmount")
-        double DownloadMusicAmount;
+        long DownloadMusicAmount;
         @SerializedName("DownloadMusicSize")
-        double DownloadMusicSize;
+        long DownloadMusicSize;
         @SerializedName("PrintPrice")
         double PrintPrice;
 
-        public Post(double downloadOneMusicPrice, double downloadAllMusicPrice, double printPrice, double DownloadMusicAmount, double DownloadMusicSize) {
+        public Post(double downloadOneMusicPrice, double downloadAllMusicPrice, double printPrice, long DownloadMusicAmount, long DownloadMusicSize) {
             DownloadAllMusicPrice = downloadAllMusicPrice;
             DownloadOneMusicPrice = downloadOneMusicPrice;
             this.DownloadMusicAmount = DownloadMusicAmount;

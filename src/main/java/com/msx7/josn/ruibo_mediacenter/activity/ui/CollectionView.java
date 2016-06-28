@@ -94,7 +94,7 @@ public class CollectionView extends BeanView {
                 mSelectAll.setChecked(false);
                 mSelectAll.setOnCheckedChangeListener(onCheckedChangeListener);
                 SharedPreferencesUtil.saveCollection(musics);
-                if(musics.isEmpty()){
+                if (musics.isEmpty()) {
                     mdelete.setEnabled(false);
                     mDownBtn.setEnabled(false);
                 }
@@ -165,6 +165,10 @@ public class CollectionView extends BeanView {
     public void showData() {
         mSongPageView.setSelectedAll(false);
         mdelete.setEnabled(false);
+        mDownBtn.setEnabled(false);
+        mSelectAll.setOnCheckedChangeListener(null);
+        mSelectAll.setChecked(false);
+        mSelectAll.setOnCheckedChangeListener(onCheckedChangeListener);
         mSongPageView.showData(SharedPreferencesUtil.getCollection());
     }
 

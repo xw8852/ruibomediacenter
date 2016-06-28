@@ -1,6 +1,8 @@
 package com.msx7.josn.ruibo_mediacenter.activity.net;
 
+import com.android.volley.Request;
 import com.android.volley.Response;
+import com.google.gson.JsonObject;
 import com.google.gson.annotations.SerializedName;
 import com.msx7.josn.ruibo_mediacenter.RuiBoApplication;
 import com.msx7.josn.ruibo_mediacenter.common.UrlStatic;
@@ -24,9 +26,10 @@ public class UserInfoNet {
      */
     public static final void getUserInfoNet(String loginName, Response.Listener<String> listener, Response.ErrorListener errorListener) {
         String url = UrlStatic.URL_GETUSERINFO();
-        String param = "{\"loginname\":\"" + loginName.trim() + "\"}";
-        BaseJsonRequest request = new BaseJsonRequest(url, listener, errorListener);
-        request.addRequestJson(param);
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("loginname", loginName.trim());
+        BaseJsonRequest request = new BaseJsonRequest(Request.Method.POST,url, listener, errorListener);
+        request.addRequestJson(jsonObject.toString());
         RuiBoApplication.getApplication().runVolleyRequest(request);
     }
 
@@ -52,7 +55,7 @@ public class UserInfoNet {
         @SerializedName("closed")
         public int closed;
         @SerializedName("consumemoney")
-        public int consumemoney;
+        public double consumemoney;
         @SerializedName("enddate")
         public Object enddate;
         /**
@@ -81,11 +84,11 @@ public class UserInfoNet {
          * 剩余金额
          */
         @SerializedName("remainmoney")
-        public int remainmoney;
+        public double remainmoney;
         @SerializedName("startdate")
         public Object startdate;
         @SerializedName("totalmoney")
-        public int totalmoney;
+        public double totalmoney;
         @SerializedName("type")
         public int type;
         @SerializedName("userstatus")

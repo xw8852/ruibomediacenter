@@ -48,6 +48,10 @@ public class BeanView extends LinearLayout {
 
     protected void download(final SongPageView songPageView) {
         int songs = songPageView.getAllSelectedMusic().size();
+        if (songs <= 0) {
+            ToastUtil.show("请选择需要下载的歌曲");
+            return;
+        }
         double money = SharedPreferencesUtil.getUserInfo().entity.DownloadOneMusicPrice * songs;
         money = Math.min(money, SharedPreferencesUtil.getUserInfo().entity.DownloadAllMusicPrice);
 
@@ -94,9 +98,9 @@ public class BeanView extends LinearLayout {
 
 
                 dialog.show(size,
-                        (int)Math.round(100 * size / maxSize),
+                        (int) Math.round(100 * size / maxSize),
                         baseBean.data.DownloadMusicRemainDiskSpace,
-                        (int)Math.round (100 * baseBean.data.DownloadMusicRemainDiskSpace / maxSize),
+                        (int) Math.round(100 * baseBean.data.DownloadMusicRemainDiskSpace / maxSize),
                         baseBean.data.PrintPrice);
                 dialog.setPostData(post);
 
@@ -122,7 +126,7 @@ public class BeanView extends LinearLayout {
         @SerializedName("money")
         public double money;
         @SerializedName("printnumber")
-        public int printnumber=1;
+        public int printnumber = 1;
 
         @SerializedName("needprint")
         public int needprint;

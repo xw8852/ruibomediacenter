@@ -1,6 +1,8 @@
 package com.msx7.josn.ruibo_mediacenter.activity.ui;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Handler;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -11,6 +13,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -73,7 +76,7 @@ public class SearchView extends BeanView {
     View mSearchBtn;
 
     @InjectView(R.id.codeBg)
-    View mCodeBg;
+    ImageView mCodeBg;
 
 
     @InjectView(R.id.SongPageView)
@@ -119,17 +122,18 @@ public class SearchView extends BeanView {
             }
         });
         findViewById(R.id.tmp).setVisibility(GONE);
-       showDefaultBG();
-
+        showDefaultBG();
         initSearch();
     }
-    void hideDefaultBG(){
+
+    void hideDefaultBG() {
+        mCodeBg.setImageDrawable(new ColorDrawable(Color.TRANSPARENT));
         mCodeBg.setVisibility(GONE);
-        new Exception("hideDefaultBG").printStackTrace();
     }
-    void showDefaultBG(){
+
+    void showDefaultBG() {
+        mCodeBg.setImageResource(R.drawable.bg_big_2);
         mCodeBg.setVisibility(VISIBLE);
-        new Exception("showDefaultBG").printStackTrace();
     }
 
     public void initSearch() {
@@ -279,7 +283,7 @@ public class SearchView extends BeanView {
                             mSongPageView.showData(baseBean.data);
                             mSongPageView.setDoSelect(doSelect);
                             if (baseBean.data == null || baseBean.data.isEmpty()) {
-                               showDefaultBG();
+                                showDefaultBG();
                                 findViewById(R.id.tmp).setVisibility(GONE);
                             } else {
                                 findViewById(R.id.tmp).setVisibility(VISIBLE);

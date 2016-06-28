@@ -94,13 +94,7 @@
                 android:id="@+id/add"
                 android:background="@drawable/btn_added" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="(提示:打印1元/张)"
-                android:visibility="gone"
-                android:textAppearance="?android:textAppearanceLarge"
-                android:textColor="@color/white" />
+
         </LinearLayout>
 
     </LinearLayout>

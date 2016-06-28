@@ -53,16 +53,16 @@ public class BeanAdminInfo {
         @SerializedName("DownloadMusicRemainDiskSpace")
         public double DownloadMusicRemainDiskSpace;
         @SerializedName("DownloadMusicSize")
-        public double DownloadMusicSize;
+        public long DownloadMusicSize;
         @SerializedName("DownloadMusicTotalDiskSpace")
-        public double DownloadMusicTotalDiskSpace;
+        public long DownloadMusicTotalDiskSpace;
         @SerializedName("DownloadOneMusicPrice")
         public double DownloadOneMusicPrice;
         @SerializedName("PrintPrice")
         public double PrintPrice;
         @SerializedName("StoreMusicRemainDiskSpace")
-        public double StoreMusicRemainDiskSpace;
+        public long StoreMusicRemainDiskSpace;
         @SerializedName("StoreMusicTotalDiskSpace")
-        public double StoreMusicTotalDiskSpace;
+        public long StoreMusicTotalDiskSpace;
     }
 }

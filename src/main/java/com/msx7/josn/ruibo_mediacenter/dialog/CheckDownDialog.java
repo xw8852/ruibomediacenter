@@ -118,7 +118,7 @@ public class CheckDownDialog extends Dialog {
         tv2.setText("目前磁卡可用容量:" + a.format(remain) + "M");
         mbar1.setProgress(needB);
         mbar2.setProgress(remianb);
-        print.setText("(打印另收费:" + a.format(printPrice) + "元/张)");
+        print.setText("(打印另收费\b:\b" + a.format(printPrice) + "元/张)");
 
     }
 }

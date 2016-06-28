@@ -100,12 +100,12 @@ public class DownProgressDialog extends Dialog {
     }
 
     void refreshUserInfo(){
-        BeanUserInfo userInfo = SharedPreferencesUtil.getUserInfo();
-        userInfo.remainmoney = userInfo.remainmoney - post.money;
+//        BeanUserInfo userInfo = SharedPreferencesUtil.getUserInfo();
+//        userInfo.remainmoney = userInfo.remainmoney - post.money;
 //                            if (post.needprint == 1) {
 //                                userInfo.remainmoney = userInfo.remainmoney - userInfo.entity.PrintPrice;
 //                            }
-        SharedPreferencesUtil.saveUserInfo(userInfo);
+//        SharedPreferencesUtil.saveUserInfo(userInfo);
         HomeActivity homeActivity = ((HomeActivity) activity);
         homeActivity.refreshUserInfo();
     }
@@ -202,12 +202,12 @@ public class DownProgressDialog extends Dialog {
                                 return;
                             }
                             stopTimer();
-                            BeanUserInfo userInfo = SharedPreferencesUtil.getUserInfo();
-                            userInfo.remainmoney = userInfo.remainmoney - post.money;
+//                            BeanUserInfo userInfo = SharedPreferencesUtil.getUserInfo();
+//                            userInfo.remainmoney = userInfo.remainmoney - post.money;
 //                            if (post.needprint == 1) {
 //                                userInfo.remainmoney = userInfo.remainmoney - userInfo.entity.PrintPrice;
 //                            }
-                            SharedPreferencesUtil.saveUserInfo(userInfo);
+//                            SharedPreferencesUtil.saveUserInfo(userInfo);
                             HomeActivity homeActivity = ((HomeActivity) activity);
                             homeActivity.refreshUserInfo();
                             if (homeActivity.searchFragment != null && homeActivity.searchFragment.mSearchView != null) {

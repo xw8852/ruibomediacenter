@@ -20,6 +20,7 @@ import com.msx7.josn.ruibo_mediacenter.Config;
 import com.msx7.josn.ruibo_mediacenter.R;
 import com.msx7.josn.ruibo_mediacenter.RuiBoApplication;
 import com.msx7.josn.ruibo_mediacenter.activity.BaseActivity;
+import com.msx7.josn.ruibo_mediacenter.activity.net.UserInfoNet;
 import com.msx7.josn.ruibo_mediacenter.bean.BaseBean;
 import com.msx7.josn.ruibo_mediacenter.bean.BeanAdminInfo;
 import com.msx7.josn.ruibo_mediacenter.bean.BeanUserInfo;
@@ -108,18 +109,18 @@ public class UserManagerDialog extends BaseCustomDialog {
             return;
         }
         activity.showProgess();
-        RuiBoApplication.getApplication().runVolleyRequest(new getUserRequest(loginName, new Response.Listener<String>() {
+        UserInfoNet.getUserInfoNet(loginName, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 activity.dismisProgess();
-                BaseBean<List<BeanUserInfo>> baseBean = new Gson().fromJson(response, new TypeToken<BaseBean<List<BeanUserInfo>>>() {
+                BaseBean<BeanUserInfo> baseBean = new Gson().fromJson(response, new TypeToken<BaseBean<BeanUserInfo>>() {
                 }.getType());
                 if ("200".equals(baseBean.code)) {
-                    if (baseBean.data.size() == 0) {
+                    if (baseBean.data == null) {
                         mTips.setText("卡号无效");
                         return;
                     }
-                    beanUserInfo = baseBean.data.get(0);
+                    beanUserInfo = baseBean.data;
                     initUser();
                     mLoginRoot.setVisibility(View.GONE);
                     mUserRoot.setVisibility(View.VISIBLE);
@@ -133,7 +134,7 @@ public class UserManagerDialog extends BaseCustomDialog {
                 activity.dismisProgess();
                 mTips.setText(VolleyErrorUtils.getError(error));
             }
-        }));
+        });
     }
 
     BeanUserInfo beanUserInfo;
