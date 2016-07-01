@@ -1,6 +1,7 @@
 package com.msx7.josn.ruibo_mediacenter.activity;
 
 import android.app.ActivityManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -49,7 +50,7 @@ public class AdminActivity extends BaseActivity {
         findViewById(R.id.exit).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                onBackPressed();
             }
         });
         SharedPreferencesUtil.clearUserInfo();
@@ -165,4 +166,9 @@ public class AdminActivity extends BaseActivity {
         }));
     }
 
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(this, HomeActivity.class));
+        super.onBackPressed();
+    }
 }

@@ -1,6 +1,7 @@
 package com.msx7.josn.ruibo_mediacenter.activity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -11,6 +12,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.msx7.josn.ruibo_mediacenter.BuildConfig;
 import com.msx7.josn.ruibo_mediacenter.R;
 import com.msx7.josn.ruibo_mediacenter.RuiBoApplication;
 import com.msx7.josn.ruibo_mediacenter.bean.BaseBean;
@@ -61,6 +63,14 @@ public class MainActivity extends BaseActivity {
         findViewById(R.id.num11).setOnClickListener(numClickListener);
         findViewById(R.id.num12).setOnClickListener(numClickListener);
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, HomeActivity.class);
+        intent.putExtra("keep", "keep");
+        startActivity(intent);
+        super.onBackPressed();
     }
 
     StringBuffer buffer = new StringBuffer();
@@ -172,12 +182,15 @@ public class MainActivity extends BaseActivity {
             new IpDialog(this).show();
             return;
         }
+
+//        if (BuildConfig.DEBUG) {
+//            if (passwd.length() == 6)
+//                onLogin(passwd);
+//            else if (passwd.length() > 6)
+//                passwd = "";
+//            return;
+//        }
         if (passwd.length() >= "*#06#".length())
-            passwd = "";
-        else
-        if (passwd.length() == 6)
-            onLogin(passwd);
-        else if (passwd.length() > 6)
             passwd = "";
 
     }

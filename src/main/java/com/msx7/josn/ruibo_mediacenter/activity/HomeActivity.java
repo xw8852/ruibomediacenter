@@ -8,6 +8,7 @@ import android.text.Html;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -64,6 +65,9 @@ public class HomeActivity extends BaseActivity {
     @InjectView(R.id.group)
     RadioGroup group;
 
+    @InjectView(R.id.codeBg)
+    ImageView mCodeBg;
+
     LoginDialog mLoginDialog;
 
 //    @InjectView(R.id.SearchView)
@@ -100,10 +104,13 @@ public class HomeActivity extends BaseActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), MainActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
-        SharedPreferencesUtil.saveUserInfo(null);
-        SharedPreferencesUtil.clearCollection();
+        if (!getIntent().hasExtra("keep")) {
+            SharedPreferencesUtil.clearCollection();
+            SharedPreferencesUtil.saveUserInfo(null);
+        }
 
         group.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -142,6 +149,13 @@ public class HomeActivity extends BaseActivity {
         group.check(R.id.home);
         //登录按钮
         toLogin.setOnClickListener(loginClick);
+    }
+
+
+    public static final void showBg(boolean flag) {
+        if (homeActivity == null || homeActivity.mCodeBg == null) return;
+        if (flag) homeActivity.mCodeBg.setVisibility(View.VISIBLE);
+        else homeActivity.mCodeBg.setVisibility(View.GONE);
     }
 
     //登录点击
@@ -270,7 +284,7 @@ public class HomeActivity extends BaseActivity {
      */
     public void refreshUserInfo() {
         BeanUserInfo userInfo = SharedPreferencesUtil.getUserInfo();
-        if(userInfo==null)return;
+        if (userInfo == null) return;
         StringBuffer html = new StringBuffer("会员:");
         html.append("<font color=\"#ff971e\">");
         html.append(userInfo.loginname);

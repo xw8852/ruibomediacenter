@@ -144,6 +144,8 @@
             android:background="@drawable/bg_allpage"
             android:layout_height="match_parent">
 
+
+
             <FrameLayout
                 android:id="@+id/rootFragment"
                 android:layout_width="match_parent"
@@ -151,6 +153,12 @@
                 android:layout_weight="1"
                 android:background="@drawable/bg_big"
                 >
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/codeBg"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/bg_big_2" />
 
 
             </FrameLayout>

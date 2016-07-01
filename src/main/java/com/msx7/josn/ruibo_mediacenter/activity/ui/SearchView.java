@@ -55,12 +55,10 @@ import java.util.List;
  */
 public class SearchView extends BeanView {
 
-    Drawable bgDrawable;
 
     public SearchView(Context context, AttributeSet attrs) {
         super(context, attrs);
         inflate(context, R.layout.layout_search, this);
-        bgDrawable = getResources().getDrawable(R.drawable.bg_big_2);
         Inject.inject(this, this);
         initSearch();
         findViewById(R.id.tmp).setVisibility(GONE);
@@ -78,10 +76,6 @@ public class SearchView extends BeanView {
 
     @InjectView(R.id.search_btn1)
     View mSearchBtn;
-
-    @InjectView(R.id.codeBg)
-    ImageView mCodeBg;
-
 
     @InjectView(R.id.SongPageView)
     public SongPageView mSongPageView;
@@ -126,27 +120,10 @@ public class SearchView extends BeanView {
             }
         });
         findViewById(R.id.tmp).setVisibility(GONE);
-        showDefaultBG();
+        HomeActivity.showBg(true);
         initSearch();
     }
 
-    void hideDefaultBG() {
-        mCodeBg.setImageDrawable(new ColorDrawable(Color.TRANSPARENT));
-        mCodeBg.setVisibility(GONE);
-    }
-
-    void showDefaultBG() {
-        try {
-            if (bgDrawable != null) {
-                mCodeBg.setImageDrawable(bgDrawable);
-            } else
-                mCodeBg.setImageResource(R.drawable.bg_big_2);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-        }
-        mCodeBg.setVisibility(VISIBLE);
-    }
 
     public void initSearch() {
 //        mSearchContent.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
@@ -295,11 +272,11 @@ public class SearchView extends BeanView {
                             mSongPageView.showData(baseBean.data);
                             mSongPageView.setDoSelect(doSelect);
                             if (baseBean.data == null || baseBean.data.isEmpty()) {
-                                showDefaultBG();
+                                HomeActivity.showBg(true);
                                 findViewById(R.id.tmp).setVisibility(GONE);
                             } else {
                                 findViewById(R.id.tmp).setVisibility(VISIBLE);
-                                hideDefaultBG();
+                                HomeActivity.showBg(false);
                             }
                         } else {
                             ToastUtil.show(baseBean.msg);

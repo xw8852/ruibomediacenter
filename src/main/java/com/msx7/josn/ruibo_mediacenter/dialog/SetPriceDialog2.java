@@ -85,7 +85,7 @@ public class SetPriceDialog2 extends BaseCustomDialog {
         mPrintPrice.setInputType(InputType.TYPE_CLASS_NUMBER);
 
         mSinglePrice.setInputType(InputType.TYPE_NULL);
-        mPrintPrice.setFilters(new InputFilter[]{new DialerKeyListener()});
+        mSinglePrice.setFilters(new InputFilter[]{new DialerKeyListener(),new InputFilter.LengthFilter(6)});
         mSinglePrice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -97,7 +97,7 @@ public class SetPriceDialog2 extends BaseCustomDialog {
         });
 
         mMaxPrice.setInputType(InputType.TYPE_NULL);
-        mPrintPrice.setFilters(new InputFilter[]{new DialerKeyListener()});
+        mMaxPrice.setFilters(new InputFilter[]{new DialerKeyListener(),new InputFilter.LengthFilter(6)});
         mMaxPrice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -109,7 +109,7 @@ public class SetPriceDialog2 extends BaseCustomDialog {
         });
 
         mPrintPrice.setInputType(InputType.TYPE_NULL);
-        mPrintPrice.setFilters(new InputFilter[]{new DialerKeyListener()});
+        mPrintPrice.setFilters(new InputFilter[]{new DialerKeyListener(),new InputFilter.LengthFilter(6)});
         mPrintPrice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -122,6 +122,7 @@ public class SetPriceDialog2 extends BaseCustomDialog {
 
 
         mMaxCount.setInputType(InputType.TYPE_NULL);
+        mMaxCount.setFilters(new InputFilter[]{new InputFilter.LengthFilter(6)});
         mMaxCount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -134,6 +135,7 @@ public class SetPriceDialog2 extends BaseCustomDialog {
 
 
         mMaxSize.setInputType(InputType.TYPE_NULL);
+        mMaxSize.setFilters(new InputFilter[]{new InputFilter.LengthFilter(6)});
         mMaxSize.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -167,7 +169,12 @@ public class SetPriceDialog2 extends BaseCustomDialog {
         mSubmitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                submit();
+                try {
+                    submit();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                }
             }
         });
     }
