@@ -36,6 +36,8 @@ public class RuiBoApplication extends Application {
 //        MUSIC_FILE = Environment.getExternalStorageDirectory().getPath() + "/";
 //        MUSIC_FILE = "/sdcard/";
         SDUtils.getPath();
+//        CrashHandler.getInstance().init(getApplicationContext());
+
     }
 
     Handler handler;

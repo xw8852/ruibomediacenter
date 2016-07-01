@@ -2,6 +2,7 @@ package com.msx7.josn.ruibo_mediacenter.dialog;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.msx7.josn.ruibo_mediacenter.CloseAppActivity;
 import com.msx7.josn.ruibo_mediacenter.R;
 import com.msx7.josn.ruibo_mediacenter.RuiBoApplication;
 import com.msx7.josn.ruibo_mediacenter.common.UrlStatic;
@@ -48,18 +50,25 @@ public class ClosePcDialog extends BaseCustomDialog {
                         @Override
                         public void onResponse(String response) {
                             dismisProgess();
-                            ToastUtil.show("关机成功");
+                            closeApp();
                         }
                     }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     dismisProgess();
-                    ToastUtil.show("关机成功");
+                    closeApp();
                 }
             }));
             dismiss();
         }
     };
+
+    void closeApp() {
+        ToastUtil.show("关机成功");
+        Intent intent = new Intent(activity, CloseAppActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        activity.startActivity(intent);
+    }
 
     View.OnClickListener cancelClickListener = new View.OnClickListener() {
         @Override

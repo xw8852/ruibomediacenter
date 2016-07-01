@@ -30,6 +30,11 @@
             android:theme="@android:style/Theme.NoTitleBar"
             android:windowSoftInputMode="stateHidden" />
         <activity
+            android:name=".CloseAppActivity"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
             android:name="com.msx7.josn.ruibo_mediacenter.activity.HomeActivity"
             android:screenOrientation="landscape"
             android:theme="@android:style/Theme.NoTitleBar"

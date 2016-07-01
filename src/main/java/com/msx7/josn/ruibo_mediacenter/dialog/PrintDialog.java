@@ -85,6 +85,7 @@ public class PrintDialog extends BaseCustomDialog {
                             Tv0.setText("机器编号:"+baseBean.data.ServerNumber);
                             Tv1.setText("上月打印统计"+baseBean.data.LastMonthPrintQty+"张");
                             Tv2.setText("本月打印统计"+baseBean.data.CurrentMonthPrintQty+"张");
+                            Tv3.setText(baseBean.data.CurrentDateTime);
                         }
                     }
                 }, new Response.ErrorListener() {
@@ -105,6 +106,8 @@ public class PrintDialog extends BaseCustomDialog {
         long CurrentMonthPrintQty;
         @SerializedName("ServerNumber")
         String ServerNumber;
+        @SerializedName("CurrentDateTime")
+        String CurrentDateTime;
 
     }
 

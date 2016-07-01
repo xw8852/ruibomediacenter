@@ -3,6 +3,7 @@ package com.msx7.josn.ruibo_mediacenter.activity.ui;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -54,9 +55,12 @@ import java.util.List;
  */
 public class SearchView extends BeanView {
 
+    Drawable bgDrawable;
+
     public SearchView(Context context, AttributeSet attrs) {
         super(context, attrs);
         inflate(context, R.layout.layout_search, this);
+        bgDrawable = getResources().getDrawable(R.drawable.bg_big_2);
         Inject.inject(this, this);
         initSearch();
         findViewById(R.id.tmp).setVisibility(GONE);
@@ -132,7 +136,15 @@ public class SearchView extends BeanView {
     }
 
     void showDefaultBG() {
-        mCodeBg.setImageResource(R.drawable.bg_big_2);
+        try {
+            if (bgDrawable != null) {
+                mCodeBg.setImageDrawable(bgDrawable);
+            } else
+                mCodeBg.setImageResource(R.drawable.bg_big_2);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+        }
         mCodeBg.setVisibility(VISIBLE);
     }
 
