@@ -20,6 +20,7 @@ import com.msx7.josn.ruibo_mediacenter.bean.BeanMusic;
 import com.msx7.josn.ruibo_mediacenter.common.SyncUserInfo;
 import com.msx7.josn.ruibo_mediacenter.util.L;
 import com.msx7.josn.ruibo_mediacenter.util.SharedPreferencesUtil;
+import com.msx7.josn.ruibo_mediacenter.util.ToastUtil;
 import com.msx7.lib.annotations.Inject;
 import com.msx7.lib.annotations.InjectView;
 import com.msx7.lib.widget.BaseAdapter;
@@ -51,21 +52,33 @@ public class SingleFragment extends Fragment implements IMusicSelcted {
 
     @Override
     public void addSelected(BeanMusic music) {
+        if (musicSelcted == null){
+            return;
+        }
         musicSelcted.addSelected(music);
     }
 
     @Override
     public List<BeanMusic> getAllMusic() {
+        if (musicSelcted == null) {
+            return new ArrayList<>();
+        }
         return musicSelcted.getAllMusic();
     }
 
     @Override
     public List<BeanMusic> getAllSelectedMusic() {
+        if (musicSelcted == null) {
+            return new ArrayList<>();
+        }
         return musicSelcted.getAllSelectedMusic();
     }
 
     @Override
     public void removeSelected(BeanMusic music) {
+        if (musicSelcted == null){
+            return;
+        }
         musicSelcted.removeSelected(music);
     }
 
