@@ -2,6 +2,7 @@ package com.msx7.josn.ruibo_mediacenter.activity;
 
 import android.app.ActivityManager;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -170,5 +171,13 @@ public class AdminActivity extends BaseActivity {
     public void onBackPressed() {
         startActivity(new Intent(this, HomeActivity.class));
         super.onBackPressed();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        Configuration configuration = new Configuration(getResources().getConfiguration());
+        configuration.keyboard = Configuration.KEYBOARD_NOKEYS;
+        getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
     }
 }

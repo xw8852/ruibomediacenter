@@ -1,6 +1,7 @@
 package com.msx7.josn.ruibo_mediacenter.activity;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -149,8 +150,22 @@ public class HomeActivity extends BaseActivity {
         group.check(R.id.home);
         //登录按钮
         toLogin.setOnClickListener(loginClick);
+
+        Configuration configuration = new Configuration(getResources().getConfiguration());
+        configuration.keyboard = Configuration.KEYBOARD_NOKEYS;
+        configuration.hardKeyboardHidden = Configuration.KEYBOARDHIDDEN_YES;
+        getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
+
     }
 
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        Configuration configuration = new Configuration(getResources().getConfiguration());
+        configuration.keyboard = Configuration.KEYBOARD_NOKEYS;
+        configuration.hardKeyboardHidden = Configuration.KEYBOARDHIDDEN_YES;
+        getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
+    }
 
     public static final void showBg(boolean flag) {
         if (homeActivity == null || homeActivity.mCodeBg == null) return;
@@ -296,10 +311,10 @@ public class HomeActivity extends BaseActivity {
         html.append(userInfo.remainmoney + "");
         html.append("</font>");
         mMoney.setText(Html.fromHtml(html.toString()));
-        RuiBoApplication.getApplication().runVolleyRequest(new LoginRequest(userInfo.loginname, userInfo.password, new Response.Listener<String>() {
+
+        BaseJsonRequest request = new BaseJsonRequest(Request.Method.POST, UrlStatic.URL_GETUSERINFO(), new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                L.d(response);
                 BaseBean<BeanUserInfo> baseBean = new Gson().fromJson(response, new TypeToken<BaseBean<BeanUserInfo>>() {
                 }.getType());
                 if ("200".equals(baseBean.code)) {
@@ -318,7 +333,11 @@ public class HomeActivity extends BaseActivity {
                     mMoney.setText(Html.fromHtml(html.toString()));
                 }
             }
-        }, null));
+        }, null);
+        request.addRequestJson(new Gson().toJson(SharedPreferencesUtil.getUserInfo()));
+        RuiBoApplication.getApplication().runVolleyRequest(request);
+
+
     }
 
 

@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
@@ -79,6 +80,7 @@ public class SingleFragment extends Fragment implements IMusicSelcted {
         if (musicSelcted == null){
             return;
         }
+
         musicSelcted.removeSelected(music);
     }
 

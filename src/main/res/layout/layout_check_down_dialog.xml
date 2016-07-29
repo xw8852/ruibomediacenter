@@ -111,7 +111,7 @@
             android:id="@+id/print"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/btn_print_a" />
+            android:src="@drawable/btn_print_1" />
 
         <View
             android:layout_width="40dp"
@@ -122,7 +122,7 @@
             android:id="@+id/noPrint"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/btn_print_b"
+            android:src="@drawable/btn_print_2"
             android:visibility="gone" />
     </LinearLayout>
 
