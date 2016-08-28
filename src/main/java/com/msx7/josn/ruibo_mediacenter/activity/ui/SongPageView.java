@@ -116,8 +116,7 @@ public class SongPageView extends LinearLayout implements IMusicSelcted {
     void doSelect2(List<BeanMusic> musics) {
         if (HomeActivity.curFragment == activity.searchFragment) {
             activity.searchFragment.mSearchView.doSelect.doSelect(musics);
-        } else
-        if (select != null) select.doSelect(musics);
+        } else if (select != null) select.doSelect(musics);
     }
 
     public void notifyLoginStatusChange() {
@@ -126,6 +125,12 @@ public class SongPageView extends LinearLayout implements IMusicSelcted {
 
     public void setTips() {
         setTip(mViewPager.getCurrentItem());
+    }
+
+    double money = 0;
+
+    public double getMoney() {
+        return money;
     }
 
     void setTip(int position) {
@@ -146,34 +151,37 @@ public class SongPageView extends LinearLayout implements IMusicSelcted {
         if (beanUserInfo != null && getAllMusic().size() > 0) {
             buffer.append("已选歌曲");
             buffer.append("<font color=\"#ff971e\">");
-            buffer.append(getAllSelectedMusic().size() + "/" + (long)beanUserInfo.entity.DownloadMusicAmount);
+            buffer.append(getAllSelectedMusic().size());
             buffer.append("</font>");
             buffer.append(",下载需支付");
             buffer.append("<font color=\"#ff971e\">");
 
             int size = getAllSelectedMusic().size();
-            double money = beanUserInfo.entity.DownloadOneMusicPrice * size;
-            buffer.append("" + Math.min(money, beanUserInfo.entity.DownloadAllMusicPrice));
+            money = beanUserInfo.entity.DownloadOneMusicPrice * size;
 
+            long fuhe = getFuhe();
+            if (fuhe % 100 > 0) {
+                money = (fuhe / 100 + 1) * beanUserInfo.entity.DownloadAllMusicPrice;
+            }
+            buffer.append("" + money);
             buffer.append("</font>");
-
             buffer.append("元，下载负荷");
             buffer.append("<font color=\"#ff971e\">");
-            buffer.append(getFuhe());
+            buffer.append(fuhe + "%");
             buffer.append("</font>");
         }
         mDownTips.setText(Html.fromHtml(buffer.toString()));
     }
 
 
-    public String getFuhe() {
+    public long getFuhe() {
         BeanUserInfo beanUserInfo = SharedPreferencesUtil.getUserInfo();
         double size = 0;
         for (BeanMusic music : getAllSelectedMusic()) {
             size += music.size;
         }
 
-        return Math.round(100 * size / (1.0 * beanUserInfo.entity.DownloadMusicSize)) + "%";
+        return Math.round(100 * size / (1.0 * beanUserInfo.entity.DownloadMusicSize));
     }
 
     List<BeanMusic> musics;

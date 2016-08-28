@@ -41,7 +41,7 @@ public class BaseCustomDialog extends Dialog {
         mTitleView = (TextView) findViewById(R.id.Title);
     }
 
-    TextView mTitleView;
+    protected TextView mTitleView;
 
     public void setTitle(CharSequence title) {
         mTitleView.setText(title);

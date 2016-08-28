@@ -40,10 +40,10 @@ public class IpDialog extends BaseCustomDialog {
         Inject.inject(this, findViewById(R.id.content));
         setTitle("服务器地址");
         mLoginPassWd.setText(SharedPreferencesUtil.getServerIp());
-        //列数
-        row1.setText(SharedPreferencesUtil.getRow1()+"");
-        //行数
-        row2.setText(SharedPreferencesUtil.getRow2()+"");
+//        //列数
+//        row1.setText(SharedPreferencesUtil.getRow1()+"");
+//        //行数
+//        row2.setText(SharedPreferencesUtil.getRow2()+"");
         mLoginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -58,10 +58,10 @@ public class IpDialog extends BaseCustomDialog {
                 }
                 SharedPreferencesUtil.saveServerIp(str);
 
-                if (!TextUtils.isEmpty(row1.getText().toString()))
-                    SharedPreferencesUtil.saveRow1(Integer.parseInt(row1.getText().toString()));
-                if (!TextUtils.isEmpty(row2.getText().toString()))
-                    SharedPreferencesUtil.saveRow2(Integer.parseInt(row2.getText().toString()));
+//                if (!TextUtils.isEmpty(row1.getText().toString()))
+//                    SharedPreferencesUtil.saveRow1(Integer.parseInt(row1.getText().toString()));
+//                if (!TextUtils.isEmpty(row2.getText().toString()))
+//                    SharedPreferencesUtil.saveRow2(Integer.parseInt(row2.getText().toString()));
                 dismiss();
             }
         });

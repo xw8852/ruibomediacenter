@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minHeight="120dp"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="60dp"
+                android:text="店主"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/font_color_3" />
+
+            <com.msx7.lib.widget.shape.ShapeEditText
+                android:id="@+id/name"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:gravity="center"
+                android:maxLines="1"
+                android:padding="10dp"
+                android:singleLine="true"
+                android:text=""
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/font_color_3"
+                app:radius="10dp"
+                app:solide="@color/white"
+                app:strokeColor="#a6a6a6"
+                app:strokeWidth="1dp" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/item_margin"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="60dp"
+                android:text="电话"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/font_color_3" />
+
+            <com.msx7.lib.widget.shape.ShapeEditText
+                android:id="@+id/phone"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:gravity="center"
+                android:maxLines="1"
+                android:padding="10dp"
+                android:singleLine="true"
+                android:text=""
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/font_color_3"
+                app:radius="10dp"
+                app:solide="@color/white"
+                app:strokeColor="#a6a6a6"
+                app:strokeWidth="1dp" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/item_margin"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="60dp"
+                android:text="地址"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/font_color_3" />
+
+            <com.msx7.lib.widget.shape.ShapeEditText
+                android:id="@+id/address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:gravity="center"
+                android:minWidth="200dp"
+                android:padding="10dp"
+                android:text=""
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/font_color_3"
+                app:radius="10dp"
+                app:solide="@color/white"
+                app:strokeColor="#a6a6a6"
+                app:strokeWidth="1dp" />
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/item_margin"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="28dp"
+                android:text="下载上限"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/font_color_3" />
+
+            <com.msx7.lib.widget.shape.ShapeEditText
+                android:id="@+id/maxCount"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:gravity="center"
+                android:inputType="number"
+                android:maxLength="5"
+                android:maxLines="1"
+                android:padding="10dp"
+                android:singleLine="true"
+                android:text="200"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/font_color_3"
+                app:radius="10dp"
+                app:solide="@color/white"
+                app:strokeColor="#a6a6a6"
+                app:strokeWidth="1dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="首"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/font_color_3" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+    <com.msx7.lib.widget.shape.ShapeTextView
+        android:id="@+id/submit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="提交"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/white"
+        app:radius="10dp"
+        app:solide="#ff791e" />
+
+</LinearLayout>

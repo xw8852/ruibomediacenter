@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/Root"
+    android:orientation="vertical">
+
+    <com.msx7.lib.widget.shape.ShapeLinearLayout
+        android:id="@+id/titleView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:radius_LT="10dp"
+        app:radius_RT="10dp"
+        app:solide="#0f53b3">
+
+        <RadioGroup
+            android:layout_width="500dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_weight="0"
+            android:id="@+id/radioButton"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/btn1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/btn_0"
+                android:button="@null"
+                android:checked="true"
+                android:gravity="center"
+                android:padding="20dp"
+                android:text="全部目录"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/white" />
+
+            <RadioButton
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:id="@+id/btn2"
+                android:layout_weight="1"
+                android:background="@drawable/btn_0"
+                android:button="@null"
+                android:gravity="center"
+                android:padding="20dp"
+                android:text="待打印目录"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/white" />
+
+        </RadioGroup>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+           android:layout_weight="1"
+            android:gravity="center_vertical|right"
+            android:layout_height="match_parent">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:id="@id/close"
+                android:src="@drawable/close" />
+        </LinearLayout>
+
+
+    </com.msx7.lib.widget.shape.ShapeLinearLayout>
+
+    <com.msx7.lib.widget.shape.ShapeLinearLayout
+        android:id="@+id/contentView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/titleView"
+        android:layout_alignRight="@id/titleView"
+        android:layout_below="@id/titleView"
+        app:radius_LB="10dp"
+        app:radius_RB="10dp"
+        android:orientation="vertical"
+        app:solide="@color/white">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="#e8eff8"
+            android:orientation="horizontal">
+
+            <CheckBox
+                android:id="@+id/select"
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/btn_1"
+                android:button="@null"
+                android:checked="false"
+                android:gravity="center"
+                android:text="全选"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/color_2" />
+
+            <TextView
+                android:id="@+id/print"
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/btn_1"
+                android:button="@null"
+                android:gravity="center"
+                android:text="打印"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/color_2" />
+
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:id="@+id/delete"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/btn_1"
+                android:button="@null"
+                android:gravity="center"
+                android:text="删除"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/color_2" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:gravity="center"
+                android:text="手指左右滑动可翻页"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="#676767" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="20dp"
+                android:gravity="center"
+                android:id="@+id/tip"
+                android:singleLine="true"
+                android:text="1/42 页\t 共9999个目录"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="#676767" />
+        </LinearLayout>
+
+        <com.msx7.josn.ruibo_mediacenter.dialog.SongManager.SongFolderView
+            android:id="@+id/SongFolder1"
+            android:padding="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+
+        <com.msx7.josn.ruibo_mediacenter.dialog.SongManager.SongFolderView
+            android:id="@+id/SongFolder2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+
+    </com.msx7.lib.widget.shape.ShapeLinearLayout>
+</RelativeLayout>

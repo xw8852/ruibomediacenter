@@ -53,9 +53,10 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:padding="10dp">
+            android:orientation="horizontal"
+            android:padding="10dp"
+            android:visibility="gone">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -65,14 +66,15 @@
                 android:textColor="@color/white" />
 
             <Button
+                android:id="@+id/minus"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_marginLeft="10dp"
-                android:enabled="false"
-                android:id="@+id/minus"
-                android:background="@drawable/btn_minus" />
+                android:background="@drawable/btn_minus"
+                android:enabled="false" />
 
             <TextView
+                android:id="@+id/printNum"
                 android:layout_width="120dp"
                 android:layout_height="60dp"
                 android:layout_marginLeft="4dp"
@@ -81,17 +83,16 @@
                 android:gravity="center"
                 android:inputType="number"
                 android:maxLength="2"
-                android:text="1"
-                android:id="@+id/printNum"
                 android:minWidth="80dp"
+                android:text="1"
                 android:textAppearance="?android:textAppearanceLarge"
                 android:textColor="@color/black" />
 
             <Button
+                android:id="@+id/add"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_marginRight="10dp"
-                android:id="@+id/add"
                 android:background="@drawable/btn_added" />
 
 
@@ -100,12 +101,24 @@
     </LinearLayout>
 
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:padding="20dp"
+        android:text="格式化后开始下载"
+        android:id="@+id/down"
+        android:background="@drawable/btn_1"
+        android:textColor="@color/color_2"
+        android:textAppearance="?android:textAppearanceLarge" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:gravity="center"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="gone">
 
         <ImageView
             android:id="@+id/print"
@@ -135,5 +148,6 @@
         android:padding="10dp"
         android:text="(打印另收费：1元/张)"
         android:textAppearance="?android:textAppearanceMedium"
-        android:textColor="@color/white" />
+        android:textColor="@color/white"
+        android:visibility="gone" />
 </LinearLayout>

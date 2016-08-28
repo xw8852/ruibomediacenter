@@ -145,6 +145,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/item_margin"
+            android:visibility="gone"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
@@ -210,7 +211,7 @@
                 android:maxLines="1"
                 android:padding="10dp"
                 android:singleLine="true"
-                android:text="1024"
+                android:text="1"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@color/font_color_3"
                 app:radius="10dp"
@@ -221,7 +222,92 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="M"
+                android:text="G"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/font_color_3" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/item_margin"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="32dp"
+                android:text="显示列数"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/font_color_3" />
+
+            <com.msx7.lib.widget.shape.ShapeEditText
+                android:id="@+id/vec"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:gravity="center"
+                android:inputType="number"
+                android:maxLength="5"
+                android:maxLines="1"
+                android:padding="10dp"
+                android:singleLine="true"
+                android:text="1"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/font_color_3"
+                app:radius="10dp"
+                app:solide="@color/white"
+                app:strokeColor="#a6a6a6"
+                app:strokeWidth="1dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="列"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/font_color_3" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/item_margin"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="32dp"
+                android:text="显示行数"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/font_color_3" />
+
+            <com.msx7.lib.widget.shape.ShapeEditText
+                android:id="@+id/hor"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:gravity="center"
+                android:inputType="number"
+                android:maxLength="5"
+                android:maxLines="1"
+                android:padding="10dp"
+                android:singleLine="true"
+                android:text="1"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/font_color_3"
+                app:radius="10dp"
+                app:solide="@color/white"
+                app:strokeColor="#a6a6a6"
+                app:strokeWidth="1dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="行"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@color/font_color_3" />
         </LinearLayout>

@@ -7,14 +7,21 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.google.gson.Gson;
 import com.msx7.josn.ruibo_mediacenter.R;
+import com.msx7.josn.ruibo_mediacenter.RuiBoApplication;
 import com.msx7.josn.ruibo_mediacenter.activity.BaseActivity;
-import com.msx7.josn.ruibo_mediacenter.activity.ui.BeanView;
 import com.msx7.josn.ruibo_mediacenter.activity.ui.BeanView.CheckPost;
+import com.msx7.josn.ruibo_mediacenter.bean.BaseBean;
+import com.msx7.josn.ruibo_mediacenter.common.UrlStatic;
+import com.msx7.josn.ruibo_mediacenter.net.BaseJsonRequest;
+import com.msx7.josn.ruibo_mediacenter.util.SharedPreferencesUtil;
 import com.msx7.josn.ruibo_mediacenter.util.ToastUtil;
 
 import java.text.DecimalFormat;
-import java.text.NumberFormat;
 
 /**
  * 文件名: BaseCustomDialog
@@ -22,54 +29,44 @@ import java.text.NumberFormat;
  * 作  者：Josn
  * 时  间：2016/2/23
  */
-public class CheckDownDialog extends Dialog {
+public class UserPrintDownDialog extends Dialog {
 
     BaseActivity activity;
 
-    ProgressBar mbar1;
-    TextView tv1;
 
-    ProgressBar mbar2;
-    TextView tv2;
     TextView printNum;
     TextView print;
     TextView down;
 
     View add;
+    View noPrint;
     View minus;
     int _printNum = 1;
 
-    public CheckDownDialog(Context context) {
+    public UserPrintDownDialog(Context context) {
         super(context, R.style.Translucent_Dialog);
         if (context instanceof Activity) {
             activity = (BaseActivity) context;
         }
-        setContentView(R.layout.layout_check_down_dialog);
+        setContentView(R.layout.layout_user_down_print_dialog);
         findViewById(R.id.root).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 //                dismiss();
             }
         });
-        mbar1 = (ProgressBar) findViewById(R.id.progressBar1);
-        mbar2 = (ProgressBar) findViewById(R.id.progressBar2);
-        tv1 = (TextView) findViewById(R.id.text);
+
         minus = findViewById(R.id.minus);
         add = findViewById(R.id.add);
         printNum = (TextView) findViewById(R.id.printNum);
         down = (TextView) findViewById(R.id.down);
-        tv2 = (TextView) findViewById(R.id.text2);
+        noPrint = (TextView) findViewById(R.id.down1);
         print = (TextView) findViewById(R.id.printPrice);
-        findViewById(R.id.print).setOnClickListener(new View.OnClickListener() {
+
+        noPrint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                print();
-            }
-        });
-        findViewById(R.id.noPrint).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                noPrint();
+                dismiss();
             }
         });
         minus.setOnClickListener(minusClickListener);
@@ -77,9 +74,35 @@ public class CheckDownDialog extends Dialog {
         down.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                noPrint();
+                print();
             }
         });
+
+
+        DecimalFormat a = new DecimalFormat("0.##");
+        print.setText("(打印另收费\b:\b" + a.format(SharedPreferencesUtil.getUserInfo().entity.PrintPrice) + "元/张)");
+    }
+
+    void print() {
+        BaseJsonRequest request = new BaseJsonRequest(Request.Method.POST, UrlStatic.URL_PRINTDOWNLOADLIST(), new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                BaseBean baseBean = new Gson().fromJson(response, BaseBean.class);
+                if (!"200".equals(baseBean.code)) {
+                    ToastUtil.show("请稍后重新尝试");
+                    return;
+                }
+                dismiss();
+                ToastUtil.show("请确保打印机正常连接，开始打印...");
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                ToastUtil.show("请稍后重新尝试");
+            }
+        });
+        request.addRequestJson(printNum.getText().toString());
+        RuiBoApplication.getApplication().runVolleyRequest(request);
     }
 
     View.OnClickListener minusClickListener = new View.OnClickListener() {
@@ -100,41 +123,5 @@ public class CheckDownDialog extends Dialog {
         }
     };
 
-    void print() {
-        post.needprint = 1;
-        post.printnumber = _printNum;
-//        post.money += _printNum * printPrice;
-        new DownProgressDialog(activity).showDown(post);
-        dismiss();
-    }
 
-    void noPrint() {
-        post.needprint = 0;
-        new DownProgressDialog(activity).showDown(post);
-        dismiss();
-    }
-
-    CheckPost post;
-    double printPrice;
-
-    public void setPostData(CheckPost postData) {
-        post = postData;
-    }
-
-    public void show(double need, int needB, double remain, int remianb, double printPrice) {
-        DecimalFormat a = new DecimalFormat("0.##");
-        this.printPrice = printPrice;
-        tv1.setText("下载容量:" + a.format(need) + "M");
-        tv2.setText("磁卡容量:" + a.format(remain) + "M");
-        mbar1.setProgress(needB);
-        mbar2.setProgress(remianb);
-        down.setText("格式化磁卡后开始下载");
-        if (need >= remain) {
-            down.setEnabled(false);
-        } else {
-            down.setEnabled(true);
-        }
-//        print.setText("(打印另收费\b:\b" + a.format(printPrice) + "元/张)");
-
-    }
 }

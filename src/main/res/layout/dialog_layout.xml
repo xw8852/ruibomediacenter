@@ -20,6 +20,15 @@
             android:text="会员管理"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/white" />
+        <TextView
+            android:id="@+id/TitleRight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:text="会员管理"
+            android:visibility="gone"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/white" />
 
         <ImageView
             android:id="@+id/close"

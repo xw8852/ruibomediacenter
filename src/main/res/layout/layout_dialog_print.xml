@@ -5,13 +5,12 @@
     android:layout_height="wrap_content">
 
     <LinearLayout
+        android:id="@+id/loginRoot"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:minWidth="350dp"
-        android:id="@+id/loginRoot"
         android:orientation="vertical"
-        android:padding="20dp"
-        >
+        android:padding="20dp">
 
         <TextView
             android:id="@+id/tip"
@@ -21,6 +20,7 @@
             android:text=""
             android:textColor="@color/font_red_0"
             android:visibility="visible" />
+
         <com.msx7.lib.widget.shape.ShapeTextView
             android:id="@+id/Tv0"
             android:layout_width="match_parent"
@@ -28,9 +28,9 @@
             android:layout_margin="10dp"
             android:gravity="center"
             android:hint="机器编号:"
+            android:inputType="number"
             android:maxLines="1"
             android:padding="10dp"
-            android:inputType="number"
             android:singleLine="true"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/font_color_3"
@@ -41,7 +41,7 @@
 
         <View
             android:layout_width="1dp"
-            android:layout_height="20dp"/>
+            android:layout_height="20dp" />
 
         <com.msx7.lib.widget.shape.ShapeTextView
             android:id="@+id/Tv1"
@@ -50,9 +50,9 @@
             android:layout_margin="10dp"
             android:gravity="center"
             android:hint="上月打印统计0张"
+            android:inputType="number"
             android:maxLines="1"
             android:padding="10dp"
-            android:inputType="number"
             android:singleLine="true"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/font_color_3"
@@ -63,7 +63,8 @@
 
         <View
             android:layout_width="1dp"
-            android:layout_height="20dp"/>
+            android:layout_height="20dp" />
+
         <com.msx7.lib.widget.shape.ShapeTextView
             android:id="@+id/Tv2"
             android:layout_width="match_parent"
@@ -71,9 +72,9 @@
             android:layout_margin="10dp"
             android:gravity="center"
             android:hint="本月打印统计0张"
+            android:inputType="number"
             android:maxLines="1"
             android:padding="10dp"
-            android:inputType="number"
             android:singleLine="true"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/font_color_3"
@@ -92,24 +93,22 @@
             android:padding="10dp"
             android:text="2016/5/30"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/font_color_6"
-           />
+            android:textColor="@color/font_color_6" />
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:padding="20dp"
         android:id="@+id/UserRoot"
-        android:visibility="gone"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="20dp"
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:minWidth="350dp"
-            android:orientation="horizontal"
-            >
+            android:orientation="horizontal">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -118,15 +117,15 @@
 
 
                 <com.msx7.lib.widget.shape.ShapeTextView
+                    android:id="@+id/et1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:gravity="center"
-                    android:text="会员卡号:123456"
                     android:maxLines="1"
                     android:padding="10dp"
                     android:singleLine="true"
-                    android:id="@+id/et1"
+                    android:text="会员卡号:123456"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/font_color_3"
                     app:radius="10dp"
@@ -135,6 +134,7 @@
                     app:strokeWidth="1dp" />
 
                 <com.msx7.lib.widget.shape.ShapeTextView
+                    android:id="@+id/et2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
@@ -142,9 +142,8 @@
                     android:hint="请输入充值金额"
                     android:maxLines="1"
                     android:padding="10dp"
-                    android:text="账户余额:¥100.0"
                     android:singleLine="true"
-                    android:id="@+id/et2"
+                    android:text="账户余额:¥100.0"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/font_color_3"
                     app:radius="10dp"
@@ -153,6 +152,7 @@
                     app:strokeWidth="1dp" />
 
                 <com.msx7.lib.widget.shape.ShapeTextView
+                    android:id="@+id/et3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
@@ -160,11 +160,10 @@
                     android:hint="手机号码:18684835943"
                     android:maxLines="1"
                     android:padding="10dp"
-                    android:visibility="gone"
                     android:singleLine="true"
-                    android:id="@+id/et3"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/font_color_3"
+                    android:visibility="gone"
                     app:radius="10dp"
                     app:solide="@color/white"
                     app:strokeColor="#a6a6a6"
@@ -178,12 +177,12 @@
                 android:orientation="vertical">
 
                 <com.msx7.lib.widget.shape.ShapeTextView
+                    android:id="@+id/btn1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:gravity="center"
                     android:padding="10dp"
-                    android:id="@+id/btn1"
                     android:text="销户"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/white"
@@ -191,26 +190,26 @@
                     app:solide="#e9213d" />
 
                 <com.msx7.lib.widget.shape.ShapeTextView
+                    android:id="@+id/btn2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:gravity="center"
                     android:padding="10dp"
-                    android:visibility="gone"
                     android:text="充值"
-                    android:id="@+id/btn2"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/white"
+                    android:visibility="gone"
                     app:radius="10dp"
                     app:solide="#42ab1d" />
 
                 <com.msx7.lib.widget.shape.ShapeTextView
+                    android:id="@+id/btn3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:gravity="center"
                     android:padding="10dp"
-                    android:id="@+id/btn3"
                     android:text="重设初始密码"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/white"

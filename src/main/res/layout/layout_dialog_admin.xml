@@ -27,7 +27,7 @@
         android:layout_margin="10dp"
         android:gravity="center"
         android:padding="10dp"
-        android:text="曲目定价"
+        android:text="参数设置"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/white"
         app:radius="10dp"
@@ -40,10 +40,9 @@
         android:layout_margin="10dp"
         android:gravity="center"
         android:padding="10dp"
-        android:text="对账单"
+        android:text="店主信息"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/white"
-        android:visibility="gone"
         app:radius="10dp"
         app:solide="#ff791e" />
 </LinearLayout>

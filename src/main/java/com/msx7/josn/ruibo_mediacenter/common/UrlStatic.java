@@ -26,6 +26,11 @@ public class UrlStatic {
     public static String URL_DOWNLOADMUSIC() {
         return getServerIp() + "/userapi/user.downloadmusic";
     }
+    public static String URL_GETDOWNLOADPROGRESS() {
+        return getServerIp() + "/userapi/user.getDownloadProgress";
+    }    public static String URL_PRINTDOWNLOADLIST() {
+        return getServerIp() + "/userapi/user.printDownloadList";
+    }
 
     public static String URL_CHANGEUSERPASSWORD() {
         return getServerIp() + "/passportapi/passport.changeuserpassword";
@@ -37,6 +42,33 @@ public class UrlStatic {
 
     public static String URL_ADMINLOGIN() {
         return getServerIp() + "/passportapi/passport.adminlogin";
+    }
+
+    public static String URL_getMusicCategoryList() {
+        return getServerIp() + "/adminapi/admin.getMusicCategoryList";
+    }
+
+    public static String URL_getNoPrintMusicCategoryList() {
+        return getServerIp() + "/adminapi/admin.getNoPrintMusicCategoryList";
+    }
+    public static String URL_printMusicCategoryList() {
+        return getServerIp() + "/adminapi/admin.printMusicCategoryList";
+    }
+    public static String URL_deleteMusicCategory() {
+        return getServerIp() + "/adminapi/admin.deleteMusicCategory";
+    }
+    public static String URL_getOwnerInfo() {
+        return getServerIp() + "/adminapi/admin.getOwnerInfo";
+    }
+    public static String URL_saveOwnerInfo() {
+        return getServerIp() + "/adminapi/admin.saveOwnerInfo";
+    }
+
+    public static String URL_CHECKUDISK() {
+        return getServerIp() + "/adminapi/admin.checkUDisk";
+    }
+    public static String URL_GETUPLOADPROGRESS() {
+        return getServerIp() + "/adminapi/admin.getUploadProgress";
     }
 
     public static String URL_UPLOADMUSIC() {
@@ -80,11 +112,13 @@ public class UrlStatic {
         return getServerIp() + "/userapi/user.favoritemusic";
     }
 
-    public static String URL_DOWNLOADMUSICCHECK() {
-        return getServerIp() + "/userapi/user.downloadmusiccheck";
+    public static String URL_DOWNLOADCHECK() {
+        return getServerIp() + "/userapi/user.downloadCheck";
     }
     public static String URL_PRINTREPORT() {
         return getServerIp() + "/adminapi/admin.printreport";
+    } public static String URL_MONTHSUMMARY() {
+        return getServerIp() + "/adminapi/admin.getMonthSummary";
     }
 
     /**

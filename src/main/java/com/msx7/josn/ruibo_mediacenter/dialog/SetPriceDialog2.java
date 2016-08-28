@@ -68,6 +68,16 @@ public class SetPriceDialog2 extends BaseCustomDialog {
      */
     @InjectView(R.id.maxCount)
     EditText mMaxCount;
+    /**
+     * 列数
+     */
+    @InjectView(R.id.vec)
+    EditText vec;
+    /**
+     * 行数
+     */
+    @InjectView(R.id.hor)
+    EditText hor;
 
     @InjectView(R.id.submit)
     TextView mSubmitBtn;
@@ -80,12 +90,44 @@ public class SetPriceDialog2 extends BaseCustomDialog {
         Inject.inject(this, findViewById(R.id.content));
 
 
+        //列数
+        vec.setText(SharedPreferencesUtil.getRow1() + "");
+        //行数
+        hor.setText(SharedPreferencesUtil.getRow2() + "");
+
         mSinglePrice.setInputType(InputType.TYPE_CLASS_NUMBER);
         mMaxPrice.setInputType(InputType.TYPE_CLASS_NUMBER);
         mPrintPrice.setInputType(InputType.TYPE_CLASS_NUMBER);
+        hor.setInputType(InputType.TYPE_CLASS_NUMBER);
+        vec.setInputType(InputType.TYPE_CLASS_NUMBER);
+
+
+        vec.setInputType(InputType.TYPE_NULL);
+        vec.setFilters(new InputFilter[]{new DialerKeyListener(), new InputFilter.LengthFilter(6)});
+        vec.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                vec.setText("");
+                int right = findViewById(R.id.root).getRight();
+                keyboard1 = new Keyboard1(v, vec).setState(Keyboard1.State.Number);
+                keyboard1.getPopupWindow().showAtLocation(v, Gravity.CENTER, right, 0);
+            }
+        });
+
+        hor.setInputType(InputType.TYPE_NULL);
+        hor.setFilters(new InputFilter[]{new DialerKeyListener(), new InputFilter.LengthFilter(6)});
+        hor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hor.setText("");
+                int right = findViewById(R.id.root).getRight();
+                keyboard1 = new Keyboard1(v, hor).setState(Keyboard1.State.Number);
+                keyboard1.getPopupWindow().showAtLocation(v, Gravity.CENTER, right, 0);
+            }
+        });
 
         mSinglePrice.setInputType(InputType.TYPE_NULL);
-        mSinglePrice.setFilters(new InputFilter[]{new DialerKeyListener(),new InputFilter.LengthFilter(6)});
+        mSinglePrice.setFilters(new InputFilter[]{new DialerKeyListener(), new InputFilter.LengthFilter(6)});
         mSinglePrice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -97,7 +139,7 @@ public class SetPriceDialog2 extends BaseCustomDialog {
         });
 
         mMaxPrice.setInputType(InputType.TYPE_NULL);
-        mMaxPrice.setFilters(new InputFilter[]{new DialerKeyListener(),new InputFilter.LengthFilter(6)});
+        mMaxPrice.setFilters(new InputFilter[]{new DialerKeyListener(), new InputFilter.LengthFilter(6)});
         mMaxPrice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -109,7 +151,7 @@ public class SetPriceDialog2 extends BaseCustomDialog {
         });
 
         mPrintPrice.setInputType(InputType.TYPE_NULL);
-        mPrintPrice.setFilters(new InputFilter[]{new DialerKeyListener(),new InputFilter.LengthFilter(6)});
+        mPrintPrice.setFilters(new InputFilter[]{new DialerKeyListener(), new InputFilter.LengthFilter(6)});
         mPrintPrice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -151,8 +193,8 @@ public class SetPriceDialog2 extends BaseCustomDialog {
         mSinglePrice.setText(String.valueOf(info.entity.DownloadOneMusicPrice));
         mMaxPrice.setText(String.valueOf(info.entity.DownloadAllMusicPrice));
         mPrintPrice.setText(String.valueOf(info.entity.PrintPrice));
-        mMaxCount.setText(String.valueOf((int)info.entity.DownloadMusicAmount));
-        mMaxSize.setText(String.valueOf((int)info.entity.DownloadMusicSize));
+        mMaxCount.setText(String.valueOf((int) info.entity.DownloadMusicAmount));
+        mMaxSize.setText(String.valueOf(info.entity.DownloadMusicSize / 1024));
 
 //        mSinglePrice.setFilters(new InputFilter[]{new InputFilter.LengthFilter(6)});
 //        mSinglePrice.setInputType(InputType.TYPE_NULL);
@@ -206,13 +248,29 @@ public class SetPriceDialog2 extends BaseCustomDialog {
             ToastUtil.show("请设置下载总容量");
             return;
         }
+        if (!TextUtils.isDigitsOnly(vec.getText().toString())) {
+            ToastUtil.show("请输入列数");
+            return;
+        }
+        if (!TextUtils.isDigitsOnly(hor.getText().toString())) {
+            ToastUtil.show("请输入行数");
+            return;
+        }
+        SharedPreferencesUtil.saveRow1(Integer.parseInt(vec.getText().toString()));
+
+        SharedPreferencesUtil.saveRow2(Integer.parseInt(vec.getText().toString()));
+
         showProgess();
+        if (!TextUtils.isEmpty(vec.getText().toString()))
+            SharedPreferencesUtil.saveRow1(Integer.parseInt(vec.getText().toString()));
+        if (!TextUtils.isEmpty(hor.getText().toString()))
+            SharedPreferencesUtil.saveRow2(Integer.parseInt(hor.getText().toString()));
         final Post post = new Post(
                 Double.parseDouble(mSinglePrice.getText().toString()),
                 Double.parseDouble(mMaxPrice.getText().toString()),
                 Double.parseDouble(mPrintPrice.getText().toString()),
                 Long.parseLong(mMaxCount.getText().toString()),
-                Long.parseLong(mMaxSize.getText().toString())
+                Long.parseLong(mMaxSize.getText().toString()) * 1024
         );
         BaseJsonRequest request = new BaseJsonRequest(Request.Method.POST, UrlStatic.URL_SETTINGMUSIC(),
                 new Response.Listener<String>() {

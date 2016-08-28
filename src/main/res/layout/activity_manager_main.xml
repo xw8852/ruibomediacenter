@@ -101,6 +101,34 @@
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:gravity="center_horizontal"
+                android:onClick="onUpdate"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/ic_update" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/tranparent"
+                    android:drawablePadding="10dp"
+                    android:gravity="center"
+                    android:text="更新歌曲"
+                    android:textColor="@color/white"
+                    android:textSize="14dp" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="30dp"
+                android:layout_height="1dp" />
+            <LinearLayout
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:gravity="center_horizontal"
                 android:onClick="onSong"
                 android:orientation="vertical">
 
@@ -117,7 +145,7 @@
                     android:background="@color/tranparent"
                     android:drawablePadding="10dp"
                     android:gravity="center"
-                    android:text="更新歌曲"
+                    android:text="歌曲库"
                     android:textColor="@color/white"
                     android:textSize="14dp" />
             </LinearLayout>
@@ -222,6 +250,30 @@
                 android:layout_width="30dp"
                 android:layout_height="1dp" />
 
+            <LinearLayout
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:gravity="center_horizontal"
+                android:onClick="onStatic"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/ic_statistical" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/tranparent"
+                    android:drawablePadding="10dp"
+                    android:gravity="center"
+                    android:text="月度统计"
+                    android:textColor="@color/white"
+                    android:textSize="14dp" />
+            </LinearLayout>
 
         </LinearLayout>
 

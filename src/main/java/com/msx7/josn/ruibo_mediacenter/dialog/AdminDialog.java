@@ -60,7 +60,7 @@ public class AdminDialog extends BaseCustomDialog {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new MonthlyStatementDialog(activity).show();
+                new ShopInfoDialog(activity).show();
                 dismiss();
             }
         });

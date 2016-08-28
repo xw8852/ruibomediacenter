@@ -6,12 +6,12 @@
     android:minWidth="400dp"
     android:gravity="center_horizontal"
     android:orientation="vertical"
+    android:background="@drawable/bg_alpha_black"
     android:padding="10dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_alpha_black"
         android:orientation="vertical"
         android:padding="20dp">
 
@@ -20,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dp"
-            android:text="下载进度:"
+            android:text="歌曲正在下载中，请耐心等待..."
             android:singleLine="true"
             android:textAppearance="?android:textAppearanceLarge"
             android:textColor="@color/white" />
@@ -31,6 +31,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
+            android:visibility="gone"
             android:layout_marginTop="10dp"
             android:max="100"
             android:progress="0" />
@@ -42,11 +43,13 @@
         android:layout_width="wrap_content"
         android:layout_height="60dp"
         android:layout_marginTop="20dp"
-        android:background="@drawable/btn_default"
         android:gravity="center"
         android:padding="10dp"
-        android:text="下载完成"
-        android:visibility="invisible"
+        android:text="查看执行情况"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="@color/font_color_2" />
+
+        android:background="@drawable/btn_1"
+        android:textColor="@color/color_2"
+
+        />
 </LinearLayout>

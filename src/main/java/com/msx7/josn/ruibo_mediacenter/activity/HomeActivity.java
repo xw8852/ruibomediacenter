@@ -290,6 +290,8 @@ public class HomeActivity extends BaseActivity {
     }
 
 
+
+
     public static final void refreshUser() {
         homeActivity.refreshUserInfo();
     }

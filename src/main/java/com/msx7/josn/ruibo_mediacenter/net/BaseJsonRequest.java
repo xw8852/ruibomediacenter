@@ -4,6 +4,7 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Response;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
+import com.google.gson.Gson;
 
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
@@ -57,10 +58,12 @@ public class BaseJsonRequest extends StringRequest {
 
     public void addPostParams(String key, String value) {
         params.put(key, value);
+        mRequestBody=new Gson().toJson(params);
     }
 
     public void addPostParams(Map<String, String> maps) {
         params.putAll(maps);
+        mRequestBody=new Gson().toJson(params);
     }
 
     public void addRequestJson(String json) {

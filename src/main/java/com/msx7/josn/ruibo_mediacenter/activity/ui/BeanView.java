@@ -46,19 +46,17 @@ public class BeanView extends LinearLayout {
     }
 
 
-    protected void download(final SongPageView songPageView) {
+    protected void download(final SongPageView songPageView, final double money) {
         int songs = songPageView.getAllSelectedMusic().size();
         if (songs <= 0) {
             ToastUtil.show("请选择需要下载的歌曲");
             return;
         }
-        double money = SharedPreferencesUtil.getUserInfo().entity.DownloadOneMusicPrice * songs;
-        money = Math.min(money, SharedPreferencesUtil.getUserInfo().entity.DownloadAllMusicPrice);
 
         final BaseActivity activity = (BaseActivity) getContext();
         activity.showProgess();
 
-        String url = UrlStatic.URL_DOWNLOADMUSICCHECK();
+        String url = UrlStatic.URL_DOWNLOADCHECK();
         final CheckPost post = new CheckPost(SharedPreferencesUtil.getUserInfo().id, money, songPageView.getAllSelectedMusic());
         BaseJsonRequest
                 jsonRequest = new BaseJsonRequest(POST, url
@@ -67,8 +65,8 @@ public class BeanView extends LinearLayout {
             public void onResponse(String response) {
                 L.d(response);
                 activity.dismisProgess();
-                BaseBean<UserInfoNet.UserInfo.EntityEntity> baseBean = new Gson().fromJson(
-                        response, new TypeToken<BaseBean<UserInfoNet.UserInfo.EntityEntity>>() {
+                BaseBean<CheckDown> baseBean = new Gson().fromJson(
+                        response, new TypeToken<BaseBean<CheckDown>>() {
                         }.getType()
                 );
                 if (!"200".equals(baseBean.code)) {
@@ -76,32 +74,18 @@ public class BeanView extends LinearLayout {
                     return;
                 }
                 SyncUserInfo.SyncUserInfo();
-                double size = 0;
-                for (BeanMusic music : songPageView.getAllSelectedMusic()) {
-                    size += music.size;
-                }
-                DecimalFormat a = new DecimalFormat("0.##");
-                if (baseBean.data.DownloadMusicRemainDiskSpace <= 0) {
-                    ToastUtil.show("您还没有插入U盘");
-                    return;
-                }
-                if (size > baseBean.data.DownloadMusicRemainDiskSpace) {
-                    ToastUtil.show("U盘空间不足，还需" + a.format(baseBean.data.DownloadMusicRemainDiskSpace - size) + "M");
-                    return;
-                }
-                double money = baseBean.data.DownloadOneMusicPrice * songPageView.getAllSelectedMusic().size();
-                money = Math.min(money, SharedPreferencesUtil.getUserInfo().entity.DownloadAllMusicPrice);
-                post.money = money;
+
+
                 CheckDownDialog dialog = new CheckDownDialog(songPageView.getContext());
                 dialog.show();
-                double maxSize = Math.max(size, baseBean.data.DownloadMusicRemainDiskSpace);
+                double maxSize = Math.max(baseBean.data.DownSize, baseBean.data.DiskSize);
 
 
-                dialog.show(size,
-                        (int) Math.round(100 * size / maxSize),
-                        baseBean.data.DownloadMusicRemainDiskSpace,
-                        (int) Math.round(100 * baseBean.data.DownloadMusicRemainDiskSpace / maxSize),
-                        baseBean.data.PrintPrice);
+                dialog.show(baseBean.data.DownSize,
+                        (int) Math.round(100 * baseBean.data.DownSize / maxSize),
+                        baseBean.data.DiskSize,
+                        (int) Math.round(100 * baseBean.data.DiskSize / maxSize),
+                        SharedPreferencesUtil.getUserInfo().entity.PrintPrice);
                 dialog.setPostData(post);
 
             }
@@ -117,6 +101,12 @@ public class BeanView extends LinearLayout {
         RuiBoApplication.getApplication().runVolleyRequest(jsonRequest);
     }
 
+    public static class CheckDown {
+        @SerializedName("DownSize")
+        public int DownSize;
+        @SerializedName("DiskSize")
+        public int DiskSize;
+    }
 
     public static class CheckPost {
         @SerializedName("musiclist")
@@ -126,7 +116,7 @@ public class BeanView extends LinearLayout {
         @SerializedName("money")
         public double money;
         @SerializedName("printnumber")
-        public int printnumber = 1;
+        public int printnumber = 0;
 
         @SerializedName("needprint")
         public int needprint;

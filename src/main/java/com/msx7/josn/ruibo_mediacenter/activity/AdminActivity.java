@@ -1,6 +1,5 @@
 package com.msx7.josn.ruibo_mediacenter.activity;
 
-import android.app.ActivityManager;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -21,12 +20,13 @@ import com.msx7.josn.ruibo_mediacenter.dialog.BaoYueDialog;
 import com.msx7.josn.ruibo_mediacenter.dialog.ChongZhiDialog;
 import com.msx7.josn.ruibo_mediacenter.dialog.ClosePcDialog;
 import com.msx7.josn.ruibo_mediacenter.dialog.Keyboard1;
+import com.msx7.josn.ruibo_mediacenter.dialog.MonthStaticDialog;
 import com.msx7.josn.ruibo_mediacenter.dialog.OpenAccountDialog;
 import com.msx7.josn.ruibo_mediacenter.dialog.PrintDialog;
-import com.msx7.josn.ruibo_mediacenter.dialog.SyncSongDialog;
+import com.msx7.josn.ruibo_mediacenter.dialog.SongManager.SongFolderDialog;
+import com.msx7.josn.ruibo_mediacenter.dialog.SyncSong.SyncSongDialog;
 import com.msx7.josn.ruibo_mediacenter.dialog.UserManagerDialog;
 import com.msx7.josn.ruibo_mediacenter.net.BaseJsonRequest;
-import com.msx7.josn.ruibo_mediacenter.net.SyncSongRequest;
 import com.msx7.josn.ruibo_mediacenter.util.L;
 import com.msx7.josn.ruibo_mediacenter.util.SharedPreferencesUtil;
 import com.msx7.josn.ruibo_mediacenter.util.ToastUtil;
@@ -101,16 +101,31 @@ public class AdminActivity extends BaseActivity {
         new PrintDialog(v.getContext()).show();
     }
 
+    /**
+     * 歌曲库
+     *
+     * @param v
+     */
+    public void onSong(View v) {
+        new SongFolderDialog(v.getContext()).show();
+    }
+
+    /**
+     * 月度统计
+     *
+     * @param v
+     */
+    public void onStatic(View v) {
+        new MonthStaticDialog(v.getContext()).show();
+    }
 
     /**
      * 歌曲管理
      *
      * @param v
      */
-    public void onSong(View v) {
-//        showProgess();
-//        RuiBoApplication.getApplication().runVolleyRequest(new SyncSongRequest(2, responseListener, errorListener));
-        new SyncSongDialog(v.getContext()).show();
+    public void onUpdate(View v) {
+        new SyncSongDialog(v.getContext());
     }
 
     Response.Listener<String> responseListener = new Response.Listener<String>() {
@@ -123,6 +138,7 @@ public class AdminActivity extends BaseActivity {
 
         }
     };
+
     Response.ErrorListener errorListener = new Response.ErrorListener() {
         @Override
         public void onErrorResponse(VolleyError error) {

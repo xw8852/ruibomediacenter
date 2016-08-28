@@ -20,9 +20,11 @@
     <View
         android:layout_width="1dp"
         android:layout_height="20dp"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <com.msx7.lib.widget.shape.ShapeTextView
             android:id="@+id/sure"
             android:layout_width="match_parent"
@@ -54,7 +56,6 @@
             app:solide="#ff791e" />
 
     </LinearLayout>
-
 
 
 </LinearLayout>

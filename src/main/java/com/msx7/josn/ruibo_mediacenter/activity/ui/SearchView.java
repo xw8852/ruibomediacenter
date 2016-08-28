@@ -190,7 +190,7 @@ public class SearchView extends BeanView {
                     ToastUtil.show("请先登录");
                     return;
                 }
-                download(mSongPageView);
+                download(mSongPageView,mSongPageView.getMoney());
             }
         });
     }
@@ -234,18 +234,18 @@ public class SearchView extends BeanView {
             mDownBtn.setEnabled(false);
             return;
         }
-        if (musics.size() > beanUserInfo.entity.DownloadMusicAmount) {
-            mDownBtn.setEnabled(false);
-            return;
-        }
-        long size = 0;
-        for (BeanMusic music : mSongPageView.getAllSelectedMusic()) {
-            size += music.size;
-        }
-        if (size / 1.0 > beanUserInfo.entity.DownloadMusicSize) {
-            mDownBtn.setEnabled(false);
-            return;
-        }
+//        if (musics.size() > beanUserInfo.entity.DownloadMusicAmount) {
+//            mDownBtn.setEnabled(false);
+//            return;
+//        }
+//        long size = 0;
+//        for (BeanMusic music : mSongPageView.getAllSelectedMusic()) {
+//            size += music.size;
+//        }
+//        if (size / 1.0 > beanUserInfo.entity.DownloadMusicSize) {
+//            mDownBtn.setEnabled(false);
+//            return;
+//        }
     }
 
 

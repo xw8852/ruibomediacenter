@@ -63,7 +63,7 @@ public class ToastUtil {
 
     public static void show( String msg) {
         if (!TextUtils.isEmpty(msg)) {
-            show(msg, ToastDisplayTime.TOAST_DISPLAY_SHORT);
+            show(msg, ToastDisplayTime.TOAST_DISPLAY_LONG);
         }
     }
 

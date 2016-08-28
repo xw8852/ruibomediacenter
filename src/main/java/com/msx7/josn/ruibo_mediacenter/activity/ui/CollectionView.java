@@ -148,18 +148,18 @@ public class CollectionView extends BeanView {
             mDownBtn.setEnabled(false);
             return;
         }
-        double size = 0;
-        for (BeanMusic music : mSongPageView.getAllSelectedMusic()) {
-            size += music.size;
-        }
-        if (musics.size() > beanUserInfo.entity.DownloadMusicAmount) {
-            mDownBtn.setEnabled(false);
-            return;
-        }
-        if (size > beanUserInfo.entity.DownloadMusicSize) {
-            mDownBtn.setEnabled(false);
-            return;
-        }
+//        double size = 0;
+//        for (BeanMusic music : mSongPageView.getAllSelectedMusic()) {
+//            size += music.size;
+//        }
+//        if (musics.size() > beanUserInfo.entity.DownloadMusicAmount) {
+//            mDownBtn.setEnabled(false);
+//            return;
+//        }
+//        if (size > beanUserInfo.entity.DownloadMusicSize) {
+//            mDownBtn.setEnabled(false);
+//            return;
+//        }
     }
 
     public void showData() {
@@ -173,7 +173,7 @@ public class CollectionView extends BeanView {
     }
 
     void download() {
-        download(mSongPageView);
+        download(mSongPageView,mSongPageView.getMoney());
     }
 
     public void clear() {

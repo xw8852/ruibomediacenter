@@ -46,6 +46,10 @@
             </intent-filter>
         </activity>
 
+        <!--<activity android:name=".dialog.SongManager.SongFolderDialog"-->
+            <!--android:theme="@style/Translucent_Dialog">-->
+
+        <!--</activity>-->
         <!--<receiver android:name=".net.DownloadManager">-->
         <!--<intent-filter>-->
         <!--<action android:name="com.msx7.josn.ruibo_mediacenter.net.DownloadManager" />-->
